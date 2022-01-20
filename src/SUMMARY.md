@@ -27,7 +27,7 @@
   - [巡回セールスマン問題](./graph/tsp/main.md)
 - [区間問題](./range/main.md)
   - [imos法](./range/imos/main.md)
-  - [BIT(フェネック木)](./range/bit/main.md)
+  - [BIT(フェニック木)](./range/bit/main.md)
   - [セグメント木](./range/segtree/main.md)
   - [平衡2分探索木](./range/bbst/main.md)
     - [スプレー木](./range/bbst/splay-tree/main.md)
