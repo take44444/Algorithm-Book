@@ -289,8 +289,6 @@ classDef heavy stroke-width:4px,stroke:slateblue;
   let prodl: S = e() // 左側の累積値を単位元で初期化
   let prodr: S = e() // 右側の累積値を単位元で初期化
   while true {
-    let topl = lnode.top
-    let topr = rnode.top
     if lnode.top == rnode.top { // 左ノードと右ノードが同じheavyパスにある場合
       if lnode.depth &gt; rnode.depth
         prodl = op(prodl, prod(lnode, rnode)) // 左ノード-&gt;右ノードパスの累積値を左側に累積
