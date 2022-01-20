@@ -5,5 +5,9 @@ multilingual = false
 src = "src"
 title = "アルゴリズムとデータ構造大全"
 
+[preprocessor.mermaid]
+command = "mdbook-mermaid"
+
 [output.html]
 mathjax-support = true
+additional-js = ["mermaid.min.js", "mermaid-init.js"]

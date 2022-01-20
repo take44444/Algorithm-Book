@@ -27,6 +27,8 @@
   - [imos法](./range/imos/main.md)
   - [BIT(フェネック木)](./range/bit/main.md)
   - [セグメント木](./range/segtree/main.md)
+  - [平衡2分探索木](./range/bbst/main.md)
+    - [スプレー木](./range/bbst/splay-tree/main.md)
   - [2次元imos法](./range/imos2d/main.md)
   - [Range Tree](./range/range-tree/main.md)
   - [区間スケジューリング問題](./range/isp/main.md)
