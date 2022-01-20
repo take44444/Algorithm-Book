@@ -237,8 +237,126 @@ classDef heavy stroke-width:4px,stroke:slateblue;
 <p>この木を例にしながら，<strong>任意の点から根までのパスにいくつのheavyパスが含まれるか</strong>を考える．ノード1個単体で，どこにもheavy辺が伸びていないものも1つのheavyパスとみなすと，任意のパスにおいて，heavyパスと1本のlight辺を交互に通ることになる．そのため，パス上のheavyパスの個数とパス上のlight辺の個数の差は必ず\(1\)以下になる．つまり，<strong>パス上のheavyパスの個数を抑えることは，パス上のlight辺の個数を抑えることと言い換えることができる</strong>．</p>
 <p>仮に，始点をノード19，終点を根としよう．まず，19-&gt;18の累積&quot;和&quot;を対応するセグ木を使って求める．次の18-&gt;13を見ると，これはlight辺である．<strong>ここにlight辺があるということはつまり，ノード18を根とする部分木のサイズ(ノード数)は，最大でも，ノード13を根とする部分木のサイズの半分以下</strong>ということである．もし半分以上のサイズならここはheavy辺になっているはずだからだ．実際に，ノード13を根とする部分木のサイズは7，ノード18を根とする部分木のサイズは2であり，半分以下である．これはつまり，<strong>light辺を通るたびに，全体の推定ノード数が，その下の部分木のサイズの2倍(以上)になる</strong>ということである．したがって，全体のノード数を\(|V|\)とすると，任意のノードから根までのパスに，<strong>light辺は最大でも\(O(\log |V|)\)個しか含まれない</strong>ことがわかる．従って，heavyパスの個数のオーダも\(O(\log |V|)\)であり，また，それぞれのheavyパスにおいて，セグ木の操作により\(O(\log |V|)\)がかかるため，任意のノードから根までのパスクエリの計算量は\(O(\log ^2 |V|)\)である．</p>
 <p>最後に，任意の2ノード間\(u\)-&gt;\(v\)のパスクエリを求める計算量は，\(u\)-&gt;\(root\) \(+\) \(root\)-&gt;\(v\)のパスクエリの計算量より小さいことに注目すると，後者の計算量は\(O(2 \log ^2 |V|) = O(\log ^2 |V|)\)であるため，<strong>前者の計算量も\(O(\log ^2 |V|)\)で抑えられる</strong>ことがわかる．</p>
-<p>LCAは，セグ木の操作を省いて，上と同様にheavyパスとlight辺を交互に通りながら上に上っていき，同じノードにたどり着くか同じheavyパスにたどり着けばそれがLCAだとわかる．上と同様にlight辺の個数は\(O(\log |V|)\)であるため，<strong>高々\(O(\log |V|)\)回上るとLCAにたどりつける</strong>ことがわかる．</p>
-<p>// TODO: 実装の詳細については後日加筆予定</p>
+<p>LCAを求めるクエリについても，上と同様にlight辺の個数は\(O(\log |V|)\)であるため，<strong>高々\(O(\log |V|)\)回上るとLCAにたどりつける</strong>ことがわかる．</p>
+<h2 id="実装"><a class="header" href="#実装">実装</a></h2>
+<p>先ほどの木を例として考える．</p>
+<h3 id="パスクエリ"><a class="header" href="#パスクエリ">パスクエリ</a></h3>
+<p>まずはパスクエリから．</p>
+<pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
+graph TD
+1((1)):::heavy --- 2((2)):::heavy
+1 --- 6((6)):::heavy
+1 --- 12((12)):::heavy
+2 --- 3((3)):::heavy
+3 --- 4((4)):::heavy
+3 --- 5((5)):::heavy
+6 --- 7((7)):::heavy
+6 --- 11((11)):::heavy
+7 --- 8((8)):::heavy
+8 --- 9((9)):::heavy
+8 --- 10((10)):::heavy
+12 --- 13((13)):::heavy
+13 --- 14((14)):::heavy
+13 --- 15((15)):::heavy
+13 --- 18((18)):::heavy
+15 --- 16((16)):::heavy
+15 --- 17((17)):::heavy
+18 --- 19((19)):::heavy
+
+linkStyle 2 stroke-width:4px,fill:none,stroke:slateblue;
+linkStyle 3 stroke-width:4px,fill:none,stroke:slateblue;
+linkStyle 4 stroke-width:4px,fill:none,stroke:slateblue;
+linkStyle 6 stroke-width:4px,fill:none,stroke:slateblue;
+linkStyle 8 stroke-width:4px,fill:none,stroke:slateblue;
+linkStyle 9 stroke-width:4px,fill:none,stroke:slateblue;
+linkStyle 11 stroke-width:4px,fill:none,stroke:slateblue;
+linkStyle 13 stroke-width:4px,fill:none,stroke:slateblue;
+linkStyle 15 stroke-width:4px,fill:none,stroke:slateblue;
+linkStyle 17 stroke-width:4px,fill:none,stroke:slateblue;
+
+classDef heavy stroke-width:4px,stroke:slateblue;
+</pre>
+<p>17-&gt;19のパスクエリを求めてみる．</p>
+<ol>
+<li>ノード17を左ノード，ノード19を右ノードとする．</li>
+<li>ノード17が含まれるheavyパスで最も根に近いノード(以降topノードと呼ぶ)と，ノード19のtopノードの深さを比較する．ノード17とノード18では，ノード17の方が深いため，ノード17の値を左側から累積した後，左ノードをノード15に移動する．</li>
+<li>ノード15のtopノードと，ノード19のtopノードの深さを比較すると，今度はノード1よりもノード18の方が深いため，19-&gt;18を右側から累積した後，右ノードをノード13に移動する．</li>
+<li>ノード15のtopノードとノード13のtopノードが等しいことから，これらは同じheavyパス上にあることがわかる．よって，単に左ノード-&gt;右ノードで値を累積し，左側の累積値に累積する．</li>
+<li>最後に左側の累積値と右側の累積値の&quot;和&quot;を取った値が求める値である．</li>
+</ol>
+<p>このようにしてパスクエリを求めることができる．ここで，パスクエリを求める疑似コードを示す．</p>
+<pre><code class="language-rs">fn query(lnode, rnode) -&gt; S {
+  let prodl: S = e() // 左側の累積値を単位元で初期化
+  let prodr: S = e() // 右側の累積値を単位元で初期化
+  while true {
+    let topl = lnode.top
+    let topr = rnode.top
+    if lnode.top == rnode.top { // 左ノードと右ノードが同じheavyパスにある場合
+      if lnode.depth &gt; rnode.depth
+        prodl = op(prodl, prod(lnode, rnode)) // 左ノード-&gt;右ノードパスの累積値を左側に累積
+      else
+        prodr = op(prod(rnode, lnode), prodr) // 右ノード-&gt;左ノードパスの累積値を右側に累積
+      return op(prodl, prodr) // 左側の累積値と右側の累積値の&quot;和&quot;を返す
+    }
+    // topノードの深さの深い方を上にあげる
+    if lnode.top.depth &gt; rnode.top.depth { // 左ノードのtopノードの方が深さが深い場合
+      prodl = op(prodl, prod(lnode, lnode.top)) // 左ノード-&gt;topパスの累積値を左側に累積
+      lnode = lnode.top.parent // lnodeを上にあげる
+    } else { // 右ノードのtopノードの方が深さが深い場合
+      prodr = op(prod(rnode.top, rnode), prodr)  // top-&gt;右ノードパスの累積値を右側に累積
+      rnode = rnode.top.parent // rnodeを上にあげる
+    }
+  }
+}
+</code></pre>
+<h3 id="構築"><a class="header" href="#構築">構築</a></h3>
+<p>上の疑似コードから，パスクエリを求めるにはそれぞれのノードのtopノード，深さ，親，heavyパス上での位置などの情報が必要となることがわかる．これらを，最初に構築フェースで求める．これらは，<strong>木を2回DFSすることで全て求めることができる</strong>．</p>
+<p>まず，それぞれのノードの木上での深さ，親は，1回DFSをすることで求められる．また，その際に，下の部分木のサイズを足しながら親に戻っていくことで，各親はheavy辺を決定することができる．2回目のDFSでは，<strong>heavy辺を優先したDFSを行う</strong>ことでtopノードを求めることができる．また，その際，<strong>通ったノードを順に並べていく</strong>ことで，各heavyパス上での位置も求めることができる．</p>
+<p>2回目のDFSの説明が分かりづらいと思うので，先ほどの木を例に説明する．</p>
+<pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
+graph TD
+1((1)):::heavy --- 2((2)):::heavy
+1 --- 6((6)):::heavy
+1 --- 12((12)):::heavy
+2 --- 3((3)):::heavy
+3 --- 4((4)):::heavy
+3 --- 5((5)):::heavy
+6 --- 7((7)):::heavy
+6 --- 11((11)):::heavy
+7 --- 8((8)):::heavy
+8 --- 9((9)):::heavy
+8 --- 10((10)):::heavy
+12 --- 13((13)):::heavy
+13 --- 14((14)):::heavy
+13 --- 15((15)):::heavy
+13 --- 18((18)):::heavy
+15 --- 16((16)):::heavy
+15 --- 17((17)):::heavy
+18 --- 19((19)):::heavy
+
+linkStyle 2 stroke-width:4px,fill:none,stroke:slateblue;
+linkStyle 3 stroke-width:4px,fill:none,stroke:slateblue;
+linkStyle 4 stroke-width:4px,fill:none,stroke:slateblue;
+linkStyle 6 stroke-width:4px,fill:none,stroke:slateblue;
+linkStyle 8 stroke-width:4px,fill:none,stroke:slateblue;
+linkStyle 9 stroke-width:4px,fill:none,stroke:slateblue;
+linkStyle 11 stroke-width:4px,fill:none,stroke:slateblue;
+linkStyle 13 stroke-width:4px,fill:none,stroke:slateblue;
+linkStyle 15 stroke-width:4px,fill:none,stroke:slateblue;
+linkStyle 17 stroke-width:4px,fill:none,stroke:slateblue;
+
+classDef heavy stroke-width:4px,stroke:slateblue;
+</pre>
+<p>この木で<strong>heavy辺を優先したDFSを行い，通ったノードを順に並べる</strong>とこのようになる．</p>
+<p>|1|12|13|15|16|17|14|18|19|2|3|4|5|6|7|8|9|10|11|</p>
+<p>すると，heavy辺を優先して探索したため，<strong>全てのheavyパスが，この配列の連続する部分列として現れている</strong>ことがわかる．
+これを<strong>1本</strong>のセグ木に持ち，各ノードのインデックスを持っておくことで，<strong>1本のセグ木だけで任意のheavyパスの累積値を求めることができる</strong>．</p>
+<p>この構築フェーズは，木上でDFSを2回行うだけなので，計算量は\(O(|V|)\)である．</p>
+<h3 id="実装におけるその他の注意事項"><a class="header" href="#実装におけるその他の注意事項">実装におけるその他の注意事項</a></h3>
+<p>実装上注意すべきことをいくつか最後に述べる．</p>
+<p>まず1つ目は，パスクエリでは，<strong>向きを間違えてはいけない</strong>ということ．\(u\)-&gt;\(v\)の累積値を求めるなら，最左を\(u\)，最右を\(v\)として，累積値を取るときに右側からとるのか左側から取るのかを間違えてはいけない．</p>
+<p>2つ目は，先ほどセグ木は1本と言ったが<strong>実際には2本必要</strong>であるということ．任意のheavyパスは，パスによっては右からも左からも累積値を取る可能性がある．よって，<strong>2方向分で2本セグ木が必要</strong>である．パスクエリの実装の際に，どっちのセグ木を使うかを間違えないように注意する．</p>
+<p>以上！</p>
 <h2 id="コード"><a class="header" href="#コード">コード</a></h2>
 <p><a href="https://judge.yosupo.jp/submission/68674"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
 <pre><code class="language-cpp">class Node {
