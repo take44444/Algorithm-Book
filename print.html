@@ -141,7 +141,7 @@
 <p>このドキュメントは，主に競技プログラミングで出題される問題を解く際に利用できるアルゴリズムやデータ構造をまとめたものです．特定の問題にはあまりフォーカスしないため，問題を解く際の考察の仕方等の内容はありません．<strong>詳しく，正確に，分かりやすく</strong>書いていこうと思っています．</p>
 <p>このドキュメントは<strong>執筆途中</strong>です．</p>
 <h2 id="想定する読者"><a class="header" href="#想定する読者">想定する読者</a></h2>
-<p>C++を用いたプログラミングに慣れている方を読者として想定しており，C++言語の仕様や，文法にはあまり触れません．また，計算量という用語についても説明しなません．ただし，償却計算量など，計算量の見積もりが複雑なものについては必要に応じて説明します．</p>
+<p>C++を用いたプログラミングに慣れている方を読者として想定しており，C++言語の仕様や，文法にはあまり触れません．また，計算量という用語についても説明しません．ただし，償却計算量など，計算量の見積もりが複雑なものについては必要に応じて説明します．</p>
 <h2 id="コードについて"><a class="header" href="#コードについて">コードについて</a></h2>
 <p>このドキュメントで登場するコードは，可読性向上のため，以下のようなコードがファイルの先頭に記述してあることを前提としています．また，適切な問題を用いてコードの検証がなされている場合は，コード周辺に<a href=""><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a>のように，検証に用いた問題の提出ページへのリンクを表示します．</p>
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
@@ -234,6 +234,8 @@ graph LR
   3((3)) --- 4((4))
   4((4)) --- 1((1))
 </pre>
+<h3 id="dag"><a class="header" href="#dag">DAG</a></h3>
+<p>閉路を持たない有向グラフを**DAG(有向非巡回グラフ)**という．</p>
 <h2 id="プログラムでのグラフの持ち方"><a class="header" href="#プログラムでのグラフの持ち方">プログラムでのグラフの持ち方</a></h2>
 <p>プログラム上でのグラフの持ち方は主に2つある．例えば，このような単純連結重み付きグラフの情報を持つ場合，下の2つのような持ち方がある．</p>
 <pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
@@ -279,6 +281,40 @@ graph LR
 <div style="break-before: page; page-break-before: always;"></div><h1 id="low-link"><a class="header" href="#low-link">Low Link</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="dynamic-connectivity-algorithm"><a class="header" href="#dynamic-connectivity-algorithm">Dynamic Connectivity Algorithm</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="木"><a class="header" href="#木">木</a></h1>
+<pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
+graph TD
+  1((1)) --- 2((2))
+  1 --- 5((5))
+  2 --- 3((3))
+  2 --- 4((4))
+  5 --- 6((6))
+  5 --- 8((8))
+  5 --- 9((9))
+  6 --- 7((7))
+</pre>
+<p>グラフのうち，連結でかつ閉路がないグラフを<strong>木</strong>という．
+また，その特徴から，次の条件を満たすものは木であると言える．</p>
+<ul>
+<li>連結で閉路がない</li>
+<li>閉路がなく\(|E| = |V| - 1\)</li>
+<li>連結で\(|E| = |V| - 1\)</li>
+<li>連結で全ての辺が橋</li>
+<li>閉路がなく，辺を1つ加えると必ず閉路ができる</li>
+<li>任意の2ノード間のパスが1本</li>
+</ul>
+<h2 id="木でよく出る単語"><a class="header" href="#木でよく出る単語">木でよく出る単語</a></h2>
+<h3 id="根"><a class="header" href="#根">根</a></h3>
+<p>木では，任意のノードを<strong>根</strong>と定めることができる．根が定められた木を<strong>根付き木</strong>という．</p>
+<h3 id="深さ"><a class="header" href="#深さ">深さ</a></h3>
+<p>根と定めたノードからの距離を<strong>深さ</strong>という．(ここでいう距離では，辺の重みは考慮しない．)
+根付き木において，任意のノードについて，自分と接続された，自分より深さが1低いノードをそのノードの<strong>親</strong>という．根は親を持たず，根以外のノードは必ず親を<strong>1つだけ</strong>もつ．また，自分と接続された親以外の全てのノードのことを<strong>子</strong>という．さらに，あるノードから子をたどってたどり着けるノードはそのノードの<strong>子孫</strong>といい，あるノード\(u\)があるノード\(v\)の<strong>子孫</strong>であるとき，\(v\)は\(u\)の<strong>下</strong>にあるという．また，\(u\)を\(v\)の<strong>祖先</strong>であるという．</p>
+<h3 id="部分木"><a class="header" href="#部分木">部分木</a></h3>
+<p>木において，ある1辺を取り除くと，必ず2つの木となる．木から，ある1辺を取り除いて得られる木を全てその木の<strong>部分木</strong>という．根付き木においてあるノードとその下の部分を取り出した部分とも言える．</p>
+<p>また，あるノードからその親</p>
+<h3 id="lca"><a class="header" href="#lca">LCA</a></h3>
+<p>ある2つのノードが与えられたとき，その2つのノードを自分の下に持つノードを，<strong>共通祖先</strong>といい共通祖先のうち，最も深さが深い(大きい)ものをその2つのノードの**LCA(最小共通祖先)**という．</p>
+<h3 id="n分木"><a class="header" href="#n分木">n分木</a></h3>
+<p>根付き木において，全てのノードが\(n\)個以下の子を持つとき，それを<strong>n分木</strong>という．また，全てのノードがちょうど\(n\)個の子を持つとき，それを<strong>完全n分木</strong>という．</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="dfs-1"><a class="header" href="#dfs-1">DFS</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="直径"><a class="header" href="#直径">直径</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="euler-tour"><a class="header" href="#euler-tour">Euler Tour</a></h1>
