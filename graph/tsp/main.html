@@ -137,6 +137,31 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="巡回セールスマン問題"><a class="header" href="#巡回セールスマン問題">巡回セールスマン問題</a></h1>
+<p>\(N\)個のノード\(1, 2, ..., N\)を持つ重み付き有向グラフ\(G(V, E)\)について，ノード\(1\)から出発し，各ノードをちょうど1度ずつ通りノード\(1\)へ戻る閉路の中で最短の経路の距離を求めよ．</p>
+<p>この問題はNP困難というクラスに属する有名な問題で，多項式時間で解くアルゴリズムが存在しないとされている．bitDPというアルゴリズムを使うと，\(O(|V|^22^{|V|})\)で解くことができる．</p>
+<p>具体的には以下の漸化式が成立する．</p>
+<p>$$
+dp[\mathbb{S}][v] = min_{u \in (\mathbb{S}\backslash \lbrace v \rbrace)}(dp[S\backslash \lbrace v \rbrace][u] + dist[u][v])
+$$</p>
+<p>自然言語でいうなら，「今まで訪れたノードの集合が\(\mathbb{S}\)で最後に訪れたノードが\(v\)になるような最短経路は，今までノードの集合が\(\mathbb{S}\backslash \lbrace v \rbrace\)で最後に訪れたノードが\(\mathbb{S}\backslash \lbrace v \rbrace\)に含まれるいずれかのノードであるような最短経路にそのノードから\(v\)への距離を足した値の最小値」．</p>
+<p>この訪れたノードの集合をbitで持つ．この集合の状態数は\(2^|V|\)となり，最後に訪れたノードの状態数は\(|V|\)である．各状態から，次に通る都市を\(|V|\)通り探索するので，全体の計算量は\(O(|V|^22^{|V|})\)となる．</p>
+<h2 id="コード"><a class="header" href="#コード">コード</a></h2>
+<p><a href="https://atcoder.jp/contests/typical-algorithm/submissions/28659236"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
+<pre><code class="language-cpp">i64 tsp(int n, vector&lt;vector&lt;int&gt;&gt; &amp;dist) {
+  vector&lt;vector&lt;i64&gt;&gt; dp(1&lt;&lt;n, vector(n, inf));
+  dp[0][0] = 0;
+  rep (bit, 1&lt;&lt;n) {
+    rep (u, n) {
+      if (!((bit &gt;&gt; u)&amp;1) and bit + u != 0) continue;
+      rep (v, n) {
+        if ((bit &gt;&gt; v)&amp;1) continue;
+        chmin(dp[bit|(1&lt;&lt;v)][v], dp[bit][u] + dist[u][v]);
+      }
+    }
+  }
+  return dp[(1&lt;&lt;n)-1][0];
+}
+</code></pre>
 
                     </main>
 

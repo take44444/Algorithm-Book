@@ -148,11 +148,10 @@
 <ol start="2">
 <li>\(h\)が存在しない時</li>
 </ol>
-<p>以下の式から，\(x\)を端点とする直径を構成することができるため，x が直径の端点にならないことに⽭盾する．</p>
-<p>\(dist(r, x) \geq dist(r, h) + max(dist(h, \mathbb{E}))\)</p>
-<p>よって\(dist(h, x) \geq + max(dist(h, \mathbb{E}))\) </p>
-<p>以上から，背理法より，任意に選択したノード\(r\)から最も遠いノード\(x\)は直径の端
-点になる．したがって，任意のノードについて，最も遠いノードを求め，そのノードのから最も遠いノードまでの距離が直径となる．</p>
+<p>以下の式から，\(x\)を端点とする直径を構成することができるため，\(x\)が直径の端点にならないことに⽭盾する．</p>
+<p>\(dist(r, x) \geq dist(r, h) + max_{u \in \mathbb{E}}(dist(h, u))\)</p>
+<p>よって\(dist(h, x) \geq + max_{u \in \mathbb{E}}(dist(h, u))\) </p>
+<p>以上から，背理法より，任意に選択したノード\(r\)から最も遠いノード\(x\)は直径の端点になる．したがって，任意のノードについて，最も遠いノードを求め，そのノードのから最も遠いノードまでの距離が直径となる．</p>
 <h2 id="コード"><a class="header" href="#コード">コード</a></h2>
 <p><a href="https://atcoder.jp/contests/typical90/submissions/28658034"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
 <pre><code class="language-cpp">pair&lt;int, int&gt; dfs(int node, int parent, vector&lt;vector&lt;int&gt;&gt; &amp;g) {
