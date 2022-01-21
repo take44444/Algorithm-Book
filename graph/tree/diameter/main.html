@@ -137,6 +137,42 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="直径"><a class="header" href="#直径">直径</a></h1>
+<p>2ノード間距離のうち最大のものを，そのグラフの直径という．ここでいう距離は，辺の重みは考慮しない．</p>
+<p>木の直径は，2回のDFSで求めることができる．具体的には，任意のノードについて，最も遠いノードを求め，そのノードからまた最も遠いノードを求めると，後者の距離が木の直径である．以下に証明を示す．</p>
+<h2 id="証明"><a class="header" href="#証明">証明</a></h2>
+<p>任意に選択したノード\(r\)から最も遠いノード\(x\)は直径の端点にならないと仮定する．直径(複数ありうる)の端点の集合を\(\mathbb{E}\)とする．\(r\)-&gt;\(x\)パスが直径と最初に交わる点が存在すればそれを\(h\)とする．</p>
+<ol>
+<li>\(h\)が存在する時</li>
+</ol>
+<p>\(r\)-&gt;\(h\)-&gt;\(x\)となるパスが存在する．この時，\(h\)は直径上にあるので，\(h\)から最も遠いノードは\(\mathbb{E}\)に属するノードである．ここで，\(r\)から最も遠いノードは\(x\)なので\(x\)は\(\mathbb{E}\)に属する．これは\(x\)が直径の端点にならないことに⽭盾する．</p>
+<ol start="2">
+<li>\(h\)が存在しない時</li>
+</ol>
+<p>以下の式から，\(x\)を端点とする直径を構成することができるため，x が直径の端点にならないことに⽭盾する．</p>
+<p>\(dist(r, x) \geq dist(r, h) + max(dist(h, \mathbb{E}))\)</p>
+<p>よって\(dist(h, x) \geq + max(dist(h, \mathbb{E}))\) </p>
+<p>以上から，背理法より，任意に選択したノード\(r\)から最も遠いノード\(x\)は直径の端
+点になる．したがって，任意のノードについて，最も遠いノードを求め，そのノードのから最も遠いノードまでの距離が直径となる．</p>
+<h2 id="コード"><a class="header" href="#コード">コード</a></h2>
+<pre><code class="language-cpp">pair&lt;int, int&gt; dfs(int node, int parent, vector&lt;vector&lt;int&gt;&gt; &amp;g) {
+  pair&lt;int, int&gt; ret = {0, node};
+  for (int &amp;e: g[node]) {
+    if (e == parent) continue;
+    pair&lt;int, int&gt; tmp = dfs(e, node, g);
+    tmp.first++;
+    chmax(ret, tmp);
+  }
+  return move(ret);
+}
+
+int main() {
+  vector&lt;vector&lt;int&gt;&gt; g;
+  // ここで木gを入力から受け取る
+  pair&lt;int, int&gt; d = dfs(0, -1, g);
+  d = dfs(d.second, -1, g);
+  cout &lt;&lt; &quot;Diameter is &quot; &lt;&lt; d.first &lt;&lt; endl;
+}
+</code></pre>
 
                     </main>
 
