@@ -2,7 +2,7 @@
 
 [はじめに](./README.md)
 - [グラフ問題](./graph/main.md)
-  - [単一始点最短路(BFS)](./graph/bfs/main.md)
+  - [単一始点最短パス(BFS)](./graph/bfs/main.md)
   - [単一始点最短路(Dijkstra法)](./graph/dijkstra/main.md)
   - [単一始点最短路(Bellman Ford法)](./graph/bellman-ford/main.md)
   - [単一始点最短路(SPFA)](./graph/spfa/main.md)
