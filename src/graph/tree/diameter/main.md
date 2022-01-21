@@ -22,6 +22,7 @@
 点になる．したがって，任意のノードについて，最も遠いノードを求め，そのノードのから最も遠いノードまでの距離が直径となる．
 
 ## コード
+[![](https://img.shields.io/badge/verify-passing-brightgreen)](https://atcoder.jp/contests/typical90/submissions/28658034)
 
 ```cpp
 pair<int, int> dfs(int node, int parent, vector<vector<int>> &g) {
@@ -35,11 +36,9 @@ pair<int, int> dfs(int node, int parent, vector<vector<int>> &g) {
   return move(ret);
 }
 
-int main() {
-  vector<vector<int>> g;
-  // ここで木gを入力から受け取る
+int diameter(vector<vector<int>> &g) {
   pair<int, int> d = dfs(0, -1, g);
   d = dfs(d.second, -1, g);
-  cout << "Diameter is " << d.first << endl;
+  return d.first;
 }
 ```
