@@ -384,14 +384,15 @@ int diameter(vector&lt;vector&lt;int&gt;&gt; &amp;g) {
 <div style="break-before: page; page-break-before: always;"></div><h1 id="euler-tour"><a class="header" href="#euler-tour">Euler Tour</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="euler-tour-tree"><a class="header" href="#euler-tour-tree">Euler Tour Tree</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="hl分解"><a class="header" href="#hl分解">HL分解</a></h1>
-<p>HL分解の各操作と時間計算量は以下．</p>
+<p>2項演算(以降便宜上仮に&quot;和&quot;と呼ぶ)を与える．
+HL分解の各操作と時間計算量は以下．</p>
 <ul>
 <li>構築: \(O(|V|)\)</li>
 <li>木のLCA: \(O(\log |V|)\)</li>
 <li>木の任意のノードの値(モノイド)の更新: \(O(\log |V|)\)</li>
 <li>木の任意2ノード間のパスクエリ: \(O(\log ^2|V|)\)</li>
 </ul>
-<p>※パスクエリというのは，あるパスについて，与えられた2項演算(以降便宜上仮に&quot;和&quot;と呼ぶ)で，通った順番にノード上の値を累積していって得られる値を求めるクエリのこと．</p>
+<p>※パスクエリというのは，あるパスについて，通った順番にノード上の値を累積&quot;和&quot;した値を求めるクエリのこと．</p>
 <h2 id="説明"><a class="header" href="#説明">説明</a></h2>
 <p>はじめに，以下のように<strong>枝分かれのない極端な木</strong>を考える．</p>
 <pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
@@ -743,6 +744,155 @@ $$</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="区間問題"><a class="header" href="#区間問題">区間問題</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="imos法"><a class="header" href="#imos法">imos法</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="セグメント木"><a class="header" href="#セグメント木">セグメント木</a></h1>
+<p>2項演算(以降便宜上仮に&quot;和&quot;と呼ぶ)を与える．
+区間クエリを求めたい配列の長さを\(n\)とすると，セグメント木の各操作と時間計算量は以下．</p>
+<ul>
+<li>構築: \(O(N)\)</li>
+<li>値(モノイド)の更新: \(O(\log N)\)</li>
+<li>配列の任意の区間の&quot;和&quot;: \(O(\log N)\)</li>
+</ul>
+<h2 id="説明-1"><a class="header" href="#説明-1">説明</a></h2>
+<p>配列の区間の累積&quot;和&quot;を木で管理することで，区間クエリ，更新クエリを高速に計算する．</p>
+<p>配列の初期値を</p>
+<p>|50|10|70|30|10|90|40|</p>
+<p>として，配列の要素を葉とする2分木を構築すると，このようになる．</p>
+<pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
+graph TD
+1(( )) --- 2(( ))
+1 --- 3(( ))
+2 --- 4(( ))
+2 --- 5(( ))
+3 --- 6(( ))
+3 ---- 7((40))
+4 --- 8((50))
+4 --- 9((10))
+5 --- 10((70))
+5 --- 11((30))
+6 --- 12((10))
+6 --- 13((90))
+</pre>
+<p>ノードを集約する上のノードに，子の&quot;和&quot;を持たせるとこのようになる．</p>
+<pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
+graph TD
+1((300)) --- 2((160))
+1 --- 3((140))
+2 --- 4((60))
+2 --- 5((100))
+3 --- 6((100))
+3 ---- 7((40))
+4 --- 8((50))
+4 --- 9((10))
+5 --- 10((70))
+5 --- 11((30))
+6 --- 12((10))
+6 --- 13((90))
+</pre>
+<p>先に更新クエリを考える．例えば配列の左から3番目の値70を20に更新するとこのようになる．</p>
+<pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
+graph TD
+1((250)):::heavy --- 2((110)):::heavy
+1 --- 3((140))
+2 --- 4((60))
+2 --- 5((50)):::heavy
+3 --- 6((100))
+3 ---- 7((40))
+4 --- 8((50))
+4 --- 9((10))
+5 --- 10((20)):::heavy
+5 --- 11((30))
+6 --- 12((10))
+6 --- 13((90))
+
+linkStyle 0 stroke-width:4px,fill:none,stroke:slateblue;
+linkStyle 3 stroke-width:4px,fill:none,stroke:slateblue;
+linkStyle 8 stroke-width:4px,fill:none,stroke:slateblue;
+
+classDef heavy stroke-width:4px,stroke:slateblue;
+</pre>
+<p>更新する場所を青く示している．どの場所を更新しても，木の高さ個のノードしか変化せず，かつ，この木は<strong>偏りのない2分木</strong>であるため，更新クエリは\(O(\log N)\)である．</p>
+<p>次に区間クエリを考える．これは，左側の累積&quot;和&quot;と右側の累積&quot;和&quot;に分けて考えるとわかりやすい．</p>
+<p>例として配列の2番目から6番目までの累積&quot;和&quot;を求める．</p>
+<pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
+graph TD
+1((250)) --- 2((110))
+1 --- 3((140))
+2 --- 4((60))
+2 --- 5((50)):::heavy1
+3 --- 6((100)):::heavy2
+3 ---- 7((40))
+4 --- 8((50))
+4 --- 9((10)):::heavy1
+5 --- 10((20))
+5 --- 11((30))
+6 --- 12((10))
+6 --- 13((90))
+
+classDef heavy1 stroke-width:4px,stroke:green;
+classDef heavy2 stroke-width:4px,stroke:orangered;
+</pre>
+<p>緑が左側の累積&quot;和&quot;で使う値，赤が右側の累積&quot;和&quot;で使う値を示している．<strong>どのような区間クエリであってっも，左側と右側それぞれには，同じ深さのノードは1度しか現れない</strong>．なぜなら，同じ深さのノード2つは上のノード1つで集約できるはずだからである．</p>
+<p>よって，区間クエリの計算量も\(O(\log N)\)である．</p>
+<h2 id="実装-1"><a class="header" href="#実装-1">実装</a></h2>
+<p>区間クエリを求めたい配列の要素数が変化しないと仮定すると，<strong>セグメント木の構造は静的であり変化しない</strong>ことがわかる．これを利用して，セグ木の実装ではノードを単に\(2*N-1\)この配列で管理することができる．</p>
+<p>ノードを管理する配列上でのそのノードのインデックスを示すと，このようになる．</p>
+<pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
+graph TD
+1((1)) --- 2((2))
+1 --- 3((3))
+2 --- 4((4))
+2 --- 5((5))
+3 --- 6((6))
+3 ---- 7((13))
+4 --- 8((7))
+4 --- 9((8))
+5 --- 10((9))
+5 --- 11((10))
+6 --- 12((11))
+6 --- 13((12))
+</pre>
+<p>しかし，これではこのように構築すると，親&lt;-&gt;子間のインデックスに規則性がなく，非常に扱いづらくなる．</p>
+<p>そこで，以下のような工夫が考えられる．</p>
+<pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
+graph TD
+1((1)) --- 2((2))
+1 --- 3((3))
+2 --- 4((4))
+2 --- 5((5))
+3 --- 6((6))
+3 ---- 7((7))
+4 --- 8((8))
+4 --- 9((9))
+5 --- 10((10))
+5 --- 11((11))
+6 --- 12((12))
+6 --- 13((13))
+</pre>
+<p>先ほどと比較して何が嬉しいかというと，この木では，<strong>親のインデックスを\(i\)とすると子のインデックスは必ず\(\lbrace 2 \times i, 2 \times i+1 \rbrace\)になっており，さらに，子のインデックスを\(i\)とすると，その親のインデックスは必ず\(i/2\)になっている</strong>．</p>
+<p>そのため，このように構築することで親&lt;-&gt;子間の移動が非常に楽になり，実装が短くなる．</p>
+<p>しかし，気づいている方もいるかもしれないが，この実装だと，<strong>親の累積&quot;和&quot;において子の順序が保たれていないため，任意のモノイドをのせることはできない</strong>．</p>
+<p>しかし，モノイドではなく，和や積，min，maxというような可換性を有する2項演算はのせることができるため，その場合は問題ない．例えば，後の章で扱うが，<strong>2次元区間クエリを扱うような場合，可換性を有さないモノイドをのせることはあまりないと考えられるため，ノード数を少なく抑えられるこの実装は有用である</strong>．</p>
+<p>では，任意のモノイドをのせるためにはどうすればいいかというと，下のように構築すると良い．</p>
+<pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
+graph TD
+1((1)) --- 2((2))
+1 --- 3((3))
+2 --- 4((4))
+2 --- 5((5))
+3 --- 6((6))
+3 --- 7((7))
+4 --- 8((8))
+4 --- 9((9))
+5 --- 10((10))
+5 --- 11((11))
+6 --- 12((12))
+6 --- 13((13))
+7 --- 14((14))
+7 --- 15((15))
+</pre>
+<p>先ほどよりノード数が多くなっている．これは，<strong>要素数を超える最小の2の冪乗の値を要素数にする</strong>という実装である．余分に枠を取ることで，<strong>子の順序を保ったまま</strong>親に累積&quot;和&quot;を持たせることができる．また，先ほどと同様に親&lt;-&gt;子間の移動も楽である．</p>
+<p><strong>ノード数は最大でも\(2\)倍程度しか増えない</strong>ため，空間計算量も時間計算量も変化しない．</p>
+<h2 id="コード-4"><a class="header" href="#コード-4">コード</a></h2>
+<p><a href="https://github.com/atcoder/ac-library/blob/master/atcoder/segtree.hpp">atcoder/segtree.hpp</a></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="bitフェニック木"><a class="header" href="#bitフェニック木">BIT(フェニック木)</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="平衡2分探索木"><a class="header" href="#平衡2分探索木">平衡2分探索木</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="スプレー木"><a class="header" href="#スプレー木">スプレー木</a></h1>

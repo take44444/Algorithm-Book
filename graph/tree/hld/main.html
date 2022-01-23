@@ -137,14 +137,15 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="hl分解"><a class="header" href="#hl分解">HL分解</a></h1>
-<p>HL分解の各操作と時間計算量は以下．</p>
+<p>2項演算(以降便宜上仮に&quot;和&quot;と呼ぶ)を与える．
+HL分解の各操作と時間計算量は以下．</p>
 <ul>
 <li>構築: \(O(|V|)\)</li>
 <li>木のLCA: \(O(\log |V|)\)</li>
 <li>木の任意のノードの値(モノイド)の更新: \(O(\log |V|)\)</li>
 <li>木の任意2ノード間のパスクエリ: \(O(\log ^2|V|)\)</li>
 </ul>
-<p>※パスクエリというのは，あるパスについて，与えられた2項演算(以降便宜上仮に&quot;和&quot;と呼ぶ)で，通った順番にノード上の値を累積していって得られる値を求めるクエリのこと．</p>
+<p>※パスクエリというのは，あるパスについて，通った順番にノード上の値を累積&quot;和&quot;した値を求めるクエリのこと．</p>
 <h2 id="説明"><a class="header" href="#説明">説明</a></h2>
 <p>はじめに，以下のように<strong>枝分かれのない極端な木</strong>を考える．</p>
 <pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
