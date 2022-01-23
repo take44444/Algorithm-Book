@@ -137,6 +137,301 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="rangebst"><a class="header" href="#rangebst">RangeBST</a></h1>
+<p>2項演算(以降便宜上仮に&quot;和&quot;と呼ぶ)を与える．
+扱う座標数を\(N\)とすると，RangeBSTの各操作と時間計算量は以下．</p>
+<ul>
+<li>構築: 処理なし</li>
+<li>指定された1次元座標に値(モノイド)の設置: \(O(\log N)\)</li>
+<li>指定された1次元座標の値の更新: \(O(\log N)\)</li>
+<li>任意の座標区間の&quot;和&quot;</li>
+</ul>
+<p>※このRangeBSTという名前は，筆者が勝手につけたもので，このデータ構造には特別名前はなく，中身はBST，つまり平衡2分探索木である．平衡2分探索木に機能を追加することで能力を拡張する例は多々あり，これはその1つの例である．</p>
+<p><strong>セグメント木と同じ?と思った方もいるかもしれないが，実は少し違う</strong>．セグメント木は，配列に対する区間クエリに対応したもの，つまり，言い換えると<strong>座標に制限(0~配列のサイズ)がある</strong>．RangeBSTは，データを，<strong>座標の集合</strong>としてもつため，座標の値自体に制限がなく，座圧+セグ木で解く必要がある問題も，RangeBSTなら座圧せずに解くことができる(<strong>データ構造内部でも座圧操作をしない！！</strong>)ため，実装が楽になり，実行速度も速くなることがある．</p>
+<h2 id="説明"><a class="header" href="#説明">説明</a></h2>
+<p>配列に対する区間クエリではないため，最初にサイズを与えたりはしない．使用するメモリ量は，追加した座標の数に比例して動的に増える(座標に重複がある場合は増えない)．</p>
+<p>例えば，座標10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150にそれぞれ何かしらの値を設置したとする．このとき，平衡2分探索木でこの集合を持つ形は複数あるが，仮に1番綺麗な形として下のようになったとしよう．</p>
+<pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
+graph TD
+80((80)) --- 40((40))
+80 --- 120((120))
+40 --- 20((20))
+40 --- 60((60))
+120 --- 100((100))
+120 --- 140((140))
+20 --- 10((10))
+20 --- 30((30))
+60 --- 50((50))
+60 --- 70((70))
+100 --- 90((90))
+100 --- 110((110))
+140 --- 130((130))
+140 --- 150((150))
+</pre>
+<p>ではここで，座標\(25 \sim 115\)の累積&quot;和&quot;を求めよと言われたら，どこのノードの値の&quot;和&quot;を求めればいいかというと，下の赤い部分である．</p>
+<pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
+graph TD
+80((80)):::p --- 40((40)):::p
+80 --- 120((120))
+40 --- 20((20))
+40 --- 60((60)):::p
+120 --- 100((100)):::p
+120 --- 140((140))
+20 --- 10((10))
+20 --- 30((30)):::p
+60 --- 50((50)):::p
+60 --- 70((70)):::p
+100 --- 90((90)):::p
+100 --- 110((110)):::p
+140 --- 130((130))
+140 --- 150((150))
+
+classDef p stroke-width:4px,stroke:orangered;
+</pre>
+<p>もちろんそのままやっていてはノード数分の計算量がかかるが，上の赤く塗られたノードを見ると，平衡2分探索木のおかげである程度まとまった位置に求めたいノードが集まっていることがわかる．</p>
+<p>じゃあそれぞれのノードが自分を根とする部分木の&quot;和&quot;を持っていたらどうなるかと考えると，見るノードは下の色がついたノードだけでよくなることがわかる．赤いノードはそのノードの値が必要であることを示しており，青いノードはそのノードを根とする部分木の累積&quot;和&quot;が必要であることを示している．</p>
+<pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
+graph TD
+80((80)):::v --- 40((40)):::v
+80 --- 120((120))
+40 --- 20((20))
+40 --- 60((60)):::p
+120 --- 100((100)):::p
+120 --- 140((140))
+20 --- 10((10))
+20 --- 30((30)):::p
+60 --- 50((50))
+60 --- 70((70))
+100 --- 90((90))
+100 --- 110((110))
+140 --- 130((130))
+140 --- 150((150))
+
+classDef v stroke-width:4px,stroke:orangered;
+classDef p stroke-width:4px,stroke:slateblue;
+</pre>
+<p>とても少なくなった．実は，この工夫だけで，任意区間の累積&quot;和&quot;を求めるのに必要なノード数が\(O(\log N)\)個に抑えられるのである．その理由を説明する．</p>
+<p>これは言葉で説明するより図と疑似コードを見た方がわかりやすい．</p>
+<p>よりちゃんとした書き方として，累積&quot;和&quot;を取得したい区間を \([25, 115)\)と書く．\([\)は閉区間を意味し，\()\)は開区間を意味する．まず，\(25\)と\(115\)を木上で2分探索(<code>lower_bound</code>)すると，下の緑のノードにたどり着く．また，この2つのノードのLCAをピンク色で示す．</p>
+<pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
+graph TD
+80((80)):::lca --- 40((40))
+80 --- 120((120)):::lb
+40 --- 20((20))
+40 --- 60((60))
+120 --- 100((100))
+120 --- 140((140))
+20 --- 10((10))
+20 --- 30((30)):::lb
+60 --- 50((50))
+60 --- 70((70))
+100 --- 90((90))
+100 --- 110((110))
+140 --- 130((130))
+140 --- 150((150))
+
+classDef v stroke-width:4px,stroke:orangered;
+classDef p stroke-width:4px,stroke:slateblue;
+classDef lb stroke-width:4px,stroke:green;
+classDef lca stroke-width:4px,stroke:deeppink;
+</pre>
+<p>左のノードは，LCAまで上りながら，<strong>右の部分木</strong>がある場合だけその累積&quot;和&quot;を累積すればよく，右のノードも同様に，LCAにまで上りながら，<strong>左の部分木</strong>がある場合だけその累積&quot;和&quot;を累積すればよい．わかりづらいと思うので，先ほどの図と重ねてみるとわかりやすい．
+　</p>
+<pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
+graph TD
+80((80)):::lca --- 40((40)):::v
+80 --- 120((120)):::lb
+40 --- 20((20))
+40 --- 60((60)):::p
+120 --- 100((100)):::p
+120 --- 140((140))
+20 --- 10((10))
+20 --- 30((30)):::lb
+60 --- 50((50))
+60 --- 70((70))
+100 --- 90((90))
+100 --- 110((110))
+140 --- 130((130))
+140 --- 150((150))
+
+classDef v stroke-width:4px,stroke:orangered;
+classDef p stroke-width:4px,stroke:slateblue;
+classDef lb stroke-width:4px,stroke:green;
+classDef lca stroke-width:4px,stroke:deeppink;
+</pre>
+<p>疑似コードを示すとこのようになる．</p>
+<pre><code class="language-rs">fn prod(xl: i64, xr: i64) -&gt; S {
+  let l: *Node = lower_bound(xl);
+  let r: *Node = lower_bound(xr);
+  let lca: *Node = get_lca(l, r);
+  let lprod: S = e();
+  { // 左からLCAまで上りながら右側の部分木を累積
+    for (bool f = true; l != lca;) {
+      if (f) lprod = op(lprod, l.r.prod_subtree);
+      f = l.is_left_child();
+      if (f &amp;&amp; l.p != lca) lprod = op(lprod, l.p.v);
+      l = l-&gt;p;
+    }
+  }
+  let rprod: S = e();
+  { // 右からLCAまで上りながら左側の部分木を累積
+    for (bool f = true; r != lca;) {
+      if (f) rprod = op(r.l.prod_subtree, rprod);
+      f = r.is_right_child();
+      if (f &amp;&amp; r.p != lca) rprod = op(r.p.v, rprod);
+      r = r-&gt;p;
+    }
+  }
+  return op(op(lprod, lca.v), rprod);
+}
+</code></pre>
+<p>よって，区間クエリの処理は，まず木上で<code>lower_bound</code>し，その次に2つのノードからLCAまで上りながら\(O(1)\)の演算を各ステップで行うだけである．したがって，平衡2分探索木の高さが\(\log N\)であることから，計算量は\(O(\log N)\)となる．</p>
+<p>最後に，更新クエリや挿入クエリについて説明する．挿入/更新を\(O(\log N)\)で行えることは平衡2分探索木の章を確認して欲しい．挿入/更新後，ノードの累積&quot;和&quot;の値に影響が出るのは該当ノードの祖先ノード高々\(O(\log N)\)個であるため，それらの値を更新していけばよい．計算量は\(O(\log N) + O(\log N) = O(\log N)\)となる．</p>
+<h2 id="実装におけるその他の注意事項"><a class="header" href="#実装におけるその他の注意事項">実装におけるその他の注意事項</a></h2>
+<p>モノイドを扱っているため，例のごとく演算の向きを間違えないようにする．</p>
+<p>以上！</p>
+<h2 id="コード"><a class="header" href="#コード">コード</a></h2>
+<p>平衡2分探索木にSplay木を用いた実装．</p>
+<p><a href="https://judge.yosupo.jp/submission/75531"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
+<pre><code class="language-cpp">template &lt;class S, S (*op)(S, S), S (*e)()&gt; struct Node {
+  Node&lt;S, op, e&gt; *l, *r, *p;
+  i64 pt;
+  S v, prod_st;
+  explicit Node(i64 pt_, S v_)
+    : l(nullptr), r(nullptr), p(nullptr), pt(pt_), v(v_), prod_st(v_) {}
+  int state() {
+    if (p &amp;&amp; p-&gt;l == this) return -1;
+    if (p &amp;&amp; p-&gt;r == this) return 1;
+    return 0;
+  }
+  S get_lprod() {
+    if (!l) return e();
+    return l-&gt;prod_st;
+  }
+  S get_rprod() {
+    if (!r) return e();
+    return r-&gt;prod_st;
+  }
+  void update() {
+    prod_st = op(op(get_lprod(), v), get_rprod());
+  }
+  void rotate() {
+    Node&lt;S, op, e&gt; *par = p;
+    Node&lt;S, op, e&gt; *mid;
+    if (p-&gt;l == this) {
+      mid = r; r = par;
+      par-&gt;l = mid;
+    } else {
+      mid = l; l = par;
+      par-&gt;r = mid;
+    }
+    if (mid) mid-&gt;p = par;
+    p = par-&gt;p; par-&gt;p = this;
+    if (p &amp;&amp; p-&gt;l == par) p-&gt;l = this;
+    if (p &amp;&amp; p-&gt;r == par) p-&gt;r = this;
+    par-&gt;update(); update();
+  }
+  void splay() {
+    while(state()) {
+      int st = state() * p-&gt;state();
+      if (st == 0) {
+        rotate();
+      } else if (st == 1) {
+        p-&gt;rotate();
+        rotate();
+      } else {
+        rotate();
+        rotate();
+      }
+    }
+  }
+};
+
+template &lt;class S, S (*op)(S, S), S (*e)()&gt; struct RangeBST {
+private:
+  using NC = Node&lt;S, op, e&gt;;
+  NC *root, *min_, *max_;
+  NC* bound(i64 x, bool lower) {
+    NC *left = root, *right = nullptr;
+    while (left) {
+      if ((lower &amp;&amp; !(x &gt; left-&gt;pt)) || (!lower &amp;&amp; (x &lt; left-&gt;pt))) {
+        right = left;
+        left = left-&gt;l;
+      } else {
+        left = left-&gt;r;
+      }
+    }
+    return right;
+  }
+  void set(i64 x, S val, bool add) {
+    NC *node = nullptr;
+    if (root &amp;&amp; min_-&gt;pt &lt;= x &amp;&amp; max_-&gt;pt &gt;= x) node = lower_bound(x);
+    if (node &amp;&amp; node-&gt;pt == x) {
+      if (add) node-&gt;v = op(node-&gt;v, val);
+      else node-&gt;v = val;
+      node-&gt;update();
+      return;
+    }
+    NC *nn = new NC(x, val);
+    if (!root) {
+      min_ = nn, max_ = nn;
+      root = nn;
+      return;
+    }
+    if (!node) {
+      if (min_-&gt;pt &gt; x) nn-&gt;r = root, min_ = nn;
+      else nn-&gt;l = root, max_ = nn;
+    } else {
+      // now node-&gt;pt &gt; x
+      nn-&gt;l = node-&gt;l; nn-&gt;r = node;
+      node-&gt;l = nullptr; node-&gt;p = nn;
+      node-&gt;update();
+    }
+    nn-&gt;update();
+    if (nn-&gt;l) nn-&gt;l-&gt;p = nn;
+    if (nn-&gt;r) nn-&gt;r-&gt;p = nn;
+    root = nn;
+    return;
+  }
+public:
+  RangeBST() : root(nullptr), min_(nullptr), max_(nullptr) {}
+  NC* lower_bound(i64 x) {
+    NC *ret = bound(x, true);
+    if (ret) ret-&gt;splay(), root = ret;
+    return ret;
+  }
+  NC* upper_bound(i64 x) {
+    NC *ret = bound(x, false);
+    if (ret) ret-&gt;splay(), root = ret;
+    return ret;
+  }
+  S get(i64 x) {
+    NC *ret = lower_bound(x);
+    if (!ret || ret-&gt;pt != x) return e();
+    return ret-&gt;v;
+  }
+  void set(i64 x, S val) { set(x, val, false); }
+  void add(i64 x, S val) { set(x, val, true); }
+  S prod(i64 xl, i64 xr) {
+    assert(xl &lt;= xr);
+    if (!root || xl &gt; max_-&gt;pt || xr &lt;= min_-&gt;pt) return e();
+    if (xl &lt;= min_-&gt;pt &amp;&amp; xr &gt; max_-&gt;pt) return root-&gt;prod_st;
+    if (xl &lt;= min_-&gt;pt) return lower_bound(xr)-&gt;get_lprod();
+    lower_bound(xl); // now xl is root
+    if (xr &gt; max_-&gt;pt) return op(root-&gt;v, root-&gt;get_rprod());
+    NC *right = bound(xr, true);
+    NC *tmp = right;
+    S ret = e();
+    for (bool f = true; tmp != root;) {
+      if (f) ret = op(tmp-&gt;get_lprod(), ret);
+      f = tmp-&gt;state() == 1;
+      if (f) ret = op(tmp-&gt;p-&gt;v, ret);
+      tmp = tmp-&gt;p;
+    }
+    if (right) right-&gt;splay(), root = right;
+    return ret;
+  }
+};
+</code></pre>
 
                     </main>
 
