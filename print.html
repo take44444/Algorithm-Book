@@ -1035,7 +1035,7 @@ classDef splay stroke-width:4px,stroke:slateblue;
 </pre>
 <p>この例は，splayしたいノードは右の子であり親ノードは左の子であるが，逆の，splayしたいノードが左の子で，親ノードが右の子である場合も左右対称の同様の操作になる．</p>
 <h3 id="zig-zig"><a class="header" href="#zig-zig">zig-zig</a></h3>
-<p>zig-aigは，<strong>splayしたいノードと親ノードの関係が，親ノードと親の親ノードの関係と同じ時</strong>に行われる操作である．<strong>これは実質，親ノードに対してzigを1回行った後にsplayしたいノードにzigを1回行うことと同じである</strong>．</p>
+<p>zig-zigは，<strong>splayしたいノードと親ノードの関係が，親ノードと親の親ノードの関係と同じ時</strong>に行われる操作である．<strong>これは実質，親ノードに対してzigを1回行った後にsplayしたいノードにzigを1回行うことと同じである</strong>．</p>
 <pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
 graph TD
 G((GPar)):::p --- P((Par)):::p
@@ -1062,12 +1062,34 @@ classDef p stroke-width:4px,stroke:green;
 classDef splay stroke-width:4px,stroke:slateblue;
 </pre>
 <p>この例は，splayしたいノードは左の子であり親ノードも左の子であるが，逆の，splayしたいノードが右の子で，親ノードも右の子である場合も左右対称の同様の操作になる．</p>
-<p>splay操作は，splayしたいノードとその親ノード，親の親ノードとの関係から，zig，zig-zag，zig-zigの内適切なものを選んで木を変形することを繰り返して，そのノードを根まで持っていく操作である．</p>
+<p>splay操作は，splayしたいノードとその親ノード，親の親ノードとの関係から，zig，zig-zag，zig-zigの内適切なものを選んで木を変形(一般に木の<strong>回転</strong>と呼ばれる)することを繰り返して，そのノードを根まで持っていく操作である．</p>
 <h2 id="splay操作の計算量と各操作の計算量との関係"><a class="header" href="#splay操作の計算量と各操作の計算量との関係">splay操作の計算量と各操作の計算量との関係</a></h2>
 <p>話の流れを切らさないために結論から述べると，splay操作の<strong>償却計算量</strong>は\(O(\log N)\)である．償却計算量についてはこの後に説明するが，簡単に言うと，<strong>一連の操作を行なった時，その1回あたりの計算量の平均を取ると\(O(\log N)\)になるということが保証される</strong>ということである．もっと噛み砕いて言うと，バランスの取れていない木で深さの深いノードをsplayすると，それはその操作単体で見ると時間がかかっているかもしれない．しかし，<strong>連続して</strong>何回もsplay操作を行なった時，<strong>全体の計算量が，splay操作回数を\(k\)として\(O(k \log N)\)になることを保証できる</strong>ということ．これが償却計算量の意味である．splay操作の償却計算量がなぜ\(O(\log N)\)になるかはひとまず置いといて，もしそうなるとしたら何が嬉しいのかを考えよう．</p>
 <p>冒頭で，<strong>splay操作は，<code>lower_bound</code>の計算量を\(O(\log N)\)に保証するための操作</strong>であると述べた．<code>lower_bound</code>の計算量は，<br>\(O(\)探索しているノードが存在する深さ\()\)<br>であった．ではsplay操作はどうだろうか．zig1回の操作でそのノードが1つ上に上がり，zig-zagやzig-zigのようにzigを2回行う操作でそのノードが2つ上がるため，<strong>splay操作の計算量は<br>\(O(\)splayしたいノードが存在する深さ\()\)</strong><br>である．splayするノードと，探索したノードが等しければ，これらは当然同じである．つまり，<strong><code>lower_bound</code>でアクセスしたノードをsplayする</strong>ことで，<strong><code>lower_bound</code>の計算量をsplay操作の計算量で保証することができるのである</strong>．</p>
 <h2 id="splay操作の償却計算量"><a class="header" href="#splay操作の償却計算量">splay操作の償却計算量</a></h2>
-<p>// TODO : 後日加筆</p>
+<p>償却計算量とは，上でも述べたように，<strong>続けて行なった一連の操作</strong>の，平均した1回あたりの計算量である．混同しやすいものとして，<strong>平均計算量</strong>があるが，これは別物である．平均計算量は，<strong>操作を独立したものとして考える</strong>．あらゆる入力に対してその操作を<strong>1回</strong>行なった時の計算量の平均が平均計算量である．大きな違いは，平均計算量の場合，最悪の入力がされ続けた場合，1回あたりの操作の計算量の平均がその計算量に収まるかがわからないが，償却計算量の場合はその計算量に収まることを保証できるということ．</p>
+<p>償却計算量の導出には，<strong>ポテンシャル解析</strong>という手法が用いられる．ポテンシャル解析では，操作が行われる前と後の状態を<strong>ポテンシャル関数</strong>というもので評価する．ポテンシャル関数で評価した値は<strong>借金</strong>みたいなものと考えるとわかりやすい．<strong>後の操作の計算量を悪化させる</strong>ような操作を行った場合は，<strong>その操作自体は速かったとしても</strong>その分を考慮して評価すべきである．これがポテンシャル解析の基本的な考え方である．</p>
+<p>ポテンシャル\(\Phi\)が満たす必要のある条件は以下．</p>
+<ul>
+<li>任意の\(i\)について，\(i\)番目の操作を行なった後の状態\(\Phi_i\)について，\(\Phi_i \geq 0\)</li>
+<li>\(\Phi_0 = 0\)</li>
+</ul>
+<p>これらの条件を満たすポテンシャル\(\Phi\)を定義したとする．このとき，行なったある操作の実計算量を\(T\)とすると，この操作の償却計算量\(\tilde{T}\)は以下で表される．</p>
+<p>$$
+\tilde{T} = T + \Delta\Phi
+$$</p>
+<p>ここで，上の条件より，<strong>\(\Delta\Phi \geq 0\)であるため，\(\tilde{T}\)を上から抑えることができれば，実計算量\(T\)も同様の計算量で抑えることができる</strong>ということである．</p>
+<p>上で述べた2つの条件を満たすポテンシャル関数はいくらでも定義できる．しかし，このポテンシャル関数を適切なものにしなければ，\(\Delta\Phi\)が大きくなってしまい，解析の意味がなくなってしまう．splay操作の償却解析において用いるポテンシャル関数\(\Phi\)を，以下のように定義する(と上手くいく)．</p>
+<p>\(s(x)\) = ノード\(x\)を根とする部分木のサイズ(部分木に含まれるノード数)<br>\(r(x) = \log_2 s(x)\)<br>\(\Phi(x) = \sum r(x)\)</p>
+<p>木に存在する全ノードの\(r(x)\)の合計をポテンシャルとして定義するのは，直感的にも理にかなっている．なぜなら，深さの深いノードが多くある状態(<strong>後の操作の計算量が悪くなりそうな状態</strong>)では，そのノードを下(部分木)に持つノード数が多いため，<strong>\(\Phi(x) = \sum r(x)\)の値が増加する</strong>．</p>
+<p>ここから，実際にsplay操作の償却計算量\(\tilde{T}_{splay}\)を導いていく．</p>
+<p>\(\tilde{T}_{splay}\)を導くために，まず，\(\tilde{T}_{zig}\)，\(\tilde{T}_{zig-zag}\)，\(\tilde{T}_{zig-zig}\)を導く．なぜなら，splay操作は，<strong>複数回のzig-zagもしくはzig-zig操作</strong>と，<strong>最後の1回のzig操作</strong>から成っているからだ．</p>
+<h3 id="zigの償却計算量"><a class="header" href="#zigの償却計算量">zigの償却計算量</a></h3>
+<p>// TODO : 近日加筆予定</p>
+<h3 id="zig-zagの償却計算量"><a class="header" href="#zig-zagの償却計算量">zig-zagの償却計算量</a></h3>
+<p>// TODO : 近日加筆予定</p>
+<h3 id="zig-zigの償却計算量"><a class="header" href="#zig-zigの償却計算量">zig-zigの償却計算量</a></h3>
+<p>// TODO : 近日加筆予定</p>
 <h2 id="実装におけるその他の注意事項-1"><a class="header" href="#実装におけるその他の注意事項-1">実装におけるその他の注意事項</a></h2>
 <ul>
 <li><code>lower_bound</code>でアクセスしたノードをsplayするのを忘れてはいけない．それを<strong>splayするから\(O(\log N)\)になるのであって，余分な操作と思ってsplayを省略すると，計算量がおかしくなる</strong>．</li>
