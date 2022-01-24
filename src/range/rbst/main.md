@@ -180,7 +180,7 @@ fn prod(xl: i64, xr: i64) -> S {
 ## コード
 平衡2分探索木にSplay木を用いた実装．
 
-[![](https://img.shields.io/badge/verify-passing-brightgreen)](https://judge.yosupo.jp/submission/75531)
+[![](https://img.shields.io/badge/verify-passing-brightgreen)](https://judge.yosupo.jp/submission/75623)
 
 ```cpp
 template <class S, S (*op)(S, S), S (*e)()> struct Node {
@@ -241,58 +241,52 @@ template <class S, S (*op)(S, S), S (*e)()> struct RangeBST {
 private:
   using NC = Node<S, op, e>;
   NC *root, *min_, *max_;
+  void splay(NC *node) { node->splay(), root = node; }
   NC* bound(i64 x, bool lower) {
-    NC *left = root, *right = nullptr;
+    NC *valid = nullptr, *left = root, *right = nullptr;
     while (left) {
+      valid = left;
       if ((lower && !(x > left->pt)) || (!lower && (x < left->pt))) {
         right = left;
         left = left->l;
-      } else {
-        left = left->r;
-      }
+      } else left = left->r;
     }
+    if (!right && valid) splay(valid);
     return right;
   }
   void set(i64 x, S val, bool add) {
-    NC *node = nullptr;
-    if (root && min_->pt <= x && max_->pt >= x) node = lower_bound(x);
-    if (node && node->pt == x) {
+    NC *nn = new NC(x, val);
+    // if no nodes in tree
+    if (!root) {
+      min_ = nn, max_ = nn, root = nn; return;
+    } if (min_->pt > x) { // if x become min key in tree
+      min_->l = nn, nn->p = min_, min_ = nn;
+      splay(nn); return;
+    } if (max_->pt < x) { // if x become max key in tree
+      max_->r = nn, nn->p = max_, max_ = nn;
+      splay(nn); return;
+    }
+    NC *node = bound(x, true); // assert node is not null
+    if (node->pt == x) { // if tree already has key x
       if (add) node->v = op(node->v, val);
       else node->v = val;
-      node->update();
-      return;
+      node->update(); splay(node); delete nn; return;
     }
-    NC *nn = new NC(x, val);
-    if (!root) {
-      min_ = nn, max_ = nn;
-      root = nn;
-      return;
-    }
-    if (!node) {
-      if (min_->pt > x) nn->r = root, min_ = nn;
-      else nn->l = root, max_ = nn;
-    } else {
-      // now node->pt > x
-      nn->l = node->l; nn->r = node;
-      node->l = nullptr; node->p = nn;
-      node->update();
-    }
-    nn->update();
-    if (nn->l) nn->l->p = nn;
-    if (nn->r) nn->r->p = nn;
-    root = nn;
-    return;
+    // now node is first node whose key is larger than x
+    nn->l = node->l; node->l = nn;
+    nn->p = node; if (nn->l) nn->l->p = nn;
+    nn->update(); splay(nn);
   }
 public:
   RangeBST() : root(nullptr), min_(nullptr), max_(nullptr) {}
   NC* lower_bound(i64 x) {
     NC *ret = bound(x, true);
-    if (ret) ret->splay(), root = ret;
+    if (ret) splay(ret);
     return ret;
   }
   NC* upper_bound(i64 x) {
     NC *ret = bound(x, false);
-    if (ret) ret->splay(), root = ret;
+    if (ret) splay(ret);
     return ret;
   }
   S get(i64 x) {
@@ -318,7 +312,7 @@ public:
       if (f) ret = op(tmp->p->v, ret);
       tmp = tmp->p;
     }
-    if (right) right->splay(), root = right;
+    if (right) splay(right);
     return ret;
   }
 };

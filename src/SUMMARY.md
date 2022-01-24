@@ -30,7 +30,7 @@
   - [セグメント木](./range/segtree/main.md)
   - [BIT(フェニック木)](./range/bit/main.md)
   - [平衡2分探索木](./range/bbst/main.md)
-    - [スプレー木](./range/bbst/splay-tree/main.md)
+    - [splay木](./range/bbst/splay-tree/main.md)
   - [RangeBST](./range/rbst/main.md)
   - [2次元imos法](./range/imos2d/main.md)
   - [ウェーブレット行列](./range/wavelet-matrix/main.md)
