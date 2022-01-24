@@ -1136,8 +1136,8 @@ private:
 public:
   SplayTree() : root(nullptr), min_(nullptr), max_(nullptr), sz(0) {}
   int size() { return sz; }
-  Node&lt;T&gt; *begin() { return min_; }
-  Node&lt;T&gt; *rbegin() { return max_; }
+  NC *begin() { return min_; }
+  NC *rbegin() { return max_; }
   NC* lower_bound(T k) {
     NC *ret = bound(k, true);
     if (ret) splay(ret);
@@ -1148,12 +1148,12 @@ public:
     if (ret) splay(ret);
     return ret;
   }
-  Node&lt;T&gt;* entry(T k) {
+  NC* entry(T k) {
     lower_bound(k);
     if (!root || root-&gt;k != k) return nullptr;
     return root;
   }
-  pair&lt;Node&lt;T&gt;*, bool&gt; insert(T k) {
+  pair&lt;NC*, bool&gt; insert(T k) {
     NC *nn = new NC(k);
     if (!root) { // if no nodes in tree
       min_ = nn, max_ = nn, root = nn;
@@ -1175,7 +1175,7 @@ public:
     }
     sz++; return {root, true};
   }
-  void erase(Node&lt;T&gt; *node) {
+  void erase(NC *node) {
     assert(node); splay(node); sz--;
     if (!root-&gt;l) { // it means this node is min_
       // if no nodes remain
