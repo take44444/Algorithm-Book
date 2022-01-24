@@ -1068,6 +1068,12 @@ classDef splay stroke-width:4px,stroke:slateblue;
 <p>冒頭で，<strong>splay操作は，<code>lower_bound</code>の計算量を\(O(\log N)\)に保証するための操作</strong>であると述べた．<code>lower_bound</code>の計算量は，<br>\(O(\)探索しているノードが存在する深さ\()\)<br>であった．ではsplay操作はどうだろうか．zig1回の操作でそのノードが1つ上に上がり，zig-zagやzig-zigのようにzigを2回行う操作でそのノードが2つ上がるため，<strong>splay操作の計算量は<br>\(O(\)splayしたいノードが存在する深さ\()\)</strong><br>である．splayするノードと，探索したノードが等しければ，これらは当然同じである．つまり，<strong><code>lower_bound</code>でアクセスしたノードをsplayする</strong>ことで，<strong><code>lower_bound</code>の計算量をsplay操作の計算量で保証することができるのである</strong>．</p>
 <h2 id="splay操作の償却計算量"><a class="header" href="#splay操作の償却計算量">splay操作の償却計算量</a></h2>
 <p>// TODO : 後日加筆</p>
+<h2 id="実装におけるその他の注意事項-1"><a class="header" href="#実装におけるその他の注意事項-1">実装におけるその他の注意事項</a></h2>
+<ul>
+<li><code>lower_bound</code>でアクセスしたノードをsplayするのを忘れてはいけない．それを<strong>splayするから\(O(\log N)\)になるのであって，余分な操作と思ってsplayを省略すると，計算量がおかしくなる</strong>．</li>
+<li><code>lower_bound</code>以外の方法で，\(O(1)\)以外の方法でノードにアクセスする際は，それが<code>lower_bound</code>と同等のアクセス方法かをよく考えること．また，その後のsplay操作も忘れないこと．</li>
+</ul>
+<p>以上！</p>
 <h2 id="コード-5"><a class="header" href="#コード-5">コード</a></h2>
 <pre><code class="language-cpp">template &lt;class T&gt; struct Node {
   Node&lt;T&gt; *l, *r, *p;
@@ -1351,7 +1357,7 @@ classDef lca stroke-width:4px,stroke:deeppink;
 </code></pre>
 <p>よって，区間クエリの処理は，まず木上で<code>lower_bound</code>し，その次に2つのノードからLCAまで上りながら\(O(1)\)の演算を各ステップで行うだけである．したがって，平衡2分探索木の高さが\(\log N\)であることから，計算量は\(O(\log N)\)となる．</p>
 <p>最後に，更新クエリや挿入クエリについて説明する．挿入/更新を\(O(\log N)\)で行えることは平衡2分探索木の章を確認して欲しい．挿入/更新後，ノードの累積&quot;和&quot;の値に影響が出るのは該当ノードの祖先ノード高々\(O(\log N)\)個であるため，それらの値を更新していけばよい．計算量は\(O(\log N) + O(\log N) = O(\log N)\)となる．</p>
-<h2 id="実装におけるその他の注意事項-1"><a class="header" href="#実装におけるその他の注意事項-1">実装におけるその他の注意事項</a></h2>
+<h2 id="実装におけるその他の注意事項-2"><a class="header" href="#実装におけるその他の注意事項-2">実装におけるその他の注意事項</a></h2>
 <p>モノイドを扱っているため，例のごとく演算の向きを間違えないようにする．</p>
 <p>以上！</p>
 <h2 id="コード-6"><a class="header" href="#コード-6">コード</a></h2>

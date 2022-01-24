@@ -293,6 +293,12 @@ classDef splay stroke-width:4px,stroke:slateblue;
 <p>冒頭で，<strong>splay操作は，<code>lower_bound</code>の計算量を\(O(\log N)\)に保証するための操作</strong>であると述べた．<code>lower_bound</code>の計算量は，<br>\(O(\)探索しているノードが存在する深さ\()\)<br>であった．ではsplay操作はどうだろうか．zig1回の操作でそのノードが1つ上に上がり，zig-zagやzig-zigのようにzigを2回行う操作でそのノードが2つ上がるため，<strong>splay操作の計算量は<br>\(O(\)splayしたいノードが存在する深さ\()\)</strong><br>である．splayするノードと，探索したノードが等しければ，これらは当然同じである．つまり，<strong><code>lower_bound</code>でアクセスしたノードをsplayする</strong>ことで，<strong><code>lower_bound</code>の計算量をsplay操作の計算量で保証することができるのである</strong>．</p>
 <h2 id="splay操作の償却計算量"><a class="header" href="#splay操作の償却計算量">splay操作の償却計算量</a></h2>
 <p>// TODO : 後日加筆</p>
+<h2 id="実装におけるその他の注意事項"><a class="header" href="#実装におけるその他の注意事項">実装におけるその他の注意事項</a></h2>
+<ul>
+<li><code>lower_bound</code>でアクセスしたノードをsplayするのを忘れてはいけない．それを<strong>splayするから\(O(\log N)\)になるのであって，余分な操作と思ってsplayを省略すると，計算量がおかしくなる</strong>．</li>
+<li><code>lower_bound</code>以外の方法で，\(O(1)\)以外の方法でノードにアクセスする際は，それが<code>lower_bound</code>と同等のアクセス方法かをよく考えること．また，その後のsplay操作も忘れないこと．</li>
+</ul>
+<p>以上！</p>
 <h2 id="コード"><a class="header" href="#コード">コード</a></h2>
 <pre><code class="language-cpp">template &lt;class T&gt; struct Node {
   Node&lt;T&gt; *l, *r, *p;
