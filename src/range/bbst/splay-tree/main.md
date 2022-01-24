@@ -269,8 +269,8 @@ private:
 public:
   SplayTree() : root(nullptr), min_(nullptr), max_(nullptr), sz(0) {}
   int size() { return sz; }
-  Node<T> *begin() { return min_; }
-  Node<T> *rbegin() { return max_; }
+  NC *begin() { return min_; }
+  NC *rbegin() { return max_; }
   NC* lower_bound(T k) {
     NC *ret = bound(k, true);
     if (ret) splay(ret);
@@ -281,12 +281,12 @@ public:
     if (ret) splay(ret);
     return ret;
   }
-  Node<T>* entry(T k) {
+  NC* entry(T k) {
     lower_bound(k);
     if (!root || root->k != k) return nullptr;
     return root;
   }
-  pair<Node<T>*, bool> insert(T k) {
+  pair<NC*, bool> insert(T k) {
     NC *nn = new NC(k);
     if (!root) { // if no nodes in tree
       min_ = nn, max_ = nn, root = nn;
@@ -308,7 +308,7 @@ public:
     }
     sz++; return {root, true};
   }
-  void erase(Node<T> *node) {
+  void erase(NC *node) {
     assert(node); splay(node); sz--;
     if (!root->l) { // it means this node is min_
       // if no nodes remain
