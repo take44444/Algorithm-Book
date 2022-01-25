@@ -425,6 +425,7 @@ classDef splay stroke-width:4px,stroke:slateblue;
 <p>$$\log \frac{s_{pre}(s) \times s_{new}(g)}{s_{new}(s) \times s_{new}(s)} \leq -2$$</p>
 <p>が示せるので，</p>
 <p>$$\tilde{T}_{zig-zig} \leq 3r_{new}(s) - 3r_{pre}(s)$$</p>
+<p>が得られる．</p>
 <p><strong>これで，zig，zig-zag，zig-zig全ての償却計算量が導出した</strong>．ここで，splay操作は，<strong>複数回のzig-zagもしくはzig-zig操作</strong>と，<strong>最後の1回のzig操作</strong>から成っていることを思い出して欲しい．このことから，splay操作の償却計算量\(\tilde{T}_{splay}\)は，以下の式で表される．</p>
 <p>$$\tilde{T}_{splay} = \sum (\tilde{T}_{zig-zag}~\rm{or}~\tilde{T}_{zig-zig}) + \tilde{T}_{zig}$$</p>
 <p>そして，splay操作でzig-zagまたはzig-zigをした回数を合計\(m-1\)回，また，splay操作の直前の状態を\(0\)番目の状態とすると，今まで求めてきたものを代入して以下の式が得られる．</p>
@@ -433,7 +434,7 @@ classDef splay stroke-width:4px,stroke:slateblue;
 <p>$$\tilde{T}_{splay} \leq 1 + 3r_m(s) - 3r_0(s)$$</p>
 <p>ここで，\(3r_m(s)\)はsplay操作が終わった後の状態であることに注目する．<strong>splay操作が終わった後，\(s\)ノードは根である</strong>ため，木の全ノード数を\(N\)とすると，以下の式が成り立つ．</p>
 <p>$$r_m(s) = \log N$$</p>
-<p>また，\(r_(x) \geq 0\)であることから，最後に，splay操作の償却計算量\(\tilde{T}_{splay}\)が得られる．</p>
+<p>また，\(r(x) \geq 0\)であることから，最後に，splay操作の償却計算量\(\tilde{T}_{splay}\)が得られる．</p>
 <p>$$\tilde{T}_{splay} \leq 1 + 3 \log N \leq O(\log N)$$</p>
 <p>よって，ここからは冗長だが，splay操作を\(k\)回行った時の計算量について以下の関係が成り立つ．</p>
 <p>$$\sum_{i=1}^{k} T_{splay} \leq \sum_{i=1}^{k} \tilde{T}_{splay} \leq O(k \log N)$$</p>
