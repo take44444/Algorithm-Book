@@ -299,18 +299,46 @@ classDef splay stroke-width:4px,stroke:slateblue;
 <li>任意の\(i\)について，\(i\)番目の操作を行なった後の状態\(\Phi_i\)について，\(\Phi_i \geq 0\)</li>
 <li>\(\Phi_0 = 0\)</li>
 </ul>
-<p>これらの条件を満たすポテンシャル\(\Phi\)を定義したとする．このとき，行なったある操作の実計算量を\(T\)とすると，この操作の償却計算量\(\tilde{T}\)は以下で表される．</p>
-<p>$$
-\tilde{T} = T + \Delta\Phi
-$$</p>
-<p>ここで，上の条件より，<strong>\(\Delta\Phi \geq 0\)であるため，\(\tilde{T}\)を上から抑えることができれば，実計算量\(T\)も同様の計算量で抑えることができる</strong>ということである．</p>
+<p>これらの条件を満たすポテンシャル\(\Phi\)を定義したとする．このとき，行なったある操作の実計算量を\(T\)とすると，この操作の償却計算量\(\tilde{T}\)との間に以下の式が成り立つ．</p>
+<p>$$\tilde{T} = T + \Delta\Phi$$</p>
+<p>よって，例えば操作を\(q\)回行ったとすると，全操作の合計計算量について，以下の式が成り立つ．</p>
+<p>$$\sum_{i=1}^q \tilde{T}_i = \sum_{i=1}^q T_i + \sum_{i=1}^q \Delta \Phi_i = \sum_{i=1}^q T_i + \sum_{i=1}^q (\Phi_i - \Phi_{i-1})$$</p>
+<p>ここで重要なことは，上の条件より，<strong>\(\Delta\Phi \geq 0\)であるため，\(\sum_{i=1}^q \tilde{T}_i\)を上から抑えることができれば，実計算量\(\sum_{i=1}^q T_i\)も同様の計算量で抑えることができる</strong>ということである．</p>
 <p>上で述べた2つの条件を満たすポテンシャル関数はいくらでも定義できる．しかし，このポテンシャル関数を適切なものにしなければ，\(\Delta\Phi\)が大きくなってしまい，解析の意味がなくなってしまう．splay操作の償却解析において用いるポテンシャル関数\(\Phi\)を，以下のように定義する(と上手くいく)．</p>
 <p>\(s(x)\) = ノード\(x\)を根とする部分木のサイズ(部分木に含まれるノード数)<br>\(r(x) = \log_2 s(x)\)<br>\(\Phi(x) = \sum r(x)\)</p>
 <p>木に存在する全ノードの\(r(x)\)の合計をポテンシャルとして定義するのは，直感的にも理にかなっている．なぜなら，深さの深いノードが多くある状態(<strong>後の操作の計算量が悪くなりそうな状態</strong>)では，そのノードを下(部分木)に持つノード数が多いため，<strong>\(\Phi(x) = \sum r(x)\)の値が増加する</strong>．</p>
 <p>ここから，実際にsplay操作の償却計算量\(\tilde{T}_{splay}\)を導いていく．</p>
 <p>\(\tilde{T}_{splay}\)を導くために，まず，\(\tilde{T}_{zig}\)，\(\tilde{T}_{zig-zag}\)，\(\tilde{T}_{zig-zig}\)を導く．なぜなら，splay操作は，<strong>複数回のzig-zagもしくはzig-zig操作</strong>と，<strong>最後の1回のzig操作</strong>から成っているからだ．</p>
 <h3 id="zigの償却計算量"><a class="header" href="#zigの償却計算量">zigの償却計算量</a></h3>
-<p>// TODO : 近日加筆予定</p>
+<p>zigをもう1度振り返ると，以下のような操作である．</p>
+<pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
+graph TD
+P((Par)):::p --- S((Spl)):::splay
+P --- C(部分木C)
+S --- A(部分木A)
+S --- B(部分木B)
+
+classDef p stroke-width:4px,stroke:green;
+classDef splay stroke-width:4px,stroke:slateblue;
+</pre>
+<p>上のような木を下のように変形する．</p>
+<pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
+graph TD
+SS((Spl)):::splay --- AA(部分木A)
+SS --- PP((Par)):::p
+PP --- BB(部分木B)
+PP --- CC(部分木C)
+
+classDef p stroke-width:4px,stroke:green;
+classDef splay stroke-width:4px,stroke:slateblue;
+</pre>
+<p>この操作の償却計算量は以下で表せる．</p>
+<p>$$\tilde{T}_{zig} = T_{zig} + \Delta\Phi = T_{zig} + (\sum r_{new}(x) - \sum r_{pre}(x))$$</p>
+<p>zigは1回の操作であるため，\(T_{zig} = 1\)である．あとは，\(\sum r_{new}(x) - \sum r_{pre}(x)\)の部分を求めたい．先ほどの木の変形に注目すると，zigによって\(r(x)\)の値が変化したのは，実はsplayしたいノード(以下\(s\)ノードと呼ぶ)とその親ノード(以下\(p\)ノードと呼ぶ)だけである．よって，式は以下のように変形できる．</p>
+<p>$$\tilde{T}_{zig} = 1 + \lbrace(r_{new}(s) + r_{new}(p)) - (r_{pre}(s) + r_{pre}(p))\rbrace$$</p>
+<p>ここで，上の木の変形の図から，\(r_{new}(p) - r_{pre}(p)\)は負であることがわかる．よって，以下の式が成り立つ．</p>
+<p>$$\tilde{T}_{zig} \leq 1 + r_{new}(s) - r_{pre}(s) \leq 1 + 3r_{new}(s) - 3r_{pre}(s)$$</p>
+<p>なぜ一部\(3\)倍したかはあとでわかるので，今はこの式が成り立つことさえ確認できればok．</p>
 <h3 id="zig-zagの償却計算量"><a class="header" href="#zig-zagの償却計算量">zig-zagの償却計算量</a></h3>
 <p>// TODO : 近日加筆予定</p>
 <h3 id="zig-zigの償却計算量"><a class="header" href="#zig-zigの償却計算量">zig-zigの償却計算量</a></h3>
