@@ -206,13 +206,15 @@ splay操作は，splayしたいノードとその親ノード，親の親ノー�
 - 任意の\\(i\\)について，\\(i\\)番目の操作を行なった後の状態\\(\Phi_i\\)について，\\(\Phi_i \geq 0\\)
 - \\(\Phi_0 = 0\\)
 
-これらの条件を満たすポテンシャル\\(\Phi\\)を定義したとする．このとき，行なったある操作の実計算量を\\(T\\)とすると，この操作の償却計算量\\(\tilde{T}\\)は以下で表される．
+これらの条件を満たすポテンシャル\\(\Phi\\)を定義したとする．このとき，行なったある操作の実計算量を\\(T\\)とすると，この操作の償却計算量\\(\tilde{T}\\)との間に以下の式が成り立つ．
 
-$$
-\tilde{T} = T + \Delta\Phi
-$$
+$$\tilde{T} = T + \Delta\Phi$$
 
-ここで，上の条件より，**\\(\Delta\Phi \geq 0\\)であるため，\\(\tilde{T}\\)を上から抑えることができれば，実計算量\\(T\\)も同様の計算量で抑えることができる**ということである．
+よって，例えば操作を\\(q\\)回行ったとすると，全操作の合計計算量について，以下の式が成り立つ．
+
+$$\sum\_{i=1}^q \tilde{T}\_i = \sum\_{i=1}^q T\_i + \sum\_{i=1}^q \Delta \Phi\_i = \sum\_{i=1}^q T\_i + \sum\_{i=1}^q (\Phi\_i - \Phi\_{i-1})$$
+
+ここで重要なことは，上の条件より，**\\(\Delta\Phi \geq 0\\)であるため，\\(\sum\_{i=1}^q \tilde{T}\_i\\)を上から抑えることができれば，実計算量\\(\sum\_{i=1}^q T\_i\\)も同様の計算量で抑えることができる**ということである．
 
 上で述べた2つの条件を満たすポテンシャル関数はいくらでも定義できる．しかし，このポテンシャル関数を適切なものにしなければ，\\(\Delta\Phi\\)が大きくなってしまい，解析の意味がなくなってしまう．splay操作の償却解析において用いるポテンシャル関数\\(\Phi\\)を，以下のように定義する(と上手くいく)．
 
@@ -225,8 +227,47 @@ $$
 \\(\tilde{T}\_{splay}\\)を導くために，まず，\\(\tilde{T}\_{zig}\\)，\\(\tilde{T}\_{zig-zag}\\)，\\(\tilde{T}\_{zig-zig}\\)を導く．なぜなら，splay操作は，**複数回のzig-zagもしくはzig-zig操作**と，**最後の1回のzig操作**から成っているからだ．
 
 ### zigの償却計算量
+zigをもう1度振り返ると，以下のような操作である．
 
-// TODO : 近日加筆予定
+```mermaid
+%%{init: {"flowchart" : { "curve" : "basis" } } }%%
+graph TD
+P((Par)):::p --- S((Spl)):::splay
+P --- C(部分木C)
+S --- A(部分木A)
+S --- B(部分木B)
+
+classDef p stroke-width:4px,stroke:green;
+classDef splay stroke-width:4px,stroke:slateblue;
+```
+
+上のような木を下のように変形する．
+
+```mermaid
+%%{init: {"flowchart" : { "curve" : "basis" } } }%%
+graph TD
+SS((Spl)):::splay --- AA(部分木A)
+SS --- PP((Par)):::p
+PP --- BB(部分木B)
+PP --- CC(部分木C)
+
+classDef p stroke-width:4px,stroke:green;
+classDef splay stroke-width:4px,stroke:slateblue;
+```
+
+この操作の償却計算量は以下で表せる．
+
+$$\tilde{T}\_{zig} = T\_{zig} + \Delta\Phi = T\_{zig} + (\sum r\_{new}(x) - \sum r\_{pre}(x))$$
+
+zigは1回の操作であるため，\\(T\_{zig} = 1\\)である．あとは，\\(\sum r\_{new}(x) - \sum r\_{pre}(x)\\)の部分を求めたい．先ほどの木の変形に注目すると，zigによって\\(r(x)\\)の値が変化したのは，実はsplayしたいノード(以下\\(s\\)ノードと呼ぶ)とその親ノード(以下\\(p\\)ノードと呼ぶ)だけである．よって，式は以下のように変形できる．
+
+$$\tilde{T}\_{zig} = 1 + \lbrace(r\_{new}(s) + r\_{new}(p)) - (r\_{pre}(s) + r\_{pre}(p))\rbrace$$
+
+ここで，上の木の変形の図から，\\(r\_{new}(p) - r\_{pre}(p)\\)は負であることがわかる．よって，以下の式が成り立つ．
+
+$$\tilde{T}\_{zig} \leq 1 + r\_{new}(s) - r\_{pre}(s) \leq 1 + 3r\_{new}(s) - 3r\_{pre}(s)$$
+
+なぜ一部\\(3\\)倍したかはあとでわかるので，今はこの式が成り立つことさえ確認できればok．
 
 ### zig-zagの償却計算量
 
