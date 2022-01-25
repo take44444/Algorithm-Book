@@ -1007,7 +1007,7 @@ classDef splay stroke-width:4px,stroke:slateblue;
 </pre>
 <p>この例は，splayしたいノードが根ノードの左の子である場合のzigだが，右の子である場合も左右対称の同様の操作になる．</p>
 <h3 id="zig-zag"><a class="header" href="#zig-zag">zig-zag</a></h3>
-<p>zig-zagは，<strong>splayしたいノードと親ノードの関係が，親ノードと親の親ノードの関係と逆の時</strong>に行われる操作である．<strong>これは実質，splayしたいノードに対してzigを2回行うことと同じである</strong>．なのになぜzigと区別してここに示しているかは，後半の計算量解析の時にわかるので今は考えなくてよい．</p>
+<p>zig-zagは，<strong>splayしたいノードと親ノードの関係が，親ノードと親の親ノードの関係と逆の時</strong>に行われる操作である．<strong>これは実質，splayしたいノードに対してzigを2回行うことと同じである</strong>．なのになぜzigと区別してここに示しているかは，後半の計算量解析の時に分かるので今は考えなくてよい．</p>
 <pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
 graph TD
 G((GPar)):::p --- P((Par)):::p
@@ -1067,6 +1067,7 @@ classDef splay stroke-width:4px,stroke:slateblue;
 <p>話の流れを切らさないために結論から述べると，splay操作の<strong>償却計算量</strong>は\(O(\log N)\)である．償却計算量についてはこの後に説明するが，簡単に言うと，<strong>一連の操作を行なった時，その1回あたりの計算量の平均を取ると\(O(\log N)\)になるということが保証される</strong>ということである．もっと噛み砕いて言うと，バランスの取れていない木で深さの深いノードをsplayすると，それはその操作単体で見ると時間がかかっているかもしれない．しかし，<strong>連続して</strong>何回もsplay操作を行なった時，<strong>全体の計算量が，splay操作回数を\(k\)として\(O(k \log N)\)になることを保証できる</strong>ということ．これが償却計算量の意味である．splay操作の償却計算量がなぜ\(O(\log N)\)になるかはひとまず置いといて，もしそうなるとしたら何が嬉しいのかを考えよう．</p>
 <p>冒頭で，<strong>splay操作は，<code>lower_bound</code>の計算量を\(O(\log N)\)に保証するための操作</strong>であると述べた．<code>lower_bound</code>の計算量は，<br>\(O(\)探索しているノードが存在する深さ\()\)<br>であった．ではsplay操作はどうだろうか．zig1回の操作でそのノードが1つ上に上がり，zig-zagやzig-zigのようにzigを2回行う操作でそのノードが2つ上がるため，<strong>splay操作の計算量は<br>\(O(\)splayしたいノードが存在する深さ\()\)</strong><br>である．splayするノードと，探索したノードが等しければ，これらは当然同じである．つまり，<strong><code>lower_bound</code>でアクセスしたノードをsplayする</strong>ことで，<strong><code>lower_bound</code>の計算量をsplay操作の計算量で保証することができるのである</strong>．</p>
 <h2 id="splay操作の償却計算量の導出"><a class="header" href="#splay操作の償却計算量の導出">splay操作の償却計算量の導出</a></h2>
+<p><u>※この章はかなり読むのがしんどいと思います．コードだけ欲しい人は，飛ばして最後までスクロールしてください．</u></p>
 <p>償却計算量とは，上でも述べたように，<strong>続けて行なった一連の操作</strong>の，平均した1回あたりの計算量である．混同しやすいものとして，<strong>平均計算量</strong>があるが，これは別物である．平均計算量は，<strong>操作を独立したものとして考える</strong>．あらゆる入力に対してその操作を<strong>1回</strong>行なった時の計算量の平均が平均計算量である．大きな違いは，平均計算量の場合，最悪の入力がされ続けた場合，1回あたりの操作の計算量の平均がその計算量に収まるかがわからないが，償却計算量の場合はその計算量に収まることを保証できるということ．</p>
 <p>償却計算量の導出には，<strong>ポテンシャル解析</strong>という手法が用いられる．ポテンシャル解析では，操作が行われる前と後の状態を<strong>ポテンシャル関数</strong>というもので評価する．ポテンシャル関数で評価した値は<strong>借金</strong>みたいなものと考えるとわかりやすい．<strong>後の操作の計算量を悪化させる</strong>ような操作を行った場合は，<strong>その操作自体は速かったとしても</strong>その分を考慮して評価すべきである．これがポテンシャル解析の基本的な考え方である．</p>
 <p>ポテンシャル\(\Phi\)が満たす必要のある条件は以下．</p>
@@ -1076,9 +1077,9 @@ classDef splay stroke-width:4px,stroke:slateblue;
 </ul>
 <p>これらの条件を満たすポテンシャル\(\Phi\)を定義したとする．このとき，行なったある操作の実計算量を\(T\)とすると，この操作の償却計算量\(\tilde{T}\)との間に以下の式が成り立つ．</p>
 <p>$$\tilde{T} = T + \Delta\Phi$$</p>
-<p>よって，例えば操作を\(q\)回行ったとすると，全操作の合計計算量について，以下の式が成り立つ．</p>
-<p>$$\sum_{i=1}^q \tilde{T}_i = \sum_{i=1}^q T_i + \sum_{i=1}^q \Delta \Phi_i = \sum_{i=1}^q T_i + \sum_{i=1}^q (\Phi_i - \Phi_{i-1})$$</p>
-<p>ここで重要なことは，上の条件より，<strong>\(\Delta\Phi \geq 0\)であるため，\(\sum_{i=1}^q \tilde{T}_i\)を上から抑えることができれば，実計算量\(\sum_{i=1}^q T_i\)も同様の計算量で抑えることができる</strong>ということである．</p>
+<p>よって，例えば操作を\(k\)回行ったとすると，全操作の合計計算量について，以下の式が成り立つ．</p>
+<p>$$\sum_{i=1}^k \tilde{T}_i = \sum_{i=1}^k T_i + \sum_{i=1}^k \Delta \Phi_i$$</p>
+<p>ここで重要なことは，上の条件より，<strong>\(\Delta\Phi \geq 0\)であるため，\(\sum_{i=1}^k \tilde{T}_i\)を上から抑えることができれば，実計算量\(\sum_{i=1}^k T_i\)も同様の計算量で抑えることができる</strong>ということである．</p>
 <p>上で述べた2つの条件を満たすポテンシャル関数はいくらでも定義できる．しかし，このポテンシャル関数を適切なものにしなければ，\(\Delta\Phi\)が大きくなってしまい，解析の意味がなくなってしまう．splay操作の償却解析において用いるポテンシャル関数\(\Phi\)を，以下のように定義する(と上手くいく)．</p>
 <p>\(s(x)\) = ノード\(x\)を根とする部分木のサイズ(部分木に含まれるノード数)<br>\(r(x) = \log_2 s(x)\)<br>\(\Phi(x) = \sum r(x)\)</p>
 <p>木に存在する全ノードの\(r(x)\)の合計をポテンシャルとして定義するのは，直感的にも理にかなっている．なぜなら，深さの深いノードが多くある状態(<strong>後の操作の計算量が悪くなりそうな状態</strong>)では，そのノードを下(部分木)に持つノード数が多いため，<strong>\(\Phi(x) = \sum r(x)\)の値が増加する</strong>．</p>
@@ -1108,16 +1109,110 @@ classDef p stroke-width:4px,stroke:green;
 classDef splay stroke-width:4px,stroke:slateblue;
 </pre>
 <p>この操作の償却計算量は以下で表せる．</p>
-<p>$$\tilde{T}_{zig} = T_{zig} + \Delta\Phi = T_{zig} + (\sum r_{new}(x) - \sum r_{pre}(x))$$</p>
-<p>zigは1回の操作であるため，\(T_{zig} = 1\)である．あとは，\(\sum r_{new}(x) - \sum r_{pre}(x)\)の部分を求めたい．先ほどの木の変形に注目すると，zigによって\(r(x)\)の値が変化したのは，実はsplayしたいノード(以下\(s\)ノードと呼ぶ)とその親ノード(以下\(p\)ノードと呼ぶ)だけである．よって，式は以下のように変形できる．</p>
+<p>$$\tilde{T}_{zig} = T_{zig} + \Delta\Phi = T_{zig} + (\sum_x r_{new}(x) - \sum_x r_{pre}(x))$$</p>
+<p>zigは1回の操作であるため，\(T_{zig} = 1\)である．あとは，\(\sum_x r_{new}(x) - \sum_x r_{pre}(x)\)の部分を求めたい．先ほどの木の変形に注目すると，zigによって\(r(x)\)の値が変化したのは，実はsplayしたいノード(以下\(s\)ノードと呼ぶ)とその親ノード(以下\(p\)ノードと呼ぶ)だけである．よって，式は以下のように変形できる．</p>
 <p>$$\tilde{T}_{zig} = 1 + \lbrace(r_{new}(s) + r_{new}(p)) - (r_{pre}(s) + r_{pre}(p))\rbrace$$</p>
-<p>ここで，上の木の変形の図から，\(r_{new}(p) - r_{pre}(p)\)は負であることがわかる．よって，以下の式が成り立つ．</p>
+<p>ここで，上の木の変形の図から，\(r_{new}(p) - r_{pre}(p)\)は負であることが分かる．よって，以下の式が成り立つ．</p>
 <p>$$\tilde{T}_{zig} \leq 1 + r_{new}(s) - r_{pre}(s) \leq 1 + 3r_{new}(s) - 3r_{pre}(s)$$</p>
-<p>なぜ一部\(3\)倍したかはあとでわかるので，今はこの式が成り立つことさえ確認できればok．</p>
+<p>なぜ一部係数を\(3\)にしたかは後で分かるので，今はこの式が成り立つことさえ確認できればok．</p>
 <h3 id="zig-zagの償却計算量"><a class="header" href="#zig-zagの償却計算量">zig-zagの償却計算量</a></h3>
-<p>// TODO : 近日加筆予定</p>
+<p>zig-zagをもう1度振り返ると，以下のような操作である．</p>
+<pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
+graph TD
+G((GPar)):::p --- P((Par)):::p
+G --- D(部分木D)
+P --- A(部分木A)
+P --- S((Spl)):::splay
+S --- B(部分木B)
+S --- C(部分木C)
+
+classDef p stroke-width:4px,stroke:green;
+classDef splay stroke-width:4px,stroke:slateblue;
+</pre>
+<p>上のような木を下のように変形する．</p>
+<pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
+graph TD
+SS((Spl)):::splay --- PP((Par)):::p
+SS --- GG((GPar)):::p
+PP --- AA(部分木A)
+PP --- BB(部分木B)
+GG --- CC(部分木C)
+GG --- DD(部分木D)
+
+classDef p stroke-width:4px,stroke:green;
+classDef splay stroke-width:4px,stroke:slateblue;
+</pre>
+<p>zigの時と同様に木の変形に注目すると，\(r(x)\)の値が変化したのは\(s\)ノードと\(p\)ノードとその親のノード(以下\(g\)ノードと呼ぶ)だけである．よって，以下の式が成り立つ．</p>
+<p>$$\tilde{T}_{zig-zag} = T_{zig-zag} + \Delta\Phi = 2 + r_{new}(s) - r_{pre}(s) + r_{new}(p) - r_{pre}(p) + r_{new}(g) - r_{pre}(g)$$</p>
+<p>ここで，上の木の変形の図から，\(r_{pre}(g) = r_{new}(s)\)であること，\(r_{pre}(p)&gt;r_{pre}(s)\)であることから，下のように変形できる．
+$$\tilde{T}_{zig-zag} \leq 2 - 2r_{pre}(s) + r_{new}(p) + r_{new}(g)$$</p>
+<p>ここで，\(r(x)\)は\(\log s(x)\)であることを思い出すと，式は以下のように変形される．</p>
+<p>$$\tilde{T}_{zig-zag} \leq \log \frac{s_{new}(p) \times s_{new}(g)}{s_{new}(s) \times s_{new}(s)} + 2 + 2r_{new}(s) - 2r_{pre}(s)$$</p>
+<p>ここで，以下の式\((*)\)を示す．</p>
+<p>$$\log \frac{s_{new}(p) \times s_{new}(g)}{s_{new}(s) \times s_{new}(s)} \leq -2 \qquad (*)$$</p>
+<p>この式を変形して，</p>
+<p>$$\frac{s_{new}(p)}{s_{new}(s)} \times \frac{s_{new}(g)}{s_{new}(s)} \leq \frac{1}{4}$$</p>
+<p>が得られる．ここで，zig-zagで木を変形した後の図から，</p>
+<p>$$\frac{s_{new}(p)}{s_{new}(s)} + \frac{s_{new}(g)}{s_{new}(s)} \leq 1$$</p>
+<p>であることが分かる．和の最大値が定められている時，積の最大値はそれら2つの値が等しく，和の最大値\(/2\)である時である(この証明は簡単なので省略する)．よって，</p>
+<p>$$\frac{s_{new}(p)}{s_{new}(s)} \times \frac{s_{new}(g)}{s_{new}(s)} \leq \frac{1}{2} \times \frac{1}{2} = \frac{1}{4}$$</p>
+<p>が証明され，式\((*)\)が示された．ここで，元の式に戻ると，式\((*)\)を使って，以下のように変形できることが分かる．</p>
+<p>$$\tilde{T}_{zig-zag} \leq \log \frac{s_{new}(p) \times s_{new}(g)}{s_{new}(s) \times s_{new}(s)} + 2 + 2r_{new}(s) - 2r_{pre}(s) \leq 2r_{new}(s) - 2r_{pre}(s)$$</p>
+<p>従って，以下の式が示された．</p>
+<p>$$\tilde{T}_{zig-zag} \leq 3r_{new}(s) - 3r_{pre}(s)$$</p>
+<p>こちらも，なぜ一部の係数を\(3\)にしたかは後で分かるので，この式が成り立つことさえ確認できればok．</p>
 <h3 id="zig-zigの償却計算量"><a class="header" href="#zig-zigの償却計算量">zig-zigの償却計算量</a></h3>
-<p>// TODO : 近日加筆予定</p>
+<p>zig-zigをもう1度振り返ると，以下のような操作である．</p>
+<pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
+graph TD
+G((GPar)):::p --- P((Par)):::p
+G --- D(部分木D)
+P --- S((Spl)):::splay
+P --- C(部分木C)
+S --- A(部分木A)
+S --- B(部分木B)
+
+classDef p stroke-width:4px,stroke:green;
+classDef splay stroke-width:4px,stroke:slateblue;
+</pre>
+<p>上のような木を下のように変形する．</p>
+<pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
+graph TD
+SS((Spl)):::splay --- AA(部分木A)
+SS --- PP((Par)):::p
+PP --- BB(部分木B)
+PP --- GG((GPar)):::p
+GG --- CC(部分木C)
+GG --- DD(部分木D)
+
+classDef p stroke-width:4px,stroke:green;
+classDef splay stroke-width:4px,stroke:slateblue;
+</pre>
+<p>こちらも同様に木の変形に注目すると，\(r(x)\)の値が変化したのは\(s\)ノードと\(p\)ノードと\(g\)ノードだけである．よって，以下の式が成り立つ．</p>
+<p>$$\tilde{T}_{zig-zig} = 2 + r_{new}(s) - r_{pre}(s) + r_{new}(p) - r_{pre}(p) + r_{new}(g) - r_{pre}(g)$$</p>
+<p>ここで，上の木の図から，\(r_{pre}(p) &lt; r_{pre}(s)\)であること，\(r_{new}(p) &gt; r_{new}(s)\)であること，\(r_{pre}(g) = r_{new}(s)\)であることから，以下のように変形できる．</p>
+<p>$$\tilde{T}_{zig-zig} \leq 2 - 2r_{pre}(s) + r_{new}(s) + r_{new}(g)$$</p>
+<p>ここで，\(r(x)\)は\(\log s(x)\)であることを思い出すと，式は以下のように変形される．</p>
+<p>$$\tilde{T}_{zig-zig} \leq \log \frac{s_{pre}(s) \times s_{new}(g)}{s_{new}(s) \times s_{new}(s)} + 2 + 3r_{new}(s) - 3r_{pre}(s)$$</p>
+<p>ここで，上の木の図から，これは少し気づきにくいが</p>
+<p>$$\frac{s_{pre}(s)}{s_{new}(s)} + \frac{s_{new}(g)}{s_{new}(s)} \leq 1$$</p>
+<p>であることが，それぞれのノードが持つ部分木を注意深く見ると分かる．ここで，先ほどの\((*)\)式の時と同じように，</p>
+<p>$$\log \frac{s_{pre}(s) \times s_{new}(g)}{s_{new}(s) \times s_{new}(s)} \leq -2$$</p>
+<p>が示せるので，</p>
+<p>$$\tilde{T}_{zig-zig} \leq 3r_{new}(s) - 3r_{pre}(s)$$</p>
+<p><strong>これで，zig，zig-zag，zig-zig全ての償却計算量が導出した</strong>．ここで，splay操作は，<strong>複数回のzig-zagもしくはzig-zig操作</strong>と，<strong>最後の1回のzig操作</strong>から成っていることを思い出して欲しい．このことから，splay操作の償却計算量\(\tilde{T}_{splay}\)は，以下の式で表される．</p>
+<p>$$\tilde{T}_{splay} = \sum (\tilde{T}_{zig-zag}~\rm{or}~\tilde{T}_{zig-zig}) + \tilde{T}_{zig}$$</p>
+<p>そして，splay操作でzig-zagまたはzig-zigをした回数を合計\(m-1\)回，また，splay操作の直前の状態を\(0\)番目の状態とすると，今まで求めてきたものを代入して以下の式が得られる．</p>
+<p>$$\tilde{T}_{splay} \leq \sum_{i=1}^{m}(3r_i(s) - 3r_{i-1}(s)) + 1 + 3r_{m}(s) - 3r_{m-1}(s)$$</p>
+<p>これは，一見ごちゃごちゃしているように見えるが，\(\sum\)の部分を展開すると，<strong>前の\(3r_i(s)\)と次の\(- 3r_i(s)\)が綺麗に打ち消しあって消える</strong>．したがって，以下の式を得る．</p>
+<p>$$\tilde{T}_{splay} \leq 1 + 3r_m(s) - 3r_0(s)$$</p>
+<p>ここで，\(3r_m(s)\)はsplay操作が終わった後の状態であることに注目する．<strong>splay操作が終わった後，\(s\)ノードは根である</strong>ため，木の全ノード数を\(N\)とすると，以下の式が成り立つ．</p>
+<p>$$r_m(s) = \log N$$</p>
+<p>また，\(r_(x) \geq 0\)であることから，最後に，splay操作の償却計算量\(\tilde{T}_{splay}\)が得られる．</p>
+<p>$$\tilde{T}_{splay} \leq 1 + 3 \log N \leq O(\log N)$$</p>
+<p>よって，ここからは冗長だが，splay操作を\(k\)回行った時の計算量について以下の関係が成り立つ．</p>
+<p>$$\sum_{i=1}^{k} T_{splay} \leq \sum_{i=1}^{k} \tilde{T}_{splay} \leq O(k \log N)$$</p>
+<p>従って，<strong>splay操作を連続して行なった時の1回あたりの平均の計算量，つまり償却計算量は，\(O(\log N)\)である</strong>．</p>
 <h2 id="実装におけるその他の注意事項-1"><a class="header" href="#実装におけるその他の注意事項-1">実装におけるその他の注意事項</a></h2>
 <ul>
 <li><code>lower_bound</code>でアクセスしたノードをsplayするのを忘れてはいけない．それを<strong>splayするから\(O(\log N)\)になるのであって，余分な操作と思ってsplayを省略すると，計算量がおかしくなる</strong>．</li>
