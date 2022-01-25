@@ -397,6 +397,8 @@ $$\log \frac{s\_{pre}(s) \times s\_{new}(g)}{s\_{new}(s) \times s\_{new}(s)} \le
 
 $$\tilde{T}\_{zig-zig} \leq 3r\_{new}(s) - 3r\_{pre}(s)$$
 
+が得られる．
+
 **これで，zig，zig-zag，zig-zig全ての償却計算量が導出した**．ここで，splay操作は，**複数回のzig-zagもしくはzig-zig操作**と，**最後の1回のzig操作**から成っていることを思い出して欲しい．このことから，splay操作の償却計算量\\(\tilde{T}\_{splay}\\)は，以下の式で表される．
 
 $$\tilde{T}\_{splay} = \sum (\tilde{T}\_{zig-zag}\~\rm{or}\~\tilde{T}\_{zig-zig}) + \tilde{T}\_{zig}$$
@@ -413,7 +415,7 @@ $$\tilde{T}\_{splay} \leq 1 + 3r\_m(s) - 3r\_0(s)$$
 
 $$r\_m(s) = \log N$$
 
-また，\\(r\_(x) \geq 0\\)であることから，最後に，splay操作の償却計算量\\(\tilde{T}\_{splay}\\)が得られる．
+また，\\(r(x) \geq 0\\)であることから，最後に，splay操作の償却計算量\\(\tilde{T}\_{splay}\\)が得られる．
 
 $$\tilde{T}\_{splay} \leq 1 + 3 \log N \leq O(\log N)$$
 
