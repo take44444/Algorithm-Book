@@ -281,7 +281,7 @@ graph LR
 <p>が成り立つため，この\(y\)を\(X\)に含めることができる．</p>
 <p>これを\(Y\)が空になるまで繰り返すことで，\(s\)を始点とする単一始点最短路を求めることができる．</p>
 <h2 id="実装"><a class="header" href="#実装">実装</a></h2>
-<p><strong>プライオリティキュー</strong>を用いて，路長優先探索(造語)で求められる．計算量は，取り出しに\(O(\log V)\)かかるキューを用いていることから，\(O(E \log V)\)となる．</p>
+<p><strong>プライオリティキュー</strong>を用いて，路長優先探索(造語です)をすることで求められる．計算量は，取り出しに\(O(\log V)\)かかるキューを用いていることから，\(O(E \log V)\)となる．</p>
 <h2 id="コード"><a class="header" href="#コード">コード</a></h2>
 <p><a href="https://judge.yosupo.jp/submission/77112"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
 <pre><code class="language-cpp">pair&lt;vector&lt;i64&gt;, vector&lt;int&gt;&gt; dijkstra(int s, i64 n, Graph &amp;g) {
