@@ -52,5 +52,6 @@
   - [後退解析](./game/backtrack/main.md)
   - [Nim](./game/nim/main.md)
   - [Grundy数](./game/grundy/main.md)
+- [群論](./group-theory/main.md)
 - [分割統治法](./dc/main.md)
 - [2分探索](./binary-search/main.md)
