@@ -137,7 +137,9 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="単一始点最短パスbfs"><a class="header" href="#単一始点最短パスbfs">単一始点最短パス(BFS)</a></h1>
-<p>自明だが，辺に重みがない場合の単一始点最短路(単一始点最短パス)は，BFSで求められる．全てのノードを1回ずつ訪れるので，計算量は\(O(|V|)\)</p>
+<p>全ての辺の重みが\(1\)の場合の単一始点最短路(<strong>単一始点最短パス</strong>)は，BFSで\(O(|V|)\)で求められる．</p>
+<h2 id="説明"><a class="header" href="#説明">説明</a></h2>
+<p>単一始点最短パスを<strong>Dijkstra法</strong>で求めることを考える．Dijkstra法では，始点からの最短路長が小さいノードから順に最短路が求まっていった．<strong>全ての辺の重みが\(1\)の場合，最短路長が小さい順というのはすなわち，始点からBFSをした時に訪れる順番である</strong>ため，単に始点からBFSをすることで単一始点最短パスを求めることができる．BFSで全てのノードを1回ずつ訪れるので，計算量は\(O(|V|)\)．</p>
 <h2 id="コード"><a class="header" href="#コード">コード</a></h2>
 <p><a href="https://onlinejudge.u-aizu.ac.jp/solutions/problem/ALDS1_11_C/review/6237791/Coordinator/C++17"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
 <pre><code class="language-cpp">vector&lt;int&gt; bfs(int node, int n, vector&lt;vector&lt;int&gt;&gt; &amp;g) {

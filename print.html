@@ -314,7 +314,9 @@ vector&lt;pair&lt;int, int&gt;&gt; get_path(int t, vector&lt;int&gt; &amp;prev) 
 }
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="単一始点最短パスbfs"><a class="header" href="#単一始点最短パスbfs">単一始点最短パス(BFS)</a></h1>
-<p>自明だが，辺に重みがない場合の単一始点最短路(単一始点最短パス)は，BFSで求められる．全てのノードを1回ずつ訪れるので，計算量は\(O(|V|)\)</p>
+<p>全ての辺の重みが\(1\)の場合の単一始点最短路(<strong>単一始点最短パス</strong>)は，BFSで\(O(|V|)\)で求められる．</p>
+<h2 id="説明-1"><a class="header" href="#説明-1">説明</a></h2>
+<p>単一始点最短パスを<strong>Dijkstra法</strong>で求めることを考える．Dijkstra法では，始点からの最短路長が小さいノードから順に最短路が求まっていった．<strong>全ての辺の重みが\(1\)の場合，最短路長が小さい順というのはすなわち，始点からBFSをした時に訪れる順番である</strong>ため，単に始点からBFSをすることで単一始点最短パスを求めることができる．BFSで全てのノードを1回ずつ訪れるので，計算量は\(O(|V|)\)．</p>
 <h2 id="コード-1"><a class="header" href="#コード-1">コード</a></h2>
 <p><a href="https://onlinejudge.u-aizu.ac.jp/solutions/problem/ALDS1_11_C/review/6237791/Coordinator/C++17"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
 <pre><code class="language-cpp">vector&lt;int&gt; bfs(int node, int n, vector&lt;vector&lt;int&gt;&gt; &amp;g) {
@@ -440,7 +442,7 @@ HL分解の各操作と時間計算量は以下．</p>
 <li>木の任意2ノード間のパスクエリ: \(O(\log ^2|V|)\)</li>
 </ul>
 <p>※パスクエリというのは，あるパスについて，通った順番にノード上の値を累積&quot;和&quot;した値を求めるクエリのこと．</p>
-<h2 id="説明-1"><a class="header" href="#説明-1">説明</a></h2>
+<h2 id="説明-2"><a class="header" href="#説明-2">説明</a></h2>
 <p>はじめに，以下のように<strong>枝分かれのない極端な木</strong>を考える．</p>
 <pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
 graph LR
@@ -798,7 +800,7 @@ $$</p>
 <li>値(モノイド)の更新: \(O(\log N)\)</li>
 <li>配列の任意の区間の&quot;和&quot;: \(O(\log N)\)</li>
 </ul>
-<h2 id="説明-2"><a class="header" href="#説明-2">説明</a></h2>
+<h2 id="説明-3"><a class="header" href="#説明-3">説明</a></h2>
 <p>配列の区間の累積&quot;和&quot;を木で管理することで，区間クエリ，更新クエリを高速に計算する．</p>
 <p>配列の初期値を</p>
 <p>|50|10|70|30|10|90|40|</p>
@@ -1411,7 +1413,7 @@ public:
 </ul>
 <p>※このRangeBSTという名前は，筆者が勝手につけたもので，このデータ構造には特別名前はなく，中身はBST，つまり<strong>平衡2分探索木</strong>である．平衡2分探索木に機能を追加することで能力を拡張する例は多々あり，これはその1つの例である．</p>
 <p><strong>セグメント木と同じ?と思った方もいるかもしれないが，実は少し違う</strong>．セグメント木は，配列に対する区間クエリに対応したもの，つまり，言い換えると<strong>座標に制限(0~配列のサイズ)がある</strong>．RangeBSTは，データを，<strong>座標の集合</strong>としてもつため，座標の値自体に制限がなく，座圧+セグ木で解く必要がある問題も，RangeBSTなら座圧せずに解くことができる(<strong>データ構造内部でも座圧操作をしない！！</strong>)ため，実装が楽になり，実行速度も速くなることがある．</p>
-<h2 id="説明-3"><a class="header" href="#説明-3">説明</a></h2>
+<h2 id="説明-4"><a class="header" href="#説明-4">説明</a></h2>
 <p>配列に対する区間クエリではないため，最初にサイズを与えたりはしない．使用するメモリ量は，追加した座標の数に比例して動的に増える(座標に重複がある場合は増えない)．</p>
 <p>例えば，座標10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150にそれぞれ何かしらの値を設置したとする．このとき，平衡2分探索木でこの集合を持つ形は複数あるが，仮に1番綺麗な形として下のようになったとしよう．</p>
 <pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
