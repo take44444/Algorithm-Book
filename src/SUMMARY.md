@@ -42,6 +42,7 @@
   - [bitDP](./dp/bitdp/main.md)
   - [区間DP](./dp/rangedp/main.md)
   - [耳DP](./dp/eardp/main.md)
+  - [オートマトンDP](./dp/DFAdp/main.md)
   - [LCS](./dp/lcs/main.md)
   - [LIS](./dp/lis/main.md)
 - [フロー](./flow/main.md)
