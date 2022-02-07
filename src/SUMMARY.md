@@ -33,6 +33,7 @@
     - [splay木](./range/bbst/splay-tree/main.md)
   - [RangeBST](./range/rbst/main.md)
   - [2次元imos法](./range/imos2d/main.md)
+  - [Mo's algorithm](./range/mo/main.md)
   - [ウェーブレット行列](./range/wavelet-matrix/main.md)
   - [区間スケジューリング問題](./range/isp/main.md)
 - [DP](./dp/main.md)
