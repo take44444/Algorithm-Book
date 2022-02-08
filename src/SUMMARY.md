@@ -28,7 +28,7 @@
 - [区間問題](./range/main.md)
   - [imos法](./range/imos/main.md)
   - [セグメント木](./range/segtree/main.md)
-  - [BIT(フェニック木)](./range/bit/main.md)
+  - [Binary Indexed Tree(フェニック木)](./range/bit/main.md)
   - [平衡2分探索木](./range/bbst/main.md)
     - [splay木](./range/bbst/splay-tree/main.md)
   - [RangeBST](./range/rbst/main.md)
