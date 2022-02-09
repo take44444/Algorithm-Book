@@ -160,7 +160,7 @@
 <div align="center"><img src="hilbert.png" width="50%"><br><a href="https://en.wikipedia.org/wiki/Hilbert_curve">https://en.wikipedia.org/wiki/Hilbert_curve</a></div>
 <p>Hilbert曲線は，<strong>局所性が高く</strong>，<strong>Hilbert曲線において原点からの距離が近い(Hilbert Orderが近い)ことから，その空間での距離も近いことがわかる</strong>．よって，<strong>Hilbert Orderでクエリをソート</strong>し，その順にクエリを処理することで上で述べた方法よりも全体でかかる計算量が小さくなる．</p>
 <h2 id="コード"><a class="header" href="#コード">コード</a></h2>
-<p>このコードでは，Hilbert Orderによるソートを用いている．コード中の<code>maxn</code>の値は，\(N\)以上の最小の\(2\)の累乗値にする必要がある．</p>
+<p>このコードでは，Hilbert Orderによるソートを用いている．コード中の<code>maxn</code>の値は，\(N\)以上の(最小の)\(2\)の累乗値にする必要がある．</p>
 <p><a href="https://judge.yosupo.jp/submission/77813"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
 <pre><code class="language-cpp">constexpr int maxn = 1 &lt;&lt; ??;
 i64 hilbertorder(int x, int y) {
