@@ -1754,6 +1754,79 @@ public:
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="2次元imos法"><a class="header" href="#2次元imos法">2次元imos法</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="mos-algorithm"><a class="header" href="#mos-algorithm">Mo's algorithm</a></h1>
+<p><strong>Mo's algorithm</strong>とは，長さ\(N\)配列に対して，\(Q\)個の区間クエリを合計で\(O((N + Q)\sqrt{N})\)で処理するアルゴリズムである．Mo's algorithmを適用するには，以下の条件を満たしている必要がある．</p>
+<ul>
+<li>処理する全クエリを先読みできる(オフラインクエリ)．</li>
+<li>配列の各要素が不変．</li>
+<li>区間\([l, r)\)の結果から区間\([l+1, r)\)，\([l−1, r)\)，\([l, r−1)\)，\([l, r+1)\)の結果をある程度高速に計算できる．(最終的な計算量に影響する．)</li>
+<li>区間\([l, m)\)と区間\([m, r)\)をマージして\([l, r)\)を高速に計算することができない．(これができるなら<strong>セグメント木</strong>などを使えば良い．)</li>
+</ul>
+<p>要するに，少し複雑な区間クエリに高速に対応するためのアルゴリズムである．</p>
+<h2 id="説明-6"><a class="header" href="#説明-6">説明</a></h2>
+<p><strong>オフラインクエリ</strong>というのは，クエリを，実際に，与えられた順番で処理する必要がないことを意味する．また，上で述べた条件で，\([l, r)\)に対する区間クエリを求めた後に，\([l+1, r)\)，\([l−1, r)\)，\([l, r−1)\)，\([l, r+1)\)のクエリを高速に求められるというのがあった．これは，区間を左/右に1つ伸び縮みした区間のクエリを高速に求められることを意味する．</p>
+<p>Mo's algorithmの基本的なアイディアは，クエリを適切に並び替え，全体での<strong>区間の伸び縮みの回数を最小限に抑え</strong>られば，全体での計算量を抑えられるということである．</p>
+<p>ある区間\([l_1, r_1)\)を求めてからある区間\([l_2, r_2)\)までに行われる伸び縮みの回数は，\(|l_1 - l_2| + |r_1 - r_2|\)である．このことから，\((l_i, r_i)\)を座標としてみることで，<strong>任意の2つの区間の間の伸び縮み回数は，2次元座標上でのマンハッタン距離</strong>を意味することがわかる．</p>
+<p>よって，<strong>2次元座標上に設置された全ての点を1回ずつ通る道の中で総移動距離が最短のもの</strong>を見つけ出したいのだが，これは巡回セールスマン問題とほぼ同じ問題であるため，<strong>NP困難</strong>な問題である．そこで，全体の計算量がある程度小さくなるように全\((l_i, r_i)\)を通る方法として，この図のような通り方を考える．</p>
+<div align="center"><img src="range/mo/mo.png" width="50%"></div>
+<p><strong>クエリを\(l_i\)について\(\sqrt{N}\)ごとにブロックにわけ，ブロックの昇順に，ブロックごとに\(r_i\)の昇順に点を辿る</strong>．</p>
+<p>このように辿ることで，ブロックごとに\(r\)の移動は\(O(N)\)でブロック数は\(\sqrt{N}\)なので，全部で\(r\)の移動は\(O(N\sqrt{N})\)，また，\(l\)の移動は\(O(\sqrt{N})\)の移動を\(Q\)回繰り返すので，全部で\(l\)の移動は\(O(Q\sqrt{N})\)になる．よって，<strong>全体の計算量は\(O((N + Q)\sqrt{N} \times\)区間を\(1\)伸び縮みさせる計算量\()\)である</strong>．</p>
+<p>このように，クエリについて\(\sqrt{N}\)や\(\sqrt{Q}\)に分割して処理することで全体の計算量を抑える手法は一般に<strong>平方分割</strong>と呼ばれる．</p>
+<h2 id="高速化"><a class="header" href="#高速化">高速化</a></h2>
+<p>Mo's algorithmは，クエリを，上で述べたようにソートするフェーズと，実際に座標を移動しながらクエリを処理するフェーズの2つのフェーズから成る．このうち1つ目のクエリをソートするフェーズについて，ソート方法を工夫することで高速化する方法がいくつかある．</p>
+<p>最も有名なのは<strong>Hilbert曲線</strong>に沿って原点から2次元空間を移動する順番(<strong>Hilbert Order</strong>と呼ばれる)にクエリを処理する方法である．</p>
+<div align="center"><img src="range/mo/hilbert.png" width="50%"><br><a href="https://en.wikipedia.org/wiki/Hilbert_curve">https://en.wikipedia.org/wiki/Hilbert_curve</a></div>
+<p>Hilbert曲線は，<strong>局所性が高く</strong>，<strong>Hilbert曲線において原点からの距離が近い(Hilbert Orderが近い)ことから，その空間での距離も近いことがわかる</strong>．よって，<strong>Hilbert Orderでクエリをソート</strong>し，その順にクエリを処理することで上で述べた方法よりも全体でかかる計算量が小さくなる．</p>
+<h2 id="コード-9"><a class="header" href="#コード-9">コード</a></h2>
+<p>このコードでは，Hilbert Orderによるソートを用いている．コード中の<code>maxn</code>の値は，\(N\)以上の最小の\(2\)の累乗値にする必要がある．</p>
+<p><a href="https://judge.yosupo.jp/submission/77813"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
+<pre><code class="language-cpp">constexpr int maxn = 1 &lt;&lt; ??;
+i64 hilbertorder(int x, int y) {
+  i64 rx, ry, d = 0;
+  for (i64 s=maxn&gt;&gt;1; s; s&gt;&gt;=1) {
+    rx = (x &amp; s)&gt;0, ry = (y &amp; s)&gt;0;
+    d += s * s * ((rx * 3) ^ ry);
+    if (ry) continue;
+    if (rx) {
+      x = maxn-1 - x;
+      y = maxn-1 - y;
+    }
+    swap(x, y);
+  }
+  return d;
+}
+
+struct Mo {
+private:
+  int q = 0;
+  vector&lt;int&gt; l, r;
+public:
+  void insert(int l_, int r_) {
+    q++;
+    l.emplace_back(l_);
+    r.emplace_back(r_);
+  }
+
+  // F1~F5: lambda関数
+  template&lt;typename F1, typename F2, typename F3, typename F4, typename F5&gt;
+  void execute(F1 &amp;&amp;add_l, F2 &amp;&amp;add_r, F3 &amp;&amp;del_l, F4 &amp;&amp;del_r, F5 &amp;&amp;solve) {
+    vector&lt;int&gt; qi(q);
+    iota(all(qi), 0);
+    vector&lt;i64&gt; eval(q);
+    rep (q) eval[i] = hilbertorder(l[i], r[i]);
+    sort(all(qi), [&amp;](int i, int j) {
+      return eval[i] &lt; eval[j];
+    });
+    int nl = 0, nr = 0;
+    for (int i: qi) {
+      while (nl &gt; l[i]) add_l(--nl);
+      while (nr &lt; r[i]) add_r(nr++);
+      while (nl &lt; l[i]) del_l(nl++);
+      while (nr &gt; r[i]) del_r(--nr);
+      solve(i);
+    }
+  }
+};
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ウェーブレット行列"><a class="header" href="#ウェーブレット行列">ウェーブレット行列</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="区間スケジューリング問題"><a class="header" href="#区間スケジューリング問題">区間スケジューリング問題</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="dp"><a class="header" href="#dp">DP</a></h1>
