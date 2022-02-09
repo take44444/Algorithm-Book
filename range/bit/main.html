@@ -147,29 +147,29 @@
 <h2 id="説明"><a class="header" href="#説明">説明</a></h2>
 <p>配列に単に値を持った場合，値の更新が\(O(1)\)でできる代わりに任意のインデックスまでの累積&quot;和&quot;を求めるのには\(O(N)\)かかる．逆に配列にそのインデックスまでの累積&quot;和&quot;を持つと，累積&quot;和&quot;の取得が\(O(1)\)でできる代わりに値の更新が\(O(N)\)かかってしまう．工夫すると，実はどちらのクエリにも高速(\(O(\log N)\))に答えることができる．</p>
 <p>\(O(\log N)\)でこれらの操作をするために，偏りのない<strong>2分木</strong>を作り，親のノードにその部分木が持つ葉の&quot;和&quot;を持たせるというのが，<strong>セグメント木</strong>のアイディアであった．</p>
-<p>BITでは，数のビット表現に注目する．BITの基本的なアイディアは，任意の自然数がいくつかの2の累乗の和であるのと同様に，累乗の累積&quot;和&quot;はいくつかの「サブ累積&quot;和&quot;」の&quot;和&quot;として表すことができるということである．例えばある数をビットで表した時に2つの位置のビットが立っているということは2つの累積&quot;和&quot;を含んでいるということ．実際に長さ\(16\)の配列にいくつか値を設置した例を見てみる．</p>
+<p>BITでは，数のビット表現に注目する．BITの基本的なアイディアは，任意の<strong>自然数がいくつかの2の累乗の和</strong>であるのと同様に，**累積&quot;和&quot;はいくつかの「サブ累積&quot;和&quot;」の&quot;和&quot;**として表すことができるということである．例えばある数をビットで表した時に2つの位置のビットが立っているということは2つの累積&quot;和&quot;を含んでいるということ．</p>
+<p>長さ\(16\)の配列にいくつか値を設置した例を見てみる．</p>
 <table><thead><tr><th style="text-align: center"><strong>Index</strong></th><th style="text-align: center">1</th><th style="text-align: center">2</th><th style="text-align: center">3</th><th style="text-align: center">4</th><th style="text-align: center">5</th><th style="text-align: center">6</th><th style="text-align: center">7</th><th style="text-align: center">8</th><th style="text-align: center">9</th><th style="text-align: center">10</th><th style="text-align: center">11</th><th style="text-align: center">12</th><th style="text-align: center">13</th><th style="text-align: center">14</th><th style="text-align: center">15</th><th style="text-align: center">16</th></tr></thead><tbody>
 <tr><td style="text-align: center"><strong>保持する区間</strong></td><td style="text-align: center">1</td><td style="text-align: center">1...2</td><td style="text-align: center">3</td><td style="text-align: center">1...4</td><td style="text-align: center">5</td><td style="text-align: center">5...6</td><td style="text-align: center">7</td><td style="text-align: center">1...8</td><td style="text-align: center">9</td><td style="text-align: center">9...10</td><td style="text-align: center">11</td><td style="text-align: center">9...12</td><td style="text-align: center">13</td><td style="text-align: center">13...14</td><td style="text-align: center">15</td><td style="text-align: center">1...16</td></tr>
 <tr><td style="text-align: center"><strong>設置した値</strong></td><td style="text-align: center">2</td><td style="text-align: center">0</td><td style="text-align: center">1</td><td style="text-align: center">1</td><td style="text-align: center">1</td><td style="text-align: center">0</td><td style="text-align: center">4</td><td style="text-align: center">4</td><td style="text-align: center">0</td><td style="text-align: center">1</td><td style="text-align: center">0</td><td style="text-align: center">1</td><td style="text-align: center">2</td><td style="text-align: center">3</td><td style="text-align: center">0</td><td style="text-align: center">0</td></tr>
 <tr><td style="text-align: center"><strong>実際の累積&quot;和&quot;</strong></td><td style="text-align: center">2</td><td style="text-align: center">2</td><td style="text-align: center">3</td><td style="text-align: center">4</td><td style="text-align: center">5</td><td style="text-align: center">5</td><td style="text-align: center">9</td><td style="text-align: center">13</td><td style="text-align: center">13</td><td style="text-align: center">14</td><td style="text-align: center">14</td><td style="text-align: center">15</td><td style="text-align: center">17</td><td style="text-align: center">20</td><td style="text-align: center">20</td><td style="text-align: center">20</td></tr>
 <tr><td style="text-align: center"><strong>格納する値</strong></td><td style="text-align: center">2</td><td style="text-align: center">2</td><td style="text-align: center">1</td><td style="text-align: center">4</td><td style="text-align: center">1</td><td style="text-align: center">1</td><td style="text-align: center">4</td><td style="text-align: center">13</td><td style="text-align: center">0</td><td style="text-align: center">1</td><td style="text-align: center">0</td><td style="text-align: center">2</td><td style="text-align: center">2</td><td style="text-align: center">5</td><td style="text-align: center">0</td><td style="text-align: center">20</td></tr>
 </tbody></table>
-<p>実際に，これで累積&quot;和&quot;を求めるにはどうするかというのを説明する．例えば閉区間\([0, 13]\)の累積&quot;和&quot;を求めてみる．まず\(13\)を2進数で表す．</p>
+<p>実際に，BITで累積&quot;和&quot;を求めるにはどうするかというのを説明する．例えば閉区間\([0, 13]\)の累積&quot;和&quot;を求めてみる．まず\(13\)を2進数で表す．</p>
 <p>$$13_{(10)} = 1101_{(2)}$$</p>
 <p>このインデックスに格納された値を足しては最も右にある\(1\)を削除してそれを新しいインデックスとするという操作を，インデックス値が\(0\)になるまで繰り返す．</p>
 <p>$$1101_{(2)} → 1100_{(2)} → 1000_{(2)} → 0000_{(2)}$$</p>
 <p>この例ではインデックス\(1101_{(2)} = 13_{(10)}\)の値，インデックス\(1100_{(2)} = 12_{(10)}\)の値，インデックス\(1000_{(2)} = 8_{(10)}\)の値を足せばいいことになる．上の表で実際に足してみると，\(2 + 2 + 13 = 17\)となる．これは，閉区間\([0, 13]\)の実際の累積&quot;和&quot;の値と一致している．また，\(13, 12, 8\)が保持する区間を見てみると，\(1...8, 9...12, 13\)となっていることからも正しい「サブ累積&quot;和&quot;」を足せていることがわかる．</p>
 <p>表だとわかりにくいが，これを木構造として見てみるとわかりやすい．</p>
-<div align="center"><img src="bit.png" width="30%"></div>
-<div align="center"><a href="https://www.topcoder.com/thrive/articles/Binary%20Indexed%20Trees">https://www.topcoder.com/thrive/articles/Binary%20Indexed%20Trees</a></div>
+<div align="center"><img src="bit.png" width="50%"></div>
 <p>このようにして，ビットが\(1\)になっているところの個数回の演算で，指定されたインデックスまでの累積&quot;和&quot;を求めることが可能であるため，累積&quot;和&quot;を求めるクエリの計算量は，ビット長から，明らかに\(O(\log N)\)である．</p>
 <p>最後に値の更新だが，あるインデックスを，自身が保持する区間に含めるインデックスの個数も，ビット長から，明らかに\(O(\log N)\)しかないため，これらのインデックスのみを更新する計算量も，\(O(\log N)\)である．</p>
 <h2 id="任意区間の累積和を求めたい場合"><a class="header" href="#任意区間の累積和を求めたい場合">任意区間の累積&quot;和&quot;を求めたい場合</a></h2>
 <p>BITで任意区間の累積&quot;和&quot;が求められるケースは限られている．例えば，整数での和を扱っている場合，閉区間\([a, b]\)の累積和(これは文字通り和)は\([0, b]\)の値から\([0, a-1]\)の値を引くことで求められる．このように，扱っている<strong>代数系</strong>に，<strong>逆元</strong>が定義できる場合，つまり，扱っている代数系が<strong>群</strong>である場合は，BITで任意区間の累積&quot;和&quot;が求めることができる．</p>
-<h2 id="fenwickさんの論文"><a class="header" href="#fenwickさんの論文">Fenwickさんの論文</a></h2>
-<p>P.Fenwick, A new data structure for cumulative frequency tables, Software Practice and Experience Vol 24, 1994</p>
 <h2 id="実装"><a class="header" href="#実装">実装</a></h2>
 <p>説明はややこしく見えるが，コード上では，ビット演算によりアクセスすべきインデックスを簡単に計算できるため，実装は軽い．例えば，ある数\(x\)を2進数表した時に最も右にある\(1\)だけを取り出すには，\(x＆(-x)\)とするだけである．</p>
+<h2 id="fenwickさんの論文"><a class="header" href="#fenwickさんの論文">Fenwickさんの論文</a></h2>
+<p>P.Fenwick, A new data structure for cumulative frequency tables, Software Practice and Experience Vol 24, 1994</p>
 <h2 id="コード"><a class="header" href="#コード">コード</a></h2>
 <p><a href="https://judge.yosupo.jp/submission/77587"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
 <pre><code class="language-cpp">template &lt;typename T&gt;
