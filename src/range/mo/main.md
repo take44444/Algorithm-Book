@@ -36,7 +36,7 @@ Hilbert曲線は，**局所性が高く**，**Hilbert曲線において原点か
 
 ## コード
 
-このコードでは，Hilbert Orderによるソートを用いている．コード中の`maxn`の値は，\\(N\\)以上の最小の\\(2\\)の累乗値にする必要がある．
+このコードでは，Hilbert Orderによるソートを用いている．コード中の`maxn`の値は，\\(N\\)以上の(最小の)\\(2\\)の累乗値にする必要がある．
 
 [![](https://img.shields.io/badge/verify-passing-brightgreen)](https://judge.yosupo.jp/submission/77813)
 
