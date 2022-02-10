@@ -137,6 +137,57 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="imos法"><a class="header" href="#imos法">imos法</a></h1>
+<p>区間クエリを求めたい配列の長さを\(N\)とすると，<strong>imos法</strong>により，区間更新を複数回行った後の，配列の各要素の値を得ることができる．操作の時間計算量は以下．</p>
+<ul>
+<li>区間更新: \(O(1)\)</li>
+<li>配列の各要素の取得\(O(N)\)</li>
+</ul>
+<p>配列の各要素は<strong>群</strong>を成す集合の要素である必要がある．</p>
+<h2 id="説明"><a class="header" href="#説明">説明</a></h2>
+<p>群における2項演算を仮に和として考える．</p>
+<p>imos法でいう区間更新とは，配列のある区間の全要素に同じ値を足す操作のことである．これは，愚直に行うと\(O(N)\)かかってしまう．</p>
+<p>imos法は，どの区間に何の値を足す必要があるかという情報を覚えておき，配列の要素を最後に取得する時に，それまでの区間更新をまとめて処理するという方法である．より具体的に説明すると，区間更新操作では，左から<strong>累積和</strong>(\(O(N)\))を取った時に，配列の各要素の値を得られるように値の更新を行う．</p>
+<p>最後に左から累積和を取ることを前提として考えると，配列のある要素にある値を足すことは，その要素以降の全要素にその値を足すことを意味する．</p>
+<table><thead><tr><th style="text-align: center">Index</th><th style="text-align: center">0</th><th style="text-align: center">1</th><th style="text-align: center">2</th><th style="text-align: center">3</th><th style="text-align: center">4</th><th style="text-align: center">5</th><th style="text-align: center">6</th><th style="text-align: center">7</th></tr></thead><tbody>
+<tr><td style="text-align: center">クエリ1</td><td style="text-align: center">-</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(+1\)</td></tr>
+<tr><td style="text-align: center">更新1</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td></tr>
+<tr><td style="text-align: center"><strong>累積和</strong></td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(1\)</td><td style="text-align: center">\(1\)</td><td style="text-align: center">\(1\)</td><td style="text-align: center">\(1\)</td><td style="text-align: center">\(1\)</td><td style="text-align: center">\(1\)</td><td style="text-align: center">\(1\)</td></tr>
+</tbody></table>
+<p>よって，例えばある区間に値\(x\)を足す場合，区間クエリの先頭に\(x\)を足し，終わりに\(-x\)を足すことで，最後に累積和を取った時にその区間の要素のみに\(x\)を足すことができる．</p>
+<table><thead><tr><th style="text-align: center">Index</th><th style="text-align: center">0</th><th style="text-align: center">1</th><th style="text-align: center">2</th><th style="text-align: center">3</th><th style="text-align: center">4</th><th style="text-align: center">5</th><th style="text-align: center">6</th><th style="text-align: center">7</th></tr></thead><tbody>
+<tr><td style="text-align: center">クエリ1</td><td style="text-align: center">-</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">-</td><td style="text-align: center">-</td><td style="text-align: center">-</td></tr>
+<tr><td style="text-align: center">更新1</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(-x\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td></tr>
+<tr><td style="text-align: center"><strong>累積和</strong></td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(x\)</td><td style="text-align: center">\(x\)</td><td style="text-align: center">\(x\)</td><td style="text-align: center">\(x\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td></tr>
+</tbody></table>
+<p>区間更新が複数あっても操作は変わらない．</p>
+<table><thead><tr><th style="text-align: center">Index</th><th style="text-align: center">0</th><th style="text-align: center">1</th><th style="text-align: center">2</th><th style="text-align: center">3</th><th style="text-align: center">4</th><th style="text-align: center">5</th><th style="text-align: center">6</th><th style="text-align: center">7</th></tr></thead><tbody>
+<tr><td style="text-align: center">クエリ1</td><td style="text-align: center">-</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">-</td><td style="text-align: center">-</td><td style="text-align: center">-</td></tr>
+<tr><td style="text-align: center">更新1</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(-x\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td></tr>
+<tr><td style="text-align: center">クエリ2</td><td style="text-align: center">-</td><td style="text-align: center">-</td><td style="text-align: center">\(+y\)</td><td style="text-align: center">\(+y\)</td><td style="text-align: center">\(+y\)</td><td style="text-align: center">\(+y\)</td><td style="text-align: center">-</td><td style="text-align: center">-</td></tr>
+<tr><td style="text-align: center">更新2</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+y\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(-x\)</td><td style="text-align: center">\(-y\)</td><td style="text-align: center">\(0\)</td></tr>
+<tr><td style="text-align: center">クエリ3</td><td style="text-align: center">-</td><td style="text-align: center">-</td><td style="text-align: center">-</td><td style="text-align: center">\(+z\)</td><td style="text-align: center">\(+z\)</td><td style="text-align: center">-</td><td style="text-align: center">-</td><td style="text-align: center">-</td></tr>
+<tr><td style="text-align: center">更新3</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+y\)</td><td style="text-align: center">\(+z\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(-x-z\)</td><td style="text-align: center">\(-y\)</td><td style="text-align: center">\(0\)</td></tr>
+<tr><td style="text-align: center"><strong>累積和</strong></td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(x\)</td><td style="text-align: center">\(x+y\)</td><td style="text-align: center">\(x+y+z\)</td><td style="text-align: center">\(x+y+z\)</td><td style="text-align: center">\(y\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td></tr>
+</tbody></table>
+<p>扱う代数系を群一般としてまとめると，区間\([l, r))に値\(x\)を作用させる場合，配列の\(l\)番目に\(x\)を作用させ，\(r\)番目に\(x\)の逆元を作用させれば良い．また，実際の値を得るには，左から累積値を取れば良い．</p>
+<h2 id="コード"><a class="header" href="#コード">コード</a></h2>
+<p><a href="https://atcoder.jp/contests/abc183/submissions/29193241"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
+<pre><code class="language-cpp">template &lt;class S, S (*op)(S, S), S (*e)(), S (*inv)(S)&gt; struct Imos {
+private:
+  vector&lt;S&gt; imos;
+public:
+  Imos(int size) { imos.assign(size, e()); }
+  void query(int l, int r, S x) { // [l, r)
+    imos[l] = op(imos[l], x);
+    imos[r] = op(imos[r], inv(x));
+  }
+  vector&lt;S&gt; get_values() {
+    vector&lt;S&gt; ret(imos);
+    rep (i, 1, ret.size()) ret[i] += ret[i-1];
+    return move(ret);
+  }
+};
+</code></pre>
 
                     </main>
 

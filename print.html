@@ -794,15 +794,65 @@ $$</p>
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="区間問題"><a class="header" href="#区間問題">区間問題</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="imos法"><a class="header" href="#imos法">imos法</a></h1>
+<p>区間クエリを求めたい配列の長さを\(N\)とすると，<strong>imos法</strong>により，区間更新を複数回行った後の，配列の各要素の値を得ることができる．操作の時間計算量は以下．</p>
+<ul>
+<li>区間更新: \(O(1)\)</li>
+<li>配列の各要素の取得\(O(N)\)</li>
+</ul>
+<p>配列の各要素は<strong>群</strong>を成す集合の要素である必要がある．</p>
+<h2 id="説明-3"><a class="header" href="#説明-3">説明</a></h2>
+<p>群における2項演算を仮に和として考える．</p>
+<p>imos法でいう区間更新とは，配列のある区間の全要素に同じ値を足す操作のことである．これは，愚直に行うと\(O(N)\)かかってしまう．</p>
+<p>imos法は，どの区間に何の値を足す必要があるかという情報を覚えておき，配列の要素を最後に取得する時に，それまでの区間更新をまとめて処理するという方法である．より具体的に説明すると，区間更新操作では，左から<strong>累積和</strong>(\(O(N)\))を取った時に，配列の各要素の値を得られるように値の更新を行う．</p>
+<p>最後に左から累積和を取ることを前提として考えると，配列のある要素にある値を足すことは，その要素以降の全要素にその値を足すことを意味する．</p>
+<table><thead><tr><th style="text-align: center">Index</th><th style="text-align: center">0</th><th style="text-align: center">1</th><th style="text-align: center">2</th><th style="text-align: center">3</th><th style="text-align: center">4</th><th style="text-align: center">5</th><th style="text-align: center">6</th><th style="text-align: center">7</th></tr></thead><tbody>
+<tr><td style="text-align: center">クエリ1</td><td style="text-align: center">-</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(+1\)</td></tr>
+<tr><td style="text-align: center">更新1</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td></tr>
+<tr><td style="text-align: center"><strong>累積和</strong></td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(1\)</td><td style="text-align: center">\(1\)</td><td style="text-align: center">\(1\)</td><td style="text-align: center">\(1\)</td><td style="text-align: center">\(1\)</td><td style="text-align: center">\(1\)</td><td style="text-align: center">\(1\)</td></tr>
+</tbody></table>
+<p>よって，例えばある区間に値\(x\)を足す場合，区間クエリの先頭に\(x\)を足し，終わりに\(-x\)を足すことで，最後に累積和を取った時にその区間の要素のみに\(x\)を足すことができる．</p>
+<table><thead><tr><th style="text-align: center">Index</th><th style="text-align: center">0</th><th style="text-align: center">1</th><th style="text-align: center">2</th><th style="text-align: center">3</th><th style="text-align: center">4</th><th style="text-align: center">5</th><th style="text-align: center">6</th><th style="text-align: center">7</th></tr></thead><tbody>
+<tr><td style="text-align: center">クエリ1</td><td style="text-align: center">-</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">-</td><td style="text-align: center">-</td><td style="text-align: center">-</td></tr>
+<tr><td style="text-align: center">更新1</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(-x\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td></tr>
+<tr><td style="text-align: center"><strong>累積和</strong></td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(x\)</td><td style="text-align: center">\(x\)</td><td style="text-align: center">\(x\)</td><td style="text-align: center">\(x\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td></tr>
+</tbody></table>
+<p>区間更新が複数あっても操作は変わらない．</p>
+<table><thead><tr><th style="text-align: center">Index</th><th style="text-align: center">0</th><th style="text-align: center">1</th><th style="text-align: center">2</th><th style="text-align: center">3</th><th style="text-align: center">4</th><th style="text-align: center">5</th><th style="text-align: center">6</th><th style="text-align: center">7</th></tr></thead><tbody>
+<tr><td style="text-align: center">クエリ1</td><td style="text-align: center">-</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">-</td><td style="text-align: center">-</td><td style="text-align: center">-</td></tr>
+<tr><td style="text-align: center">更新1</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(-x\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td></tr>
+<tr><td style="text-align: center">クエリ2</td><td style="text-align: center">-</td><td style="text-align: center">-</td><td style="text-align: center">\(+y\)</td><td style="text-align: center">\(+y\)</td><td style="text-align: center">\(+y\)</td><td style="text-align: center">\(+y\)</td><td style="text-align: center">-</td><td style="text-align: center">-</td></tr>
+<tr><td style="text-align: center">更新2</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+y\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(-x\)</td><td style="text-align: center">\(-y\)</td><td style="text-align: center">\(0\)</td></tr>
+<tr><td style="text-align: center">クエリ3</td><td style="text-align: center">-</td><td style="text-align: center">-</td><td style="text-align: center">-</td><td style="text-align: center">\(+z\)</td><td style="text-align: center">\(+z\)</td><td style="text-align: center">-</td><td style="text-align: center">-</td><td style="text-align: center">-</td></tr>
+<tr><td style="text-align: center">更新3</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+y\)</td><td style="text-align: center">\(+z\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(-x-z\)</td><td style="text-align: center">\(-y\)</td><td style="text-align: center">\(0\)</td></tr>
+<tr><td style="text-align: center"><strong>累積和</strong></td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(x\)</td><td style="text-align: center">\(x+y\)</td><td style="text-align: center">\(x+y+z\)</td><td style="text-align: center">\(x+y+z\)</td><td style="text-align: center">\(y\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td></tr>
+</tbody></table>
+<p>扱う代数系を群一般としてまとめると，区間\([l, r))に値\(x\)を作用させる場合，配列の\(l\)番目に\(x\)を作用させ，\(r\)番目に\(x\)の逆元を作用させれば良い．また，実際の値を得るには，左から累積値を取れば良い．</p>
+<h2 id="コード-5"><a class="header" href="#コード-5">コード</a></h2>
+<p><a href="https://atcoder.jp/contests/abc183/submissions/29193241"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
+<pre><code class="language-cpp">template &lt;class S, S (*op)(S, S), S (*e)(), S (*inv)(S)&gt; struct Imos {
+private:
+  vector&lt;S&gt; imos;
+public:
+  Imos(int size) { imos.assign(size, e()); }
+  void query(int l, int r, S x) { // [l, r)
+    imos[l] = op(imos[l], x);
+    imos[r] = op(imos[r], inv(x));
+  }
+  vector&lt;S&gt; get_values() {
+    vector&lt;S&gt; ret(imos);
+    rep (i, 1, ret.size()) ret[i] += ret[i-1];
+    return move(ret);
+  }
+};
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="セグメント木"><a class="header" href="#セグメント木">セグメント木</a></h1>
-<p>2項演算(以降便宜上仮に&quot;和&quot;と呼ぶ)を与える．
-区間クエリを求めたい配列の長さを\(n\)とすると，セグメント木の各操作と時間計算量は以下．</p>
+<p>区間クエリを求めたい配列の長さを\(N\)とすると，<strong>セグメント木</strong>の各操作と時間計算量は以下．</p>
 <ul>
 <li>構築: \(O(N)\)</li>
-<li>値(モノイド)の更新: \(O(\log N)\)</li>
-<li>配列の任意の区間の&quot;和&quot;: \(O(\log N)\)</li>
+<li>値(モノイドを成す集合の要素)の更新: \(O(\log N)\)</li>
+<li>配列の任意の区間の&quot;和&quot;(モノイドにおける2項演算): \(O(\log N)\)</li>
 </ul>
-<h2 id="説明-3"><a class="header" href="#説明-3">説明</a></h2>
+<h2 id="説明-4"><a class="header" href="#説明-4">説明</a></h2>
 <p>配列の区間の累積&quot;和&quot;を木で管理することで，区間クエリ，更新クエリを高速に計算する．</p>
 <p>配列の初期値を</p>
 <p>|50|10|70|30|10|90|40|</p>
@@ -942,7 +992,7 @@ graph TD
 </pre>
 <p>先ほどよりノード数が多くなっている．これは，<strong>要素数を超える最小の2の冪乗の値を要素数にする</strong>という実装である．余分に枠を取ることで，<strong>子の順序を保ったまま</strong>親に累積&quot;和&quot;を持たせることができる．また，先ほどと同様に親&lt;-&gt;子間の移動も楽である．</p>
 <p><strong>ノード数は最大でも\(2\)倍程度しか増えない</strong>ため，空間計算量も時間計算量も変化しない．</p>
-<h2 id="コード-5"><a class="header" href="#コード-5">コード</a></h2>
+<h2 id="コード-6"><a class="header" href="#コード-6">コード</a></h2>
 <p><a href="https://github.com/atcoder/ac-library/blob/master/atcoder/segtree.hpp">atcoder/segtree.hpp</a></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="binary-indexed-treeフェニック木"><a class="header" href="#binary-indexed-treeフェニック木">Binary Indexed Tree(フェニック木)</a></h1>
 <p>2項演算(以降便宜上仮に&quot;和&quot;と呼ぶ)を与える．
@@ -951,7 +1001,7 @@ graph TD
 <li>値(モノイド)の更新: \(O(\log N)\)</li>
 <li>配列の始めから任意のインデックスまでの累積&quot;和&quot;: \(O(\log N)\)</li>
 </ul>
-<h2 id="説明-4"><a class="header" href="#説明-4">説明</a></h2>
+<h2 id="説明-5"><a class="header" href="#説明-5">説明</a></h2>
 <p>配列に単に値を持った場合，値の更新が\(O(1)\)でできる代わりに任意のインデックスまでの累積&quot;和&quot;を求めるのには\(O(N)\)かかる．逆に配列にそのインデックスまでの累積&quot;和&quot;を持つと，累積&quot;和&quot;の取得が\(O(1)\)でできる代わりに値の更新が\(O(N)\)かかってしまう．工夫すると，実はどちらのクエリにも高速(\(O(\log N)\))に答えることができる．</p>
 <p>\(O(\log N)\)でこれらの操作をするために，偏りのない<strong>2分木</strong>を作り，親のノードにその部分木が持つ葉の&quot;和&quot;を持たせるというのが，<strong>セグメント木</strong>のアイディアであった．</p>
 <p>BITでは，数のビット表現に注目する．BITの基本的なアイディアは，任意の自然数がいくつかの2の累乗の和であるのと同様に，累積&quot;和&quot;はいくつかの「サブ累積&quot;和&quot;」の&quot;和&quot;として表すことができるということである．例えばある数をビットで表した時に2つの位置のビットが立っているということは2つの累積&quot;和&quot;を含んでいるということ．</p>
@@ -977,7 +1027,7 @@ graph TD
 <p>説明はややこしく見えるが，コード上では，ビット演算によりアクセスすべきインデックスを簡単に計算できるため，実装は軽い．例えば，ある数\(x\)を2進数表した時に最も右にある\(1\)だけを取り出すには，\(x＆(-x)\)とするだけである．</p>
 <h2 id="fenwickさんの論文"><a class="header" href="#fenwickさんの論文">Fenwickさんの論文</a></h2>
 <p>P.Fenwick, A new data structure for cumulative frequency tables, Software Practice and Experience Vol 24, 1994</p>
-<h2 id="コード-6"><a class="header" href="#コード-6">コード</a></h2>
+<h2 id="コード-7"><a class="header" href="#コード-7">コード</a></h2>
 <p><a href="https://judge.yosupo.jp/submission/77587"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
 <pre><code class="language-cpp">template &lt;typename T&gt;
 struct BinaryIndexedTree {
@@ -1331,7 +1381,7 @@ classDef splay stroke-width:4px,stroke:slateblue;
 <li><code>lower_bound</code>以外の方法で，\(O(1)\)以外の方法でノードにアクセスする際は，それが<code>lower_bound</code>と同等のアクセス方法かをよく考えること．また，その後のsplay操作も忘れないこと．</li>
 </ul>
 <p>以上！</p>
-<h2 id="コード-7"><a class="header" href="#コード-7">コード</a></h2>
+<h2 id="コード-8"><a class="header" href="#コード-8">コード</a></h2>
 <pre><code class="language-cpp">template &lt;class T&gt; struct Node {
   Node&lt;T&gt; *l, *r, *p;
   T k;
@@ -1465,17 +1515,16 @@ public:
 };
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rangebst"><a class="header" href="#rangebst">RangeBST</a></h1>
-<p>2項演算(以降便宜上仮に&quot;和&quot;と呼ぶ)を与える．
-扱う座標数を\(N\)とすると，<strong>RangeBST</strong>の各操作と時間計算量は以下．</p>
+<p>扱う座標数を\(N\)とすると，<strong>RangeBST</strong>の各操作と時間計算量は以下．</p>
 <ul>
 <li>構築: 処理なし</li>
-<li>指定された1次元座標に値(モノイド)の設置: \(O(\log N)\)</li>
+<li>指定された1次元座標に値(モノイドを成す集合の要素)の設置: \(O(\log N)\)</li>
 <li>指定された1次元座標の値の更新: \(O(\log N)\)</li>
-<li>任意の座標区間の&quot;和&quot; : \(O(\log N)\)</li>
+<li>任意の座標区間の&quot;和&quot;(モノイドにおける2項演算) : \(O(\log N)\)</li>
 </ul>
 <p>※このRangeBSTという名前は，筆者が勝手につけたもので，このデータ構造には特別名前はなく，中身はBST，つまり<strong>平衡2分探索木</strong>である．平衡2分探索木に機能を追加することで能力を拡張する例は多々あり，これはその1つの例である．</p>
 <p><strong>セグメント木と同じ?と思った方もいるかもしれないが，実は少し違う</strong>．セグメント木は，配列に対する区間クエリに対応したもの，つまり，言い換えると<strong>座標に制限(0~配列のサイズ)がある</strong>．RangeBSTは，データを，<strong>座標の集合</strong>としてもつため，座標の値自体に制限がなく，座圧+セグ木で解く必要がある問題も，RangeBSTなら座圧せずに解くことができる(<strong>データ構造内部でも座圧操作をしない！！</strong>)ため，実装が楽になり，実行速度も速くなることがある．</p>
-<h2 id="説明-5"><a class="header" href="#説明-5">説明</a></h2>
+<h2 id="説明-6"><a class="header" href="#説明-6">説明</a></h2>
 <p>配列に対する区間クエリではないため，最初にサイズを与えたりはしない．使用するメモリ量は，追加した座標の数に比例して動的に増える(座標に重複がある場合は増えない)．</p>
 <p>例えば，座標10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150にそれぞれ何かしらの値を設置したとする．このとき，平衡2分探索木でこの集合を持つ形は複数あるが，仮に1番綺麗な形として下のようになったとしよう．</p>
 <pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
@@ -1617,7 +1666,7 @@ classDef lca stroke-width:4px,stroke:deeppink;
 <h2 id="実装におけるその他の注意事項-2"><a class="header" href="#実装におけるその他の注意事項-2">実装におけるその他の注意事項</a></h2>
 <p>モノイドを扱っているため，例のごとく演算の向きを間違えないようにする．</p>
 <p>以上！</p>
-<h2 id="コード-8"><a class="header" href="#コード-8">コード</a></h2>
+<h2 id="コード-9"><a class="header" href="#コード-9">コード</a></h2>
 <p>平衡2分探索木にSplay木を用いた実装．</p>
 <p><a href="https://judge.yosupo.jp/submission/75623"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
 <pre><code class="language-cpp">template &lt;class S, S (*op)(S, S), S (*e)()&gt; struct Node {
@@ -1764,7 +1813,7 @@ public:
 <li>区間\([l, m)\)と区間\([m, r)\)をマージして\([l, r)\)を高速に計算することができない．(これができるなら<strong>セグメント木</strong>などを使えば良い．)</li>
 </ul>
 <p>要するに，少し複雑な区間クエリに高速に対応するためのアルゴリズムである．</p>
-<h2 id="説明-6"><a class="header" href="#説明-6">説明</a></h2>
+<h2 id="説明-7"><a class="header" href="#説明-7">説明</a></h2>
 <p><strong>オフラインクエリ</strong>というのは，クエリを，実際に，与えられた順番で処理する必要がないことを意味する．また，上で述べた条件で，\([l, r)\)に対する区間クエリを求めた後に，\([l+1, r)\)，\([l−1, r)\)，\([l, r−1)\)，\([l, r+1)\)のクエリを高速に求められるというのがあった．これは，区間を左/右に1つ伸び縮みした区間のクエリを高速に求められることを意味する．</p>
 <p>Mo's algorithmの基本的なアイディアは，クエリを適切に並び替え，全体での<strong>区間の伸び縮みの回数を最小限に抑え</strong>られば，全体での計算量を抑えられるということである．</p>
 <p>ある区間\([l_1, r_1)\)を求めてからある区間\([l_2, r_2)\)までに行われる伸び縮みの回数は，\(|l_1 - l_2| + |r_1 - r_2|\)である．このことから，\((l_i, r_i)\)を座標としてみることで，<strong>任意の2つの区間の間の伸び縮み回数は，2次元座標上でのマンハッタン距離</strong>を意味することがわかる．</p>
@@ -1778,7 +1827,7 @@ public:
 <p>最も有名なのは<strong>Hilbert曲線</strong>に沿って原点から2次元空間を移動する順番(<strong>Hilbert Order</strong>と呼ばれる)にクエリを処理する方法である．</p>
 <div align="center"><img src="range/mo/hilbert.png" width="50%"><br><a href="https://en.wikipedia.org/wiki/Hilbert_curve">https://en.wikipedia.org/wiki/Hilbert_curve</a></div>
 <p>Hilbert曲線は，<strong>局所性が高く</strong>，<strong>Hilbert曲線において原点からの距離が近い(Hilbert Orderが近い)ことから，その空間での距離も近いことがわかる</strong>．よって，<strong>Hilbert Orderでクエリをソート</strong>し，その順にクエリを処理することで上で述べた方法よりも全体でかかる計算量が小さくなる．</p>
-<h2 id="コード-9"><a class="header" href="#コード-9">コード</a></h2>
+<h2 id="コード-10"><a class="header" href="#コード-10">コード</a></h2>
 <p>このコードでは，Hilbert Orderによるソートを用いている．コード中の<code>maxn</code>の値は，\(N\)以上の(最小の)\(2\)の累乗値にする必要がある．</p>
 <p><a href="https://judge.yosupo.jp/submission/77813"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
 <pre><code class="language-cpp">constexpr int maxn = 1 &lt;&lt; ??;
