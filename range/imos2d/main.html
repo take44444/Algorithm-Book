@@ -137,6 +137,36 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="2次元imos法"><a class="header" href="#2次元imos法">2次元imos法</a></h1>
+<p>imos法は，高次元に拡張することができる．ここでは，<strong>2次元imos法</strong>を説明する．2次元配列の横の長さを\(W\)，縦の長さを\(H\)とする．</p>
+<ul>
+<li>矩形範囲更新: \(O(1)\)</li>
+<li>2次元配列上の各要素の値の取得\(O(HW)\)</li>
+</ul>
+<p>2次元配列の各要素は<strong>可換群</strong>を成す集合の要素である必要がある．</p>
+<h2 id="説明"><a class="header" href="#説明">説明</a></h2>
+<p>考え方は1次元のimos法と同じである．2次元imos法では，\((l_x, l_y)\)を左上の座標，\((r_x, r_y)\)を右下とするような矩形(\((l_x, l_y)\)は矩形内，\((r_x, r_y)\)は矩形外の座標)に値\(x\)を作用させる場合，\(l_x, l_y\)に\(x\)を，\(r_x, l_y\)に\(x^{-1}\)を，\(l_x, r_y\)に\(x^{-1}\)を，\(r_x, r_y\)に\(x\)を作用させる．実際の値を得るには，各行ごとに左から累積値を取った後に，各列ごとに上から累積値を取れば良い．</p>
+<h2 id="コード"><a class="header" href="#コード">コード</a></h2>
+<p><a href="https://atcoder.jp/contests/typical90/submissions/29194902"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
+<pre><code class="language-cpp">template &lt;class S, S (*op)(S, S), S (*e)(), S (*inv)(S)&gt; struct Imos2D {
+private:
+  vector&lt;vector&lt;S&gt;&gt; v;
+public:
+  Imos2D(int h, int w) { v.assign(h+1, vector&lt;S&gt;(w+1, e())); }
+  void query(int lx, int ly, int rx, int ry, S x) { // [(lx, ly), (rx, ry))
+    v[lx][ly] = op(v[lx][ly], x);
+    v[rx][ly] = op(v[rx][ly], inv(x));
+    v[lx][ry] = op(v[lx][ry], inv(x));
+    v[rx][ry] = op(v[rx][ry], x);
+  }
+  vector&lt;vector&lt;S&gt;&gt; get_values() {
+    for (vector&lt;S&gt; &amp;vv: v) rep (i, 1, vv.size())
+      vv[i] = op(vv[i-1], vv[i]);
+    rep (j, v[0].size()) rep (i, 1, v.size())
+      v[i][j] = op(v[i-1][j], v[i][j]);
+    return move(v);
+  }
+};
+</code></pre>
 
                     </main>
 

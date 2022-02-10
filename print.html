@@ -794,10 +794,10 @@ $$</p>
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="区間問題"><a class="header" href="#区間問題">区間問題</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="imos法"><a class="header" href="#imos法">imos法</a></h1>
-<p>区間クエリを求めたい配列の長さを\(N\)とすると，<strong>imos法</strong>により，区間更新を複数回行った後の，配列の各要素の値を得ることができる．操作の時間計算量は以下．</p>
+<p>配列の長さを\(N\)とする．<strong>imos法</strong>により，区間更新を複数回行った後の，配列の各要素の値を得ることができる．操作の時間計算量は以下．</p>
 <ul>
 <li>区間更新: \(O(1)\)</li>
-<li>配列の各要素の取得\(O(N)\)</li>
+<li>配列の各要素の値の取得\(O(N)\)</li>
 </ul>
 <p>配列の各要素は<strong>群</strong>を成す集合の要素である必要がある．</p>
 <h2 id="説明-3"><a class="header" href="#説明-3">説明</a></h2>
@@ -826,22 +826,21 @@ $$</p>
 <tr><td style="text-align: center">更新3</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+y\)</td><td style="text-align: center">\(+z\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(-x-z\)</td><td style="text-align: center">\(-y\)</td><td style="text-align: center">\(0\)</td></tr>
 <tr><td style="text-align: center"><strong>累積和</strong></td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(x\)</td><td style="text-align: center">\(x+y\)</td><td style="text-align: center">\(x+y+z\)</td><td style="text-align: center">\(x+y+z\)</td><td style="text-align: center">\(y\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td></tr>
 </tbody></table>
-<p>扱う代数系を群一般としてまとめると，区間\([l, r))に値\(x\)を作用させる場合，配列の\(l\)番目に\(x\)を作用させ，\(r\)番目に\(x\)の逆元を作用させれば良い．また，実際の値を得るには，左から累積値を取れば良い．</p>
+<p>扱う代数系を群一般としてまとめると，区間\([l, r))に値\(x\)を作用させる場合，配列の\(l\)番目に\(x\)を作用させ，\(r\)番目に\(x\)の逆元を作用させる．実際の値を得るには，左から累積値を取れば良い．</p>
 <h2 id="コード-5"><a class="header" href="#コード-5">コード</a></h2>
-<p><a href="https://atcoder.jp/contests/abc183/submissions/29193275"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
+<p><a href="https://atcoder.jp/contests/abc183/submissions/29194550"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
 <pre><code class="language-cpp">template &lt;class S, S (*op)(S, S), S (*e)(), S (*inv)(S)&gt; struct Imos {
 private:
-  vector&lt;S&gt; imos;
+  vector&lt;S&gt; v;
 public:
-  Imos(int size) { imos.assign(size, e()); }
+  Imos(int size) { v.assign(size, e()); }
   void query(int l, int r, S x) { // [l, r)
-    imos[l] = op(imos[l], x);
-    imos[r] = op(imos[r], inv(x));
+    v[l] = op(v[l], x);
+    v[r] = op(v[r], inv(x));
   }
   vector&lt;S&gt; get_values() {
-    vector&lt;S&gt; ret(imos);
-    rep (i, 1, ret.size()) ret[i] = op(ret[i-1], ret[i]);
-    return move(ret);
+    rep (i, 1, v.size()) v[i] = op(v[i-1], v[i]);
+    return move(v);
   }
 };
 </code></pre>
@@ -1804,6 +1803,36 @@ public:
 };
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="2次元imos法"><a class="header" href="#2次元imos法">2次元imos法</a></h1>
+<p>imos法は，高次元に拡張することができる．ここでは，<strong>2次元imos法</strong>を説明する．2次元配列の横の長さを\(W\)，縦の長さを\(H\)とする．</p>
+<ul>
+<li>矩形範囲更新: \(O(1)\)</li>
+<li>2次元配列上の各要素の値の取得\(O(HW)\)</li>
+</ul>
+<p>2次元配列の各要素は<strong>可換群</strong>を成す集合の要素である必要がある．</p>
+<h2 id="説明-7"><a class="header" href="#説明-7">説明</a></h2>
+<p>考え方は1次元のimos法と同じである．2次元imos法では，\((l_x, l_y)\)を左上の座標，\((r_x, r_y)\)を右下とするような矩形(\((l_x, l_y)\)は矩形内，\((r_x, r_y)\)は矩形外の座標)に値\(x\)を作用させる場合，\(l_x, l_y\)に\(x\)を，\(r_x, l_y\)に\(x^{-1}\)を，\(l_x, r_y\)に\(x^{-1}\)を，\(r_x, r_y\)に\(x\)を作用させる．実際の値を得るには，各行ごとに左から累積値を取った後に，各列ごとに上から累積値を取れば良い．</p>
+<h2 id="コード-10"><a class="header" href="#コード-10">コード</a></h2>
+<p><a href="https://atcoder.jp/contests/typical90/submissions/29194902"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
+<pre><code class="language-cpp">template &lt;class S, S (*op)(S, S), S (*e)(), S (*inv)(S)&gt; struct Imos2D {
+private:
+  vector&lt;vector&lt;S&gt;&gt; v;
+public:
+  Imos2D(int h, int w) { v.assign(h+1, vector&lt;S&gt;(w+1, e())); }
+  void query(int lx, int ly, int rx, int ry, S x) { // [(lx, ly), (rx, ry))
+    v[lx][ly] = op(v[lx][ly], x);
+    v[rx][ly] = op(v[rx][ly], inv(x));
+    v[lx][ry] = op(v[lx][ry], inv(x));
+    v[rx][ry] = op(v[rx][ry], x);
+  }
+  vector&lt;vector&lt;S&gt;&gt; get_values() {
+    for (vector&lt;S&gt; &amp;vv: v) rep (i, 1, vv.size())
+      vv[i] = op(vv[i-1], vv[i]);
+    rep (j, v[0].size()) rep (i, 1, v.size())
+      v[i][j] = op(v[i-1][j], v[i][j]);
+    return move(v);
+  }
+};
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="mos-algorithm"><a class="header" href="#mos-algorithm">Mo's algorithm</a></h1>
 <p><strong>Mo's algorithm</strong>とは，長さ\(N\)配列に対して，\(Q\)個の区間クエリを合計で\(O((N + Q)\sqrt{N})\)で処理するアルゴリズムである．Mo's algorithmを適用するには，以下の条件を満たしている必要がある．</p>
 <ul>
@@ -1813,7 +1842,7 @@ public:
 <li>区間\([l, m)\)と区間\([m, r)\)をマージして\([l, r)\)を高速に計算することができない．(これができるなら<strong>セグメント木</strong>などを使えば良い．)</li>
 </ul>
 <p>要するに，少し複雑な区間クエリに高速に対応するためのアルゴリズムである．</p>
-<h2 id="説明-7"><a class="header" href="#説明-7">説明</a></h2>
+<h2 id="説明-8"><a class="header" href="#説明-8">説明</a></h2>
 <p><strong>オフラインクエリ</strong>というのは，クエリを，実際に，与えられた順番で処理する必要がないことを意味する．また，上で述べた条件で，\([l, r)\)に対する区間クエリを求めた後に，\([l+1, r)\)，\([l−1, r)\)，\([l, r−1)\)，\([l, r+1)\)のクエリを高速に求められるというのがあった．これは，区間を左/右に1つ伸び縮みした区間のクエリを高速に求められることを意味する．</p>
 <p>Mo's algorithmの基本的なアイディアは，クエリを適切に並び替え，全体での<strong>区間の伸び縮みの回数を最小限に抑え</strong>られば，全体での計算量を抑えられるということである．</p>
 <p>ある区間\([l_1, r_1)\)を求めてからある区間\([l_2, r_2)\)までに行われる伸び縮みの回数は，\(|l_1 - l_2| + |r_1 - r_2|\)である．このことから，\((l_i, r_i)\)を座標としてみることで，<strong>任意の2つの区間の間の伸び縮み回数は，2次元座標上でのマンハッタン距離</strong>を意味することがわかる．</p>
@@ -1827,7 +1856,7 @@ public:
 <p>最も有名なのは<strong>Hilbert曲線</strong>に沿って原点から2次元空間を移動する順番(<strong>Hilbert Order</strong>と呼ばれる)にクエリを処理する方法である．</p>
 <div align="center"><img src="range/mo/hilbert.png" width="50%"><br><a href="https://en.wikipedia.org/wiki/Hilbert_curve">https://en.wikipedia.org/wiki/Hilbert_curve</a></div>
 <p>Hilbert曲線は，<strong>局所性が高く</strong>，<strong>Hilbert曲線において原点からの距離が近い(Hilbert Orderが近い)ことから，その空間での距離も近いことがわかる</strong>．よって，<strong>Hilbert Orderでクエリをソート</strong>し，その順にクエリを処理することで上で述べた方法よりも全体でかかる計算量が小さくなる．</p>
-<h2 id="コード-10"><a class="header" href="#コード-10">コード</a></h2>
+<h2 id="コード-11"><a class="header" href="#コード-11">コード</a></h2>
 <p>このコードでは，Hilbert Orderによるソートを用いている．コード中の<code>maxn</code>の値は，\(N\)以上の(最小の)\(2\)の累乗値にする必要がある．</p>
 <p><a href="https://judge.yosupo.jp/submission/77813"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
 <pre><code class="language-cpp">constexpr int maxn = 1 &lt;&lt; ??;
