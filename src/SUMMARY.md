@@ -34,6 +34,7 @@
   - [Mo's algorithm](./range/mo/main.md)
   - [ウェーブレット行列](./range/wavelet-matrix/main.md)
   - [区間スケジューリング問題](./range/isp/main.md)
+    - [重み付き区間スケジューリング問題](./range/isp/weighted/main.md)
 - [DP](./dp/main.md)
   - [桁DP](./dp/ddp/main.md)
   - [確率DP](./dp/pdp/main.md)
