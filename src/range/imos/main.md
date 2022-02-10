@@ -1,7 +1,7 @@
 # imos法
-区間クエリを求めたい配列の長さを\\(N\\)とすると，**imos法**により，区間更新を複数回行った後の，配列の各要素の値を得ることができる．操作の時間計算量は以下．
+配列の長さを\\(N\\)とする．**imos法**により，区間更新を複数回行った後の，配列の各要素の値を得ることができる．操作の時間計算量は以下．
 - 区間更新: \\(O(1)\\)
-- 配列の各要素の取得\\(O(N)\\)
+- 配列の各要素の値の取得\\(O(N)\\)
 
 配列の各要素は**群**を成す集合の要素である必要がある．
 
@@ -40,25 +40,24 @@ imos法は，どの区間に何の値を足す必要があるかという情報�
 |更新3|\\(0\\)|\\(+x\\)|\\(+y\\)|\\(+z\\)|\\(0\\)|\\(-x-z\\)|\\(-y\\)|\\(0\\)|
 |**累積和**|\\(0\\)|\\(x\\)|\\(x+y\\)|\\(x+y+z\\)|\\(x+y+z\\)|\\(y\\)|\\(0\\)|\\(0\\)|
 
-扱う代数系を群一般としてまとめると，区間\\([l, r))に値\\(x\\)を作用させる場合，配列の\\(l\\)番目に\\(x\\)を作用させ，\\(r\\)番目に\\(x\\)の逆元を作用させれば良い．また，実際の値を得るには，左から累積値を取れば良い．
+扱う代数系を群一般としてまとめると，区間\\([l, r))に値\\(x\\)を作用させる場合，配列の\\(l\\)番目に\\(x\\)を作用させ，\\(r\\)番目に\\(x\\)の逆元を作用させる．実際の値を得るには，左から累積値を取れば良い．
 
 ## コード
-[![](https://img.shields.io/badge/verify-passing-brightgreen)](https://atcoder.jp/contests/abc183/submissions/29193275)
+[![](https://img.shields.io/badge/verify-passing-brightgreen)](https://atcoder.jp/contests/abc183/submissions/29194550)
 
 ```cpp
 template <class S, S (*op)(S, S), S (*e)(), S (*inv)(S)> struct Imos {
 private:
-  vector<S> imos;
+  vector<S> v;
 public:
-  Imos(int size) { imos.assign(size, e()); }
+  Imos(int size) { v.assign(size, e()); }
   void query(int l, int r, S x) { // [l, r)
-    imos[l] = op(imos[l], x);
-    imos[r] = op(imos[r], inv(x));
+    v[l] = op(v[l], x);
+    v[r] = op(v[r], inv(x));
   }
   vector<S> get_values() {
-    vector<S> ret(imos);
-    rep (i, 1, ret.size()) ret[i] = op(ret[i-1], ret[i]);
-    return move(ret);
+    rep (i, 1, v.size()) v[i] = op(v[i-1], v[i]);
+    return move(v);
   }
 };
 ```
