@@ -43,7 +43,7 @@ imos法は，どの区間に何の値を足す必要があるかという情報�
 扱う代数系を群一般としてまとめると，区間\\([l, r))に値\\(x\\)を作用させる場合，配列の\\(l\\)番目に\\(x\\)を作用させ，\\(r\\)番目に\\(x\\)の逆元を作用させれば良い．また，実際の値を得るには，左から累積値を取れば良い．
 
 ## コード
-[![](https://img.shields.io/badge/verify-passing-brightgreen)](https://atcoder.jp/contests/abc183/submissions/29193241)
+[![](https://img.shields.io/badge/verify-passing-brightgreen)](https://atcoder.jp/contests/abc183/submissions/29193275)
 
 ```cpp
 template <class S, S (*op)(S, S), S (*e)(), S (*inv)(S)> struct Imos {
@@ -57,7 +57,7 @@ public:
   }
   vector<S> get_values() {
     vector<S> ret(imos);
-    rep (i, 1, ret.size()) ret[i] += ret[i-1];
+    rep (i, 1, ret.size()) ret[i] = op(ret[i-1], ret[i]);
     return move(ret);
   }
 };
