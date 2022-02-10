@@ -9,8 +9,6 @@
   - [全点対最短路(Warshall Floyd法)](./graph/warshall-floyd/main.md)
   - [全点対最短路(Johnson法)](./graph/johnson/main.md)
   - [単一始点最長路](./graph/longest-path/main.md)
-    - [Bellman Ford法](./graph/longest-path/bellman-ford/main.md)
-    - [トポロジカルソートDP](./graph/longest-path/topological-sort-dp/main.md)
   - [最小全域木(Kruskal法)](./graph/kruskal/main.md)
   - [連結性](./graph/connectivity/main.md)
     - [DFS](./graph/connectivity/dfs/main.md)
