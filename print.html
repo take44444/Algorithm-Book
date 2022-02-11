@@ -1910,6 +1910,47 @@ public:
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ウェーブレット行列"><a class="header" href="#ウェーブレット行列">ウェーブレット行列</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="区間スケジューリング問題"><a class="header" href="#区間スケジューリング問題">区間スケジューリング問題</a></h1>
+<p><strong>区間スケジューリング問題</strong>とは以下のような問題である．</p>
+<p>\(N\)個のタスクの集合が与えられる．各タスク\(i\)について開始時刻\(s[i]\)と終了時刻\(f[i]\)が定められている．任意の時刻において重複がないようにタスクを選ぶ場合，最大でいくつのタスクを選ぶことができるか．</p>
+<p>この問題は，<strong>貪欲法</strong>により，\(O(N \log N)\)で解くことができる．</p>
+<h2 id="説明-9"><a class="header" href="#説明-9">説明</a></h2>
+<p><strong>終了時刻の早いものから順に重複しない限り選ぶことを繰り返す</strong>という貪欲法によってこの問題を解くことができる．</p>
+<h2 id="証明-1"><a class="header" href="#証明-1">証明</a></h2>
+<p>この問題に対する解に含まれる集合を\(OPT\)とし，以降，\(OPT\)に含まれるタスクを終了時刻でソートして\(OPT = \lbrace i_1, i_2, ..., i_o \rbrace\)と表現する．</p>
+<p>また，貪欲法により選んだタスクの集合も同様に\(G = \lbrace j_1, j_2, ..., j_g \rbrace\)と表現する．まず，</p>
+<h3 id="補題-1"><a class="header" href="#補題-1">補題 1</a></h3>
+<p>$$\forall k \leq o: f[j_k] \leq f[i_k]$$</p>
+<p>を数学的帰納法により示す．</p>
+<h3 id="補題1の証明"><a class="header" href="#補題1の証明">補題1の証明</a></h3>
+<p>\(k = 1\)について，貪欲法が最も終了時刻の早いタスクを選択することから，\(f[j_1] \leq f[i_1]\)となることは自明である．</p>
+<p>\(k = m\)について，\(f[j_m] \leq f[i_m]\)が成り立つと仮定する．ここで，\(f[j_m] \leq f[i_m] \leq s[i_{m+1}]\)が成り立つ．仮に\(f[i_{m+1}] &lt; f[j_{m+1}]\)なら，貪欲法で\(i_{m+1}\)が選択されるため，\(f[j_{m+1}] \leq f[i_{m+1}]\)が成り立つ．</p>
+<p>したがって，数学的帰納法より，補題1が示された．最後に，</p>
+<h3 id="定理"><a class="header" href="#定理">定理</a></h3>
+<p><strong>上記貪欲法がこの問題に対する解である．</strong></p>
+<p>を背理法により示す．</p>
+<p>上記貪欲法で選択したタスクの集合が解でないと仮定する．</p>
+<p>\(G\)に最後に追加されたタスク\(j_g\)について，補題1より，</p>
+<p>$$f[j_g] \leq f[i_g]$$</p>
+<p>が成り立つ．ここで，仮定より\(|G| &lt; |OPT|\)であるが，</p>
+<p>$$f[j_g] \leq f[i_g] \leq s[i_{g+1}]$$</p>
+<p>となり，これは，貪欲法のアルゴリズムで最後にタスク\(j_g\)を加えた後もタスク\(i_{g+1}\)が残っていることを示しているが，上記貪欲法のアルゴリズムと矛盾する．</p>
+<p>よって，背理法より，上記貪欲法で選択したタスクの集合がこの問題の解であることが示された．</p>
+<h2 id="コード-12"><a class="header" href="#コード-12">コード</a></h2>
+<p><a href="https://atcoder.jp/contests/typical-algorithm/submissions/29212752"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
+<pre><code class="language-cpp">int interval_scheduling_problem(vector&lt;pair&lt;int, int&gt;&gt; &amp;tasks) {
+  sort(all(tasks), [](pair&lt;int, int&gt; &amp;a, pair&lt;int, int&gt; &amp;b) {
+    return a.second &lt; b.second;
+  });
+  int ret = 0, now = 0;
+  for (pair&lt;int, int&gt; &amp;e: tasks) {
+    if (e.first &gt; now) {
+      ret++;
+      now = e.second;
+    }
+  }
+  return ret;
+}
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="重み付き区間スケジューリング問題"><a class="header" href="#重み付き区間スケジューリング問題">重み付き区間スケジューリング問題</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="dp"><a class="header" href="#dp">DP</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="桁dp"><a class="header" href="#桁dp">桁DP</a></h1>
