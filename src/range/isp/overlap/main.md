@@ -15,7 +15,25 @@
 計算量は，まず最初に，タスクを終了時刻でソートするのに\\(O(N \log N)\\)かかる．次に，貪欲法では，**\\(K\\)個の終了時刻の内，次のタスクの開始時刻より小さいものの中で最大のものを選ぶ**ことを\\(N\\)回繰り返すので，**multiset(平衡2分探索木)** 等を使って\\(O(N \log K)\\)かかる．よって，最終的な計算量は\\(O(N (\log N + \log K))\\)だが，問題文から\\(K \leq N\\)としてよいので\\(O(N \log N)\\)となる．
 
 ## コード
+[![](https://img.shields.io/badge/verify-passing-brightgreen)](https://yukicoder.me/submissions/738874)
 
 ```cpp
-
+int overlapping_interval_scheduling_problem(vector<pair<i64, i64>> &tasks, int k) {
+  sort(all(tasks), [](pair<i64, i64> &a, pair<i64, i64> &b) {
+    return a.second < b.second;
+  });
+  multiset<i64> now;
+  rep (k) now.insert(0);
+  int ret = 0;
+  for (pair<i64, i64> &e: tasks) {
+    auto itr = now.lower_bound(e.first);
+    if (itr != now.begin()) {
+      itr--;
+      ret++;
+      now.erase(itr);
+      now.insert(e.second);
+    }
+  }
+  return ret;
+}
 ```

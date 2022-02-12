@@ -48,12 +48,13 @@ $$f[j\_g] \leq f[i\_g] \leq s[i\_{g+1}]$$
 [![](https://img.shields.io/badge/verify-passing-brightgreen)](https://atcoder.jp/contests/typical-algorithm/submissions/29212752)
 
 ```cpp
-int interval_scheduling_problem(vector<pair<int, int>> &tasks) {
-  sort(all(tasks), [](pair<int, int> &a, pair<int, int> &b) {
+int interval_scheduling_problem(vector<pair<i64, i64>> &tasks) {
+  sort(all(tasks), [](pair<i64, i64> &a, pair<i64, i64> &b) {
     return a.second < b.second;
   });
-  int ret = 0, now = 0;
-  for (pair<int, int> &e: tasks) {
+  int ret = 0;
+  i64 now = 0;
+  for (pair<i64, i64> &e: tasks) {
     if (e.first > now) {
       ret++;
       now = e.second;
