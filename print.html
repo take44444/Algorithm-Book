@@ -1937,12 +1937,13 @@ public:
 <p>よって，背理法より，上記貪欲法で選択したタスクの集合がこの問題の解であることが示された．</p>
 <h2 id="コード-12"><a class="header" href="#コード-12">コード</a></h2>
 <p><a href="https://atcoder.jp/contests/typical-algorithm/submissions/29212752"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
-<pre><code class="language-cpp">int interval_scheduling_problem(vector&lt;pair&lt;int, int&gt;&gt; &amp;tasks) {
-  sort(all(tasks), [](pair&lt;int, int&gt; &amp;a, pair&lt;int, int&gt; &amp;b) {
+<pre><code class="language-cpp">int interval_scheduling_problem(vector&lt;pair&lt;i64, i64&gt;&gt; &amp;tasks) {
+  sort(all(tasks), [](pair&lt;i64, i64&gt; &amp;a, pair&lt;i64, i64&gt; &amp;b) {
     return a.second &lt; b.second;
   });
-  int ret = 0, now = 0;
-  for (pair&lt;int, int&gt; &amp;e: tasks) {
+  int ret = 0;
+  i64 now = 0;
+  for (pair&lt;i64, i64&gt; &amp;e: tasks) {
     if (e.first &gt; now) {
       ret++;
       now = e.second;
@@ -1961,7 +1962,25 @@ public:
 <p>つまり，<strong>\(K\)個の終了時刻を管理しながら，次のタスクをどの集合に割り当てるかを選び，選んだものの貪欲法を進めればよい</strong>．しかしここで，そのタスクを選ぶことができる状態にあるものが複数ある場合は，どれに割り当てるのが最適かを考える必要があるが，明らかに，<strong>終了時刻が最も遅いものを選ぶのが最適</strong>である(証明省略)．したがって，\(K\)個の重複を許す区間スケジューリングもまた，貪欲法で解くことが可能である．</p>
 <p>計算量は，まず最初に，タスクを終了時刻でソートするのに\(O(N \log N)\)かかる．次に，貪欲法では，<strong>\(K\)個の終了時刻の内，次のタスクの開始時刻より小さいものの中で最大のものを選ぶ</strong>ことを\(N\)回繰り返すので，<strong>multiset(平衡2分探索木)</strong> 等を使って\(O(N \log K)\)かかる．よって，最終的な計算量は\(O(N (\log N + \log K))\)だが，問題文から\(K \leq N\)としてよいので\(O(N \log N)\)となる．</p>
 <h2 id="コード-13"><a class="header" href="#コード-13">コード</a></h2>
-<pre><code class="language-cpp">
+<p><a href="https://yukicoder.me/submissions/738874"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
+<pre><code class="language-cpp">int overlapping_interval_scheduling_problem(vector&lt;pair&lt;i64, i64&gt;&gt; &amp;tasks, int k) {
+  sort(all(tasks), [](pair&lt;i64, i64&gt; &amp;a, pair&lt;i64, i64&gt; &amp;b) {
+    return a.second &lt; b.second;
+  });
+  multiset&lt;i64&gt; now;
+  rep (k) now.insert(0);
+  int ret = 0;
+  for (pair&lt;i64, i64&gt; &amp;e: tasks) {
+    auto itr = now.lower_bound(e.first);
+    if (itr != now.begin()) {
+      itr--;
+      ret++;
+      now.erase(itr);
+      now.insert(e.second);
+    }
+  }
+  return ret;
+}
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="重み付き区間スケジューリング問題"><a class="header" href="#重み付き区間スケジューリング問題">重み付き区間スケジューリング問題</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="dp"><a class="header" href="#dp">DP</a></h1>

@@ -164,12 +164,13 @@
 <p>よって，背理法より，上記貪欲法で選択したタスクの集合がこの問題の解であることが示された．</p>
 <h2 id="コード"><a class="header" href="#コード">コード</a></h2>
 <p><a href="https://atcoder.jp/contests/typical-algorithm/submissions/29212752"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
-<pre><code class="language-cpp">int interval_scheduling_problem(vector&lt;pair&lt;int, int&gt;&gt; &amp;tasks) {
-  sort(all(tasks), [](pair&lt;int, int&gt; &amp;a, pair&lt;int, int&gt; &amp;b) {
+<pre><code class="language-cpp">int interval_scheduling_problem(vector&lt;pair&lt;i64, i64&gt;&gt; &amp;tasks) {
+  sort(all(tasks), [](pair&lt;i64, i64&gt; &amp;a, pair&lt;i64, i64&gt; &amp;b) {
     return a.second &lt; b.second;
   });
-  int ret = 0, now = 0;
-  for (pair&lt;int, int&gt; &amp;e: tasks) {
+  int ret = 0;
+  i64 now = 0;
+  for (pair&lt;i64, i64&gt; &amp;e: tasks) {
     if (e.first &gt; now) {
       ret++;
       now = e.second;
