@@ -1,14 +1,16 @@
 <!DOCTYPE HTML>
-<html lang="ja" class="sidebar-visible no-js light">
+<html lang="ja" class="light sidebar-visible" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
         <title>HL分解 - アルゴリズムとデータ構造大全</title>
+
+
         <!-- Custom HTML head -->
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="../../../favicon.svg">
         <link rel="shortcut icon" href="../../../favicon.png">
@@ -16,30 +18,37 @@
         <link rel="stylesheet" href="../../../css/general.css">
         <link rel="stylesheet" href="../../../css/chrome.css">
         <link rel="stylesheet" href="../../../css/print.css" media="print">
+
         <!-- Fonts -->
         <link rel="stylesheet" href="../../../FontAwesome/css/font-awesome.css">
         <link rel="stylesheet" href="../../../fonts/fonts.css">
+
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" href="../../../highlight.css">
-        <link rel="stylesheet" href="../../../tomorrow-night.css">
-        <link rel="stylesheet" href="../../../ayu-highlight.css">
+        <link rel="stylesheet" id="highlight-css" href="../../../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../../../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../../../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
+
         <!-- MathJax -->
-        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../../../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../../../toc.js"></script>
     </head>
     <body>
-        <!-- Provide site root to javascript -->
-        <script type="text/javascript">
-            var path_to_root = "../../../";
-            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
-        </script>
-
+    <div id="body-container">
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
+        <script>
             try {
-                var theme = localStorage.getItem('mdbook-theme');
-                var sidebar = localStorage.getItem('mdbook-sidebar');
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
 
                 if (theme.startsWith('"') && theme.endsWith('"')) {
                     localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
@@ -52,50 +61,60 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
-            var theme;
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
-            var html = document.querySelector('html');
-            html.classList.remove('no-js')
+            const html = document.documentElement;
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            html.classList.add("js");
         </script>
 
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
-            var html = document.querySelector('html');
-            var sidebar = 'hidden';
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
             }
+            sidebar_toggle.checked = sidebar === 'visible';
             html.classList.remove('sidebar-visible');
             html.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../../index.html">はじめに</a></li><li class="chapter-item expanded "><a href="../../../graph/main.html"><strong aria-hidden="true">1.</strong> グラフ問題</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../graph/dijkstra/main.html"><strong aria-hidden="true">1.1.</strong> 単一始点最短路(Dijkstra法)</a></li><li class="chapter-item expanded "><a href="../../../graph/bfs/main.html"><strong aria-hidden="true">1.2.</strong> 単一始点最短パス(BFS)</a></li><li class="chapter-item expanded "><a href="../../../graph/bellman-ford/main.html"><strong aria-hidden="true">1.3.</strong> 単一始点最短路(Bellman Ford法)</a></li><li class="chapter-item expanded "><a href="../../../graph/spfa/main.html"><strong aria-hidden="true">1.4.</strong> 単一始点最短路(SPFA)</a></li><li class="chapter-item expanded "><a href="../../../graph/warshall-floyd/main.html"><strong aria-hidden="true">1.5.</strong> 全点対最短路(Warshall Floyd法)</a></li><li class="chapter-item expanded "><a href="../../../graph/johnson/main.html"><strong aria-hidden="true">1.6.</strong> 全点対最短路(Johnson法)</a></li><li class="chapter-item expanded "><a href="../../../graph/longest-path/main.html"><strong aria-hidden="true">1.7.</strong> 単一始点最長路</a></li><li class="chapter-item expanded "><a href="../../../graph/kruskal/main.html"><strong aria-hidden="true">1.8.</strong> 最小全域木(Kruskal法)</a></li><li class="chapter-item expanded "><a href="../../../graph/connectivity/main.html"><strong aria-hidden="true">1.9.</strong> 連結性</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../graph/connectivity/dfs/main.html"><strong aria-hidden="true">1.9.1.</strong> DFS</a></li><li class="chapter-item expanded "><a href="../../../graph/connectivity/union-find/main.html"><strong aria-hidden="true">1.9.2.</strong> Union Find</a></li><li class="chapter-item expanded "><a href="../../../graph/connectivity/low-link/main.html"><strong aria-hidden="true">1.9.3.</strong> Low Link</a></li><li class="chapter-item expanded "><a href="../../../graph/connectivity/dynamic-connectivity/main.html"><strong aria-hidden="true">1.9.4.</strong> Dynamic Connectivity Algorithm</a></li></ol></li><li class="chapter-item expanded "><a href="../../../graph/tree/main.html"><strong aria-hidden="true">1.10.</strong> 木</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../graph/tree/dfs/main.html"><strong aria-hidden="true">1.10.1.</strong> DFS</a></li><li class="chapter-item expanded "><a href="../../../graph/tree/diameter/main.html"><strong aria-hidden="true">1.10.2.</strong> 直径</a></li><li class="chapter-item expanded "><a href="../../../graph/tree/euler-tour/main.html"><strong aria-hidden="true">1.10.3.</strong> Euler Tour</a></li><li class="chapter-item expanded "><a href="../../../graph/tree/euler-tour-tree/main.html"><strong aria-hidden="true">1.10.4.</strong> Euler Tour Tree</a></li><li class="chapter-item expanded "><a href="../../../graph/tree/hld/main.html" class="active"><strong aria-hidden="true">1.10.5.</strong> HL分解</a></li><li class="chapter-item expanded "><a href="../../../graph/tree/link-cut-tree/main.html"><strong aria-hidden="true">1.10.6.</strong> Link Cut Tree</a></li></ol></li><li class="chapter-item expanded "><a href="../../../graph/tsp/main.html"><strong aria-hidden="true">1.11.</strong> 巡回セールスマン問題</a></li></ol></li><li class="chapter-item expanded "><a href="../../../range/main.html"><strong aria-hidden="true">2.</strong> 区間問題</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../range/imos/main.html"><strong aria-hidden="true">2.1.</strong> imos法</a></li><li class="chapter-item expanded "><a href="../../../range/segtree/main.html"><strong aria-hidden="true">2.2.</strong> セグメント木</a></li><li class="chapter-item expanded "><a href="../../../range/bit/main.html"><strong aria-hidden="true">2.3.</strong> Binary Indexed Tree(フェニック木)</a></li><li class="chapter-item expanded "><a href="../../../range/bbst/main.html"><strong aria-hidden="true">2.4.</strong> 平衡2分探索木</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../range/bbst/splay-tree/main.html"><strong aria-hidden="true">2.4.1.</strong> splay木</a></li></ol></li><li class="chapter-item expanded "><a href="../../../range/rbst/main.html"><strong aria-hidden="true">2.5.</strong> RangeBST</a></li><li class="chapter-item expanded "><a href="../../../range/imos2d/main.html"><strong aria-hidden="true">2.6.</strong> 2次元imos法</a></li><li class="chapter-item expanded "><a href="../../../range/mo/main.html"><strong aria-hidden="true">2.7.</strong> Mo's algorithm</a></li><li class="chapter-item expanded "><a href="../../../range/wavelet-matrix/main.html"><strong aria-hidden="true">2.8.</strong> ウェーブレット行列</a></li><li class="chapter-item expanded "><a href="../../../range/isp/main.html"><strong aria-hidden="true">2.9.</strong> 区間スケジューリング問題</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../range/isp/overlap/main.html"><strong aria-hidden="true">2.9.1.</strong> 重複あり区間スケジューリング問題</a></li><li class="chapter-item expanded "><a href="../../../range/isp/weighted/main.html"><strong aria-hidden="true">2.9.2.</strong> 重み付き区間スケジューリング問題</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../../dp/main.html"><strong aria-hidden="true">3.</strong> DP</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../dp/ddp/main.html"><strong aria-hidden="true">3.1.</strong> 桁DP</a></li><li class="chapter-item expanded "><a href="../../../dp/pdp/main.html"><strong aria-hidden="true">3.2.</strong> 確率DP</a></li><li class="chapter-item expanded "><a href="../../../dp/edp/main.html"><strong aria-hidden="true">3.3.</strong> 期待値DP</a></li><li class="chapter-item expanded "><a href="../../../dp/bitdp/main.html"><strong aria-hidden="true">3.4.</strong> bitDP</a></li><li class="chapter-item expanded "><a href="../../../dp/rangedp/main.html"><strong aria-hidden="true">3.5.</strong> 区間DP</a></li><li class="chapter-item expanded "><a href="../../../dp/eardp/main.html"><strong aria-hidden="true">3.6.</strong> 耳DP</a></li><li class="chapter-item expanded "><a href="../../../dp/DFAdp/main.html"><strong aria-hidden="true">3.7.</strong> オートマトンDP</a></li><li class="chapter-item expanded "><a href="../../../dp/lcs/main.html"><strong aria-hidden="true">3.8.</strong> LCS</a></li><li class="chapter-item expanded "><a href="../../../dp/lis/main.html"><strong aria-hidden="true">3.9.</strong> LIS</a></li></ol></li><li class="chapter-item expanded "><a href="../../../flow/main.html"><strong aria-hidden="true">4.</strong> フロー</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../flow/mfp/main.html"><strong aria-hidden="true">4.1.</strong> 最大フロー問題</a></li><li class="chapter-item expanded "><a href="../../../flow/bipartitemm/main.html"><strong aria-hidden="true">4.2.</strong> 2部グラフの最大マッチング</a></li><li class="chapter-item expanded "><a href="../../../flow/mcfp/main.html"><strong aria-hidden="true">4.3.</strong> 最小費用流問題</a></li></ol></li><li class="chapter-item expanded "><a href="../../../game/main.html"><strong aria-hidden="true">5.</strong> ゲーム系問題</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../game/backtrack/main.html"><strong aria-hidden="true">5.1.</strong> 後退解析</a></li><li class="chapter-item expanded "><a href="../../../game/nim/main.html"><strong aria-hidden="true">5.2.</strong> Nim</a></li><li class="chapter-item expanded "><a href="../../../game/grundy/main.html"><strong aria-hidden="true">5.3.</strong> Grundy数</a></li></ol></li><li class="chapter-item expanded "><a href="../../../group-theory/main.html"><strong aria-hidden="true">6.</strong> 群論</a></li><li class="chapter-item expanded "><a href="../../../dc/main.html"><strong aria-hidden="true">7.</strong> 分割統治法</a></li><li class="chapter-item expanded "><a href="../../../binary-search/main.html"><strong aria-hidden="true">8.</strong> 2分探索</a></li></ol>
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../../../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
                 <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+                <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
@@ -112,6 +131,7 @@
                         <a href="../../../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
+
                     </div>
                 </div>
 
@@ -125,8 +145,9 @@
                         </ul>
                     </div>
                 </div>
+
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
+                <script>
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -137,7 +158,7 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="hl分解"><a class="header" href="#hl分解">HL分解</a></h1>
-<p>2項演算(以降便宜上仮に&quot;和&quot;と呼ぶ)を与える．
+<p>2項演算(以降便宜上仮に"和"と呼ぶ)を与える．
 HL分解の各操作と時間計算量は以下．</p>
 <ul>
 <li>構築: \(O(|V|)\)</li>
@@ -145,7 +166,7 @@ HL分解の各操作と時間計算量は以下．</p>
 <li>木の任意のノードの値(モノイド)の更新: \(O(\log |V|)\)</li>
 <li>木の任意2ノード間のパスクエリ: \(O(\log ^2|V|)\)</li>
 </ul>
-<p>※パスクエリというのは，あるパスについて，通った順番にノード上の値を累積&quot;和&quot;した値を求めるクエリのこと．</p>
+<p>※パスクエリというのは，あるパスについて，通った順番にノード上の値を累積"和"した値を求めるクエリのこと．</p>
 <h2 id="説明"><a class="header" href="#説明">説明</a></h2>
 <p>はじめに，以下のように<strong>枝分かれのない極端な木</strong>を考える．</p>
 <pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
@@ -173,7 +194,7 @@ linkStyle 8 stroke-width:4px,fill:none,stroke:slateblue;
 
 classDef heavy stroke-width:4px,stroke:slateblue;
 </pre>
-<p>では任意の木においてこれらのクエリに答えるためには，<strong>木をいくつかのパスに分解</strong>し，分割した各パスにおいては累積&quot;和&quot;を求めるためにセグメント木を利用し，それらを合わせればいいのではないか．これがHL分解の基本的なアイディアである．</p>
+<p>では任意の木においてこれらのクエリに答えるためには，<strong>木をいくつかのパスに分解</strong>し，分割した各パスにおいては累積"和"を求めるためにセグメント木を利用し，それらを合わせればいいのではないか．これがHL分解の基本的なアイディアである．</p>
 <p>例えば上のように木をいくつかのパスに分解すると，1-&gt;7パスや6-&gt;1パスのように，パス上の全てのノードが同じセグ木上で連続した並びになっているパスは1回のセグ木に対する操作でパスクエリが求まり，6-&gt;10パスのようなパスでは6-&gt;1と9-&gt;10で合わせて2回セグ木で操作を行い，それらを合わせればよいということである．</p>
 <p>しかし，異なるセグ木を操作した回数を\(N\)とすると，パスクエリに対する計算量は当然\(O(N \log |V|)\)となるため，各セグ木の操作が高速でも，<strong>この\(N\)が大きくなるとパスクエリに高速に答えることができない</strong>．</p>
 <p>ここからは，この\(O(N)\)を小さくするためのアイディアについて説明する．</p>
@@ -236,7 +257,7 @@ linkStyle 17 stroke-width:4px,fill:none,stroke:slateblue;
 classDef heavy stroke-width:4px,stroke:slateblue;
 </pre>
 <p>この木を例にしながら，<strong>任意の点から根までのパスにいくつのheavyパスが含まれるか</strong>を考える．ノード1個単体で，どこにもheavy辺が伸びていないものも1つのheavyパスとみなすと，任意のパスにおいて，heavyパスと1本のlight辺を交互に通ることになる．そのため，パス上のheavyパスの個数とパス上のlight辺の個数の差は必ず\(1\)以下になる．つまり，<strong>パス上のheavyパスの個数を抑えることは，パス上のlight辺の個数を抑えることと言い換えることができる</strong>．</p>
-<p>仮に，始点をノード19，終点を根としよう．まず，19-&gt;18の累積&quot;和&quot;を対応するセグ木を使って求める．次の18-&gt;13を見ると，これはlight辺である．<strong>ここにlight辺があるということはつまり，ノード18を根とする部分木のサイズ(ノード数)は，最大でも，ノード13を根とする部分木のサイズの半分以下</strong>ということである．もし半分以上のサイズならここはheavy辺になっているはずだからだ．実際に，ノード13を根とする部分木のサイズは7，ノード18を根とする部分木のサイズは2であり，半分以下である．これはつまり，<strong>light辺を通るたびに，全体の推定ノード数が，その下の部分木のサイズの2倍(以上)になる</strong>ということである．したがって，全体のノード数を\(|V|\)とすると，任意のノードから根までのパスに，<strong>light辺は最大でも\(O(\log |V|)\)個しか含まれない</strong>ことがわかる．従って，heavyパスの個数のオーダも\(O(\log |V|)\)であり，また，それぞれのheavyパスにおいて，セグ木の操作により\(O(\log |V|)\)がかかるため，任意のノードから根までのパスクエリの計算量は\(O(\log ^2 |V|)\)である．</p>
+<p>仮に，始点をノード19，終点を根としよう．まず，19-&gt;18の累積"和"を対応するセグ木を使って求める．次の18-&gt;13を見ると，これはlight辺である．<strong>ここにlight辺があるということはつまり，ノード18を根とする部分木のサイズ(ノード数)は，最大でも，ノード13を根とする部分木のサイズの半分以下</strong>ということである．もし半分以上のサイズならここはheavy辺になっているはずだからだ．実際に，ノード13を根とする部分木のサイズは7，ノード18を根とする部分木のサイズは2であり，半分以下である．これはつまり，<strong>light辺を通るたびに，全体の推定ノード数が，その下の部分木のサイズの2倍(以上)になる</strong>ということである．したがって，全体のノード数を\(|V|\)とすると，任意のノードから根までのパスに，<strong>light辺は最大でも\(O(\log |V|)\)個しか含まれない</strong>ことがわかる．従って，heavyパスの個数のオーダも\(O(\log |V|)\)であり，また，それぞれのheavyパスにおいて，セグ木の操作により\(O(\log |V|)\)がかかるため，任意のノードから根までのパスクエリの計算量は\(O(\log ^2 |V|)\)である．</p>
 <p>最後に，任意の2ノード間\(u\)-&gt;\(v\)のパスクエリを求める計算量は，\(u\)-&gt;\(root\) \(+\) \(root\)-&gt;\(v\)のパスクエリの計算量より小さいことに注目すると，後者の計算量は\(O(2 \log ^2 |V|) = O(\log ^2 |V|)\)であるため，<strong>前者の計算量も\(O(\log ^2 |V|)\)で抑えられる</strong>ことがわかる．</p>
 <p>LCAを求めるクエリについても，上と同様にlight辺の個数は\(O(\log |V|)\)であるため，<strong>高々\(O(\log |V|)\)回上るとLCAにたどりつける</strong>ことがわかる．</p>
 <h2 id="実装"><a class="header" href="#実装">実装</a></h2>
@@ -283,7 +304,7 @@ classDef heavy stroke-width:4px,stroke:slateblue;
 <li>ノード17が含まれるheavyパスで最も根に近いノード(以降topノードと呼ぶ)と，ノード19のtopノードの深さを比較する．ノード17とノード18では，ノード17の方が深いため，ノード17の値を左側から累積した後，左ノードをノード15に移動する．</li>
 <li>ノード15のtopノードと，ノード19のtopノードの深さを比較すると，今度はノード1よりもノード18の方が深いため，19-&gt;18を右側から累積した後，右ノードをノード13に移動する．</li>
 <li>ノード15のtopノードとノード13のtopノードが等しいことから，これらは同じheavyパス上にあることがわかる．よって，単に左ノード-&gt;右ノードで値を累積し，左側の累積値に累積する．</li>
-<li>最後に左側の累積値と右側の累積値の&quot;和&quot;を取った値が求める値である．</li>
+<li>最後に左側の累積値と右側の累積値の"和"を取った値が求める値である．</li>
 </ol>
 <p>このようにしてパスクエリを求めることができる．ここで，パスクエリを求める疑似コードを示す．</p>
 <pre><code class="language-rs">fn query(lnode, rnode) -&gt; S {
@@ -295,7 +316,7 @@ classDef heavy stroke-width:4px,stroke:slateblue;
         prodl = op(prodl, prod(lnode, rnode)) // 左ノード-&gt;右ノードパスの累積値を左側に累積
       else
         prodr = op(prod(rnode, lnode), prodr) // 右ノード-&gt;左ノードパスの累積値を右側に累積
-      return op(prodl, prodr) // 左側の累積値と右側の累積値の&quot;和&quot;を返す
+      return op(prodl, prodr) // 左側の累積値と右側の累積値の"和"を返す
     }
     // topノードの深さの深い方を上にあげる
     if lnode.top.depth &gt; rnode.top.depth { // 左ノードのtopノードの方が深さが深い場合
@@ -353,7 +374,7 @@ classDef heavy stroke-width:4px,stroke:slateblue;
 <p>この構築フェーズは，木上でDFSを2回行うだけなので，計算量は\(O(|V|)\)である．</p>
 <h3 id="実装におけるその他の注意事項"><a class="header" href="#実装におけるその他の注意事項">実装におけるその他の注意事項</a></h3>
 <p>実装上注意すべきことをいくつか最後に述べる．</p>
-<p>まず1つ目は，パスクエリでは，<strong>向きを間違えてはいけない</strong>ということ．このページでは&quot;和&quot;と呼んでいるが，実際にはこの2項演算には可換性を要求しないので，可換ではない可能性があることを忘れてはいけない．\(u\)-&gt;\(v\)の累積値を求めるなら，最左を\(u\)，最右を\(v\)として，累積値を取るときに右側からとるのか左側から取るのかを間違えてはいけない．</p>
+<p>まず1つ目は，パスクエリでは，<strong>向きを間違えてはいけない</strong>ということ．このページでは"和"と呼んでいるが，実際にはこの2項演算には可換性を要求しないので，可換ではない可能性があることを忘れてはいけない．\(u\)-&gt;\(v\)の累積値を求めるなら，最左を\(u\)，最右を\(v\)として，累積値を取るときに右側からとるのか左側から取るのかを間違えてはいけない．</p>
 <p>2つ目は，先ほどセグ木は1本と言ったが<strong>実際には2本必要</strong>であるということ．任意のheavyパスは，パスによっては右からも左からも累積値を取る可能性がある．よって，<strong>2方向分で2本セグ木が必要</strong>である．パスクエリの実装の際に，どっちのセグ木を使うかを間違えないように注意する．</p>
 <p>以上！</p>
 <h2 id="コード"><a class="header" href="#コード">コード</a></h2>
@@ -475,9 +496,11 @@ private:
                             <a rel="prev" href="../../../graph/tree/euler-tour-tree/main.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                            <a rel="next" href="../../../graph/tree/link-cut-tree/main.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+
+                            <a rel="next prefetch" href="../../../graph/tree/link-cut-tree/main.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
+
                         <div style="clear: both"></div>
                     </nav>
                 </div>
@@ -487,25 +510,35 @@ private:
                     <a rel="prev" href="../../../graph/tree/euler-tour-tree/main.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                    <a rel="next" href="../../../graph/tree/link-cut-tree/main.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+
+                    <a rel="next prefetch" href="../../../graph/tree/link-cut-tree/main.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
 
         </div>
 
-        <script type="text/javascript">
+
+
+
+        <script>
             window.playground_copyable = true;
         </script>
-        <script src="../../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../../../mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../../../searcher.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../../../highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../../../book.js" type="text/javascript" charset="utf-8"></script>
+
+
+        <script src="../../../elasticlunr.min.js"></script>
+        <script src="../../../mark.min.js"></script>
+        <script src="../../../searcher.js"></script>
+
+        <script src="../../../clipboard.min.js"></script>
+        <script src="../../../highlight.js"></script>
+        <script src="../../../book.js"></script>
 
         <!-- Custom JS scripts -->
-        <script type="text/javascript" src="../../../mermaid.min.js"></script>
-        <script type="text/javascript" src="../../../mermaid-init.js"></script>
+        <script src="../../../mermaid.min.js"></script>
+        <script src="../../../mermaid-init.js"></script>
+
+
+    </div>
     </body>
 </html>

@@ -1,14 +1,16 @@
 <!DOCTYPE HTML>
-<html lang="ja" class="sidebar-visible no-js light">
+<html lang="ja" class="light sidebar-visible" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
         <title>imos法 - アルゴリズムとデータ構造大全</title>
+
+
         <!-- Custom HTML head -->
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="../../favicon.svg">
         <link rel="shortcut icon" href="../../favicon.png">
@@ -16,30 +18,37 @@
         <link rel="stylesheet" href="../../css/general.css">
         <link rel="stylesheet" href="../../css/chrome.css">
         <link rel="stylesheet" href="../../css/print.css" media="print">
+
         <!-- Fonts -->
         <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
         <link rel="stylesheet" href="../../fonts/fonts.css">
+
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" href="../../highlight.css">
-        <link rel="stylesheet" href="../../tomorrow-night.css">
-        <link rel="stylesheet" href="../../ayu-highlight.css">
+        <link rel="stylesheet" id="highlight-css" href="../../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
+
         <!-- MathJax -->
-        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../../toc.js"></script>
     </head>
     <body>
-        <!-- Provide site root to javascript -->
-        <script type="text/javascript">
-            var path_to_root = "../../";
-            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
-        </script>
-
+    <div id="body-container">
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
+        <script>
             try {
-                var theme = localStorage.getItem('mdbook-theme');
-                var sidebar = localStorage.getItem('mdbook-sidebar');
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
 
                 if (theme.startsWith('"') && theme.endsWith('"')) {
                     localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
@@ -52,50 +61,60 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
-            var theme;
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
-            var html = document.querySelector('html');
-            html.classList.remove('no-js')
+            const html = document.documentElement;
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            html.classList.add("js");
         </script>
 
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
-            var html = document.querySelector('html');
-            var sidebar = 'hidden';
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
             }
+            sidebar_toggle.checked = sidebar === 'visible';
             html.classList.remove('sidebar-visible');
             html.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">はじめに</a></li><li class="chapter-item expanded "><a href="../../graph/main.html"><strong aria-hidden="true">1.</strong> グラフ問題</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../graph/dijkstra/main.html"><strong aria-hidden="true">1.1.</strong> 単一始点最短路(Dijkstra法)</a></li><li class="chapter-item expanded "><a href="../../graph/bfs/main.html"><strong aria-hidden="true">1.2.</strong> 単一始点最短パス(BFS)</a></li><li class="chapter-item expanded "><a href="../../graph/bellman-ford/main.html"><strong aria-hidden="true">1.3.</strong> 単一始点最短路(Bellman Ford法)</a></li><li class="chapter-item expanded "><a href="../../graph/spfa/main.html"><strong aria-hidden="true">1.4.</strong> 単一始点最短路(SPFA)</a></li><li class="chapter-item expanded "><a href="../../graph/warshall-floyd/main.html"><strong aria-hidden="true">1.5.</strong> 全点対最短路(Warshall Floyd法)</a></li><li class="chapter-item expanded "><a href="../../graph/johnson/main.html"><strong aria-hidden="true">1.6.</strong> 全点対最短路(Johnson法)</a></li><li class="chapter-item expanded "><a href="../../graph/longest-path/main.html"><strong aria-hidden="true">1.7.</strong> 単一始点最長路</a></li><li class="chapter-item expanded "><a href="../../graph/kruskal/main.html"><strong aria-hidden="true">1.8.</strong> 最小全域木(Kruskal法)</a></li><li class="chapter-item expanded "><a href="../../graph/connectivity/main.html"><strong aria-hidden="true">1.9.</strong> 連結性</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../graph/connectivity/dfs/main.html"><strong aria-hidden="true">1.9.1.</strong> DFS</a></li><li class="chapter-item expanded "><a href="../../graph/connectivity/union-find/main.html"><strong aria-hidden="true">1.9.2.</strong> Union Find</a></li><li class="chapter-item expanded "><a href="../../graph/connectivity/low-link/main.html"><strong aria-hidden="true">1.9.3.</strong> Low Link</a></li><li class="chapter-item expanded "><a href="../../graph/connectivity/dynamic-connectivity/main.html"><strong aria-hidden="true">1.9.4.</strong> Dynamic Connectivity Algorithm</a></li></ol></li><li class="chapter-item expanded "><a href="../../graph/tree/main.html"><strong aria-hidden="true">1.10.</strong> 木</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../graph/tree/dfs/main.html"><strong aria-hidden="true">1.10.1.</strong> DFS</a></li><li class="chapter-item expanded "><a href="../../graph/tree/diameter/main.html"><strong aria-hidden="true">1.10.2.</strong> 直径</a></li><li class="chapter-item expanded "><a href="../../graph/tree/euler-tour/main.html"><strong aria-hidden="true">1.10.3.</strong> Euler Tour</a></li><li class="chapter-item expanded "><a href="../../graph/tree/euler-tour-tree/main.html"><strong aria-hidden="true">1.10.4.</strong> Euler Tour Tree</a></li><li class="chapter-item expanded "><a href="../../graph/tree/hld/main.html"><strong aria-hidden="true">1.10.5.</strong> HL分解</a></li><li class="chapter-item expanded "><a href="../../graph/tree/link-cut-tree/main.html"><strong aria-hidden="true">1.10.6.</strong> Link Cut Tree</a></li></ol></li><li class="chapter-item expanded "><a href="../../graph/tsp/main.html"><strong aria-hidden="true">1.11.</strong> 巡回セールスマン問題</a></li></ol></li><li class="chapter-item expanded "><a href="../../range/main.html"><strong aria-hidden="true">2.</strong> 区間問題</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../range/imos/main.html" class="active"><strong aria-hidden="true">2.1.</strong> imos法</a></li><li class="chapter-item expanded "><a href="../../range/segtree/main.html"><strong aria-hidden="true">2.2.</strong> セグメント木</a></li><li class="chapter-item expanded "><a href="../../range/bit/main.html"><strong aria-hidden="true">2.3.</strong> Binary Indexed Tree(フェニック木)</a></li><li class="chapter-item expanded "><a href="../../range/bbst/main.html"><strong aria-hidden="true">2.4.</strong> 平衡2分探索木</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../range/bbst/splay-tree/main.html"><strong aria-hidden="true">2.4.1.</strong> splay木</a></li></ol></li><li class="chapter-item expanded "><a href="../../range/rbst/main.html"><strong aria-hidden="true">2.5.</strong> RangeBST</a></li><li class="chapter-item expanded "><a href="../../range/imos2d/main.html"><strong aria-hidden="true">2.6.</strong> 2次元imos法</a></li><li class="chapter-item expanded "><a href="../../range/mo/main.html"><strong aria-hidden="true">2.7.</strong> Mo's algorithm</a></li><li class="chapter-item expanded "><a href="../../range/wavelet-matrix/main.html"><strong aria-hidden="true">2.8.</strong> ウェーブレット行列</a></li><li class="chapter-item expanded "><a href="../../range/isp/main.html"><strong aria-hidden="true">2.9.</strong> 区間スケジューリング問題</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../range/isp/overlap/main.html"><strong aria-hidden="true">2.9.1.</strong> 重複あり区間スケジューリング問題</a></li><li class="chapter-item expanded "><a href="../../range/isp/weighted/main.html"><strong aria-hidden="true">2.9.2.</strong> 重み付き区間スケジューリング問題</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../dp/main.html"><strong aria-hidden="true">3.</strong> DP</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../dp/ddp/main.html"><strong aria-hidden="true">3.1.</strong> 桁DP</a></li><li class="chapter-item expanded "><a href="../../dp/pdp/main.html"><strong aria-hidden="true">3.2.</strong> 確率DP</a></li><li class="chapter-item expanded "><a href="../../dp/edp/main.html"><strong aria-hidden="true">3.3.</strong> 期待値DP</a></li><li class="chapter-item expanded "><a href="../../dp/bitdp/main.html"><strong aria-hidden="true">3.4.</strong> bitDP</a></li><li class="chapter-item expanded "><a href="../../dp/rangedp/main.html"><strong aria-hidden="true">3.5.</strong> 区間DP</a></li><li class="chapter-item expanded "><a href="../../dp/eardp/main.html"><strong aria-hidden="true">3.6.</strong> 耳DP</a></li><li class="chapter-item expanded "><a href="../../dp/DFAdp/main.html"><strong aria-hidden="true">3.7.</strong> オートマトンDP</a></li><li class="chapter-item expanded "><a href="../../dp/lcs/main.html"><strong aria-hidden="true">3.8.</strong> LCS</a></li><li class="chapter-item expanded "><a href="../../dp/lis/main.html"><strong aria-hidden="true">3.9.</strong> LIS</a></li></ol></li><li class="chapter-item expanded "><a href="../../flow/main.html"><strong aria-hidden="true">4.</strong> フロー</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../flow/mfp/main.html"><strong aria-hidden="true">4.1.</strong> 最大フロー問題</a></li><li class="chapter-item expanded "><a href="../../flow/bipartitemm/main.html"><strong aria-hidden="true">4.2.</strong> 2部グラフの最大マッチング</a></li><li class="chapter-item expanded "><a href="../../flow/mcfp/main.html"><strong aria-hidden="true">4.3.</strong> 最小費用流問題</a></li></ol></li><li class="chapter-item expanded "><a href="../../game/main.html"><strong aria-hidden="true">5.</strong> ゲーム系問題</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../game/backtrack/main.html"><strong aria-hidden="true">5.1.</strong> 後退解析</a></li><li class="chapter-item expanded "><a href="../../game/nim/main.html"><strong aria-hidden="true">5.2.</strong> Nim</a></li><li class="chapter-item expanded "><a href="../../game/grundy/main.html"><strong aria-hidden="true">5.3.</strong> Grundy数</a></li></ol></li><li class="chapter-item expanded "><a href="../../group-theory/main.html"><strong aria-hidden="true">6.</strong> 群論</a></li><li class="chapter-item expanded "><a href="../../dc/main.html"><strong aria-hidden="true">7.</strong> 分割統治法</a></li><li class="chapter-item expanded "><a href="../../binary-search/main.html"><strong aria-hidden="true">8.</strong> 2分探索</a></li></ol>
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
                 <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+                <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
@@ -112,6 +131,7 @@
                         <a href="../../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
+
                     </div>
                 </div>
 
@@ -125,8 +145,9 @@
                         </ul>
                     </div>
                 </div>
+
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
+                <script>
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -148,19 +169,21 @@
 <p>imos法でいう区間更新とは，配列のある区間の全要素に同じ値を足す操作のことである．これは，愚直に行うと\(O(N)\)かかってしまう．</p>
 <p>imos法は，どの区間に何の値を足す必要があるかという情報を覚えておき，配列の要素を最後に取得する時に，それまでの区間更新をまとめて処理するという方法である．より具体的に説明すると，区間更新操作では，左から<strong>累積和</strong>(\(O(N)\))を取った時に，配列の各要素の値を得られるように値の更新を行う．</p>
 <p>最後に左から累積和を取ることを前提として考えると，配列のある要素にある値を足すことは，その要素以降の全要素にその値を足すことを意味する．</p>
-<table><thead><tr><th style="text-align: center">Index</th><th style="text-align: center">0</th><th style="text-align: center">1</th><th style="text-align: center">2</th><th style="text-align: center">3</th><th style="text-align: center">4</th><th style="text-align: center">5</th><th style="text-align: center">6</th><th style="text-align: center">7</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: center">Index</th><th style="text-align: center">0</th><th style="text-align: center">1</th><th style="text-align: center">2</th><th style="text-align: center">3</th><th style="text-align: center">4</th><th style="text-align: center">5</th><th style="text-align: center">6</th><th style="text-align: center">7</th></tr></thead><tbody>
 <tr><td style="text-align: center">クエリ1</td><td style="text-align: center">-</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(+1\)</td></tr>
 <tr><td style="text-align: center">更新1</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td></tr>
 <tr><td style="text-align: center"><strong>累積和</strong></td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(1\)</td><td style="text-align: center">\(1\)</td><td style="text-align: center">\(1\)</td><td style="text-align: center">\(1\)</td><td style="text-align: center">\(1\)</td><td style="text-align: center">\(1\)</td><td style="text-align: center">\(1\)</td></tr>
 </tbody></table>
+</div>
 <p>よって，例えばある区間に値\(x\)を足す場合，区間クエリの先頭に\(x\)を足し，終わりに\(-x\)を足すことで，最後に累積和を取った時にその区間の要素のみに\(x\)を足すことができる．</p>
-<table><thead><tr><th style="text-align: center">Index</th><th style="text-align: center">0</th><th style="text-align: center">1</th><th style="text-align: center">2</th><th style="text-align: center">3</th><th style="text-align: center">4</th><th style="text-align: center">5</th><th style="text-align: center">6</th><th style="text-align: center">7</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: center">Index</th><th style="text-align: center">0</th><th style="text-align: center">1</th><th style="text-align: center">2</th><th style="text-align: center">3</th><th style="text-align: center">4</th><th style="text-align: center">5</th><th style="text-align: center">6</th><th style="text-align: center">7</th></tr></thead><tbody>
 <tr><td style="text-align: center">クエリ1</td><td style="text-align: center">-</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">-</td><td style="text-align: center">-</td><td style="text-align: center">-</td></tr>
 <tr><td style="text-align: center">更新1</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(-x\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td></tr>
 <tr><td style="text-align: center"><strong>累積和</strong></td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(x\)</td><td style="text-align: center">\(x\)</td><td style="text-align: center">\(x\)</td><td style="text-align: center">\(x\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td></tr>
 </tbody></table>
+</div>
 <p>区間更新が複数あっても操作は変わらない．</p>
-<table><thead><tr><th style="text-align: center">Index</th><th style="text-align: center">0</th><th style="text-align: center">1</th><th style="text-align: center">2</th><th style="text-align: center">3</th><th style="text-align: center">4</th><th style="text-align: center">5</th><th style="text-align: center">6</th><th style="text-align: center">7</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: center">Index</th><th style="text-align: center">0</th><th style="text-align: center">1</th><th style="text-align: center">2</th><th style="text-align: center">3</th><th style="text-align: center">4</th><th style="text-align: center">5</th><th style="text-align: center">6</th><th style="text-align: center">7</th></tr></thead><tbody>
 <tr><td style="text-align: center">クエリ1</td><td style="text-align: center">-</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">-</td><td style="text-align: center">-</td><td style="text-align: center">-</td></tr>
 <tr><td style="text-align: center">更新1</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(-x\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td></tr>
 <tr><td style="text-align: center">クエリ2</td><td style="text-align: center">-</td><td style="text-align: center">-</td><td style="text-align: center">\(+y\)</td><td style="text-align: center">\(+y\)</td><td style="text-align: center">\(+y\)</td><td style="text-align: center">\(+y\)</td><td style="text-align: center">-</td><td style="text-align: center">-</td></tr>
@@ -169,6 +192,7 @@
 <tr><td style="text-align: center">更新3</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+y\)</td><td style="text-align: center">\(+z\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(-x-z\)</td><td style="text-align: center">\(-y\)</td><td style="text-align: center">\(0\)</td></tr>
 <tr><td style="text-align: center"><strong>累積和</strong></td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(x\)</td><td style="text-align: center">\(x+y\)</td><td style="text-align: center">\(x+y+z\)</td><td style="text-align: center">\(x+y+z\)</td><td style="text-align: center">\(y\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td></tr>
 </tbody></table>
+</div>
 <p>扱う代数系を群一般としてまとめると，区間\([l, r))に値\(x\)を作用させる場合，配列の\(l\)番目に\(x\)を作用させ，\(r\)番目に\(x\)の逆元を作用させる．実際の値を得るには，左から累積値を取れば良い．</p>
 <h2 id="コード"><a class="header" href="#コード">コード</a></h2>
 <p><a href="https://atcoder.jp/contests/abc183/submissions/29194550"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
@@ -195,9 +219,11 @@ public:
                             <a rel="prev" href="../../range/main.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                            <a rel="next" href="../../range/segtree/main.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+
+                            <a rel="next prefetch" href="../../range/segtree/main.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
+
                         <div style="clear: both"></div>
                     </nav>
                 </div>
@@ -207,25 +233,35 @@ public:
                     <a rel="prev" href="../../range/main.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                    <a rel="next" href="../../range/segtree/main.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+
+                    <a rel="next prefetch" href="../../range/segtree/main.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
 
         </div>
 
-        <script type="text/javascript">
+
+
+
+        <script>
             window.playground_copyable = true;
         </script>
-        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
 
         <!-- Custom JS scripts -->
-        <script type="text/javascript" src="../../mermaid.min.js"></script>
-        <script type="text/javascript" src="../../mermaid-init.js"></script>
+        <script src="../../mermaid.min.js"></script>
+        <script src="../../mermaid-init.js"></script>
+
+
+    </div>
     </body>
 </html>

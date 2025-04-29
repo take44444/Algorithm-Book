@@ -1,15 +1,17 @@
 <!DOCTYPE HTML>
-<html lang="ja" class="sidebar-visible no-js light">
+<html lang="ja" class="light sidebar-visible" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
         <title>アルゴリズムとデータ構造大全</title>
-        <meta name="robots" content="noindex" />
+        <meta name="robots" content="noindex">
+
+
         <!-- Custom HTML head -->
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="favicon.svg">
         <link rel="shortcut icon" href="favicon.png">
@@ -17,30 +19,37 @@
         <link rel="stylesheet" href="css/general.css">
         <link rel="stylesheet" href="css/chrome.css">
         <link rel="stylesheet" href="css/print.css" media="print">
+
         <!-- Fonts -->
         <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
         <link rel="stylesheet" href="fonts/fonts.css">
+
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" href="highlight.css">
-        <link rel="stylesheet" href="tomorrow-night.css">
-        <link rel="stylesheet" href="ayu-highlight.css">
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
+
         <!-- MathJax -->
-        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
     </head>
     <body>
-        <!-- Provide site root to javascript -->
-        <script type="text/javascript">
-            var path_to_root = "";
-            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
-        </script>
-
+    <div id="body-container">
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
+        <script>
             try {
-                var theme = localStorage.getItem('mdbook-theme');
-                var sidebar = localStorage.getItem('mdbook-sidebar');
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
 
                 if (theme.startsWith('"') && theme.endsWith('"')) {
                     localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
@@ -53,50 +62,60 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
-            var theme;
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
-            var html = document.querySelector('html');
-            html.classList.remove('no-js')
+            const html = document.documentElement;
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            html.classList.add("js");
         </script>
 
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
-            var html = document.querySelector('html');
-            var sidebar = 'hidden';
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
             }
+            sidebar_toggle.checked = sidebar === 'visible';
             html.classList.remove('sidebar-visible');
             html.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">はじめに</a></li><li class="chapter-item expanded "><a href="graph/main.html"><strong aria-hidden="true">1.</strong> グラフ問題</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="graph/dijkstra/main.html"><strong aria-hidden="true">1.1.</strong> 単一始点最短路(Dijkstra法)</a></li><li class="chapter-item expanded "><a href="graph/bfs/main.html"><strong aria-hidden="true">1.2.</strong> 単一始点最短パス(BFS)</a></li><li class="chapter-item expanded "><a href="graph/bellman-ford/main.html"><strong aria-hidden="true">1.3.</strong> 単一始点最短路(Bellman Ford法)</a></li><li class="chapter-item expanded "><a href="graph/spfa/main.html"><strong aria-hidden="true">1.4.</strong> 単一始点最短路(SPFA)</a></li><li class="chapter-item expanded "><a href="graph/warshall-floyd/main.html"><strong aria-hidden="true">1.5.</strong> 全点対最短路(Warshall Floyd法)</a></li><li class="chapter-item expanded "><a href="graph/johnson/main.html"><strong aria-hidden="true">1.6.</strong> 全点対最短路(Johnson法)</a></li><li class="chapter-item expanded "><a href="graph/longest-path/main.html"><strong aria-hidden="true">1.7.</strong> 単一始点最長路</a></li><li class="chapter-item expanded "><a href="graph/kruskal/main.html"><strong aria-hidden="true">1.8.</strong> 最小全域木(Kruskal法)</a></li><li class="chapter-item expanded "><a href="graph/connectivity/main.html"><strong aria-hidden="true">1.9.</strong> 連結性</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="graph/connectivity/dfs/main.html"><strong aria-hidden="true">1.9.1.</strong> DFS</a></li><li class="chapter-item expanded "><a href="graph/connectivity/union-find/main.html"><strong aria-hidden="true">1.9.2.</strong> Union Find</a></li><li class="chapter-item expanded "><a href="graph/connectivity/low-link/main.html"><strong aria-hidden="true">1.9.3.</strong> Low Link</a></li><li class="chapter-item expanded "><a href="graph/connectivity/dynamic-connectivity/main.html"><strong aria-hidden="true">1.9.4.</strong> Dynamic Connectivity Algorithm</a></li></ol></li><li class="chapter-item expanded "><a href="graph/tree/main.html"><strong aria-hidden="true">1.10.</strong> 木</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="graph/tree/dfs/main.html"><strong aria-hidden="true">1.10.1.</strong> DFS</a></li><li class="chapter-item expanded "><a href="graph/tree/diameter/main.html"><strong aria-hidden="true">1.10.2.</strong> 直径</a></li><li class="chapter-item expanded "><a href="graph/tree/euler-tour/main.html"><strong aria-hidden="true">1.10.3.</strong> Euler Tour</a></li><li class="chapter-item expanded "><a href="graph/tree/euler-tour-tree/main.html"><strong aria-hidden="true">1.10.4.</strong> Euler Tour Tree</a></li><li class="chapter-item expanded "><a href="graph/tree/hld/main.html"><strong aria-hidden="true">1.10.5.</strong> HL分解</a></li><li class="chapter-item expanded "><a href="graph/tree/link-cut-tree/main.html"><strong aria-hidden="true">1.10.6.</strong> Link Cut Tree</a></li></ol></li><li class="chapter-item expanded "><a href="graph/tsp/main.html"><strong aria-hidden="true">1.11.</strong> 巡回セールスマン問題</a></li></ol></li><li class="chapter-item expanded "><a href="range/main.html"><strong aria-hidden="true">2.</strong> 区間問題</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="range/imos/main.html"><strong aria-hidden="true">2.1.</strong> imos法</a></li><li class="chapter-item expanded "><a href="range/segtree/main.html"><strong aria-hidden="true">2.2.</strong> セグメント木</a></li><li class="chapter-item expanded "><a href="range/bit/main.html"><strong aria-hidden="true">2.3.</strong> Binary Indexed Tree(フェニック木)</a></li><li class="chapter-item expanded "><a href="range/bbst/main.html"><strong aria-hidden="true">2.4.</strong> 平衡2分探索木</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="range/bbst/splay-tree/main.html"><strong aria-hidden="true">2.4.1.</strong> splay木</a></li></ol></li><li class="chapter-item expanded "><a href="range/rbst/main.html"><strong aria-hidden="true">2.5.</strong> RangeBST</a></li><li class="chapter-item expanded "><a href="range/imos2d/main.html"><strong aria-hidden="true">2.6.</strong> 2次元imos法</a></li><li class="chapter-item expanded "><a href="range/mo/main.html"><strong aria-hidden="true">2.7.</strong> Mo's algorithm</a></li><li class="chapter-item expanded "><a href="range/wavelet-matrix/main.html"><strong aria-hidden="true">2.8.</strong> ウェーブレット行列</a></li><li class="chapter-item expanded "><a href="range/isp/main.html"><strong aria-hidden="true">2.9.</strong> 区間スケジューリング問題</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="range/isp/overlap/main.html"><strong aria-hidden="true">2.9.1.</strong> 重複あり区間スケジューリング問題</a></li><li class="chapter-item expanded "><a href="range/isp/weighted/main.html"><strong aria-hidden="true">2.9.2.</strong> 重み付き区間スケジューリング問題</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="dp/main.html"><strong aria-hidden="true">3.</strong> DP</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="dp/ddp/main.html"><strong aria-hidden="true">3.1.</strong> 桁DP</a></li><li class="chapter-item expanded "><a href="dp/pdp/main.html"><strong aria-hidden="true">3.2.</strong> 確率DP</a></li><li class="chapter-item expanded "><a href="dp/edp/main.html"><strong aria-hidden="true">3.3.</strong> 期待値DP</a></li><li class="chapter-item expanded "><a href="dp/bitdp/main.html"><strong aria-hidden="true">3.4.</strong> bitDP</a></li><li class="chapter-item expanded "><a href="dp/rangedp/main.html"><strong aria-hidden="true">3.5.</strong> 区間DP</a></li><li class="chapter-item expanded "><a href="dp/eardp/main.html"><strong aria-hidden="true">3.6.</strong> 耳DP</a></li><li class="chapter-item expanded "><a href="dp/DFAdp/main.html"><strong aria-hidden="true">3.7.</strong> オートマトンDP</a></li><li class="chapter-item expanded "><a href="dp/lcs/main.html"><strong aria-hidden="true">3.8.</strong> LCS</a></li><li class="chapter-item expanded "><a href="dp/lis/main.html"><strong aria-hidden="true">3.9.</strong> LIS</a></li></ol></li><li class="chapter-item expanded "><a href="flow/main.html"><strong aria-hidden="true">4.</strong> フロー</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="flow/mfp/main.html"><strong aria-hidden="true">4.1.</strong> 最大フロー問題</a></li><li class="chapter-item expanded "><a href="flow/bipartitemm/main.html"><strong aria-hidden="true">4.2.</strong> 2部グラフの最大マッチング</a></li><li class="chapter-item expanded "><a href="flow/mcfp/main.html"><strong aria-hidden="true">4.3.</strong> 最小費用流問題</a></li></ol></li><li class="chapter-item expanded "><a href="game/main.html"><strong aria-hidden="true">5.</strong> ゲーム系問題</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="game/backtrack/main.html"><strong aria-hidden="true">5.1.</strong> 後退解析</a></li><li class="chapter-item expanded "><a href="game/nim/main.html"><strong aria-hidden="true">5.2.</strong> Nim</a></li><li class="chapter-item expanded "><a href="game/grundy/main.html"><strong aria-hidden="true">5.3.</strong> Grundy数</a></li></ol></li><li class="chapter-item expanded "><a href="group-theory/main.html"><strong aria-hidden="true">6.</strong> 群論</a></li><li class="chapter-item expanded "><a href="dc/main.html"><strong aria-hidden="true">7.</strong> 分割統治法</a></li><li class="chapter-item expanded "><a href="binary-search/main.html"><strong aria-hidden="true">8.</strong> 2分探索</a></li></ol>
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
                 <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+                <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
@@ -113,6 +132,7 @@
                         <a href="print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
+
                     </div>
                 </div>
 
@@ -126,8 +146,9 @@
                         </ul>
                     </div>
                 </div>
+
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
+                <script>
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -250,38 +271,38 @@ graph LR
 <ul>
 <li>隣接行列: 任意の2頂点の辺の取得が\(O(1)\)でできるが，空間計算量が\(O(|V|^2)\)．</li>
 </ul>
-<table><thead><tr><th style="text-align: center">i/j</th><th style="text-align: center">1</th><th style="text-align: center">2</th><th style="text-align: center">3</th><th style="text-align: center">4</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: center">i/j</th><th style="text-align: center">1</th><th style="text-align: center">2</th><th style="text-align: center">3</th><th style="text-align: center">4</th></tr></thead><tbody>
 <tr><td style="text-align: center"><strong>1</strong></td><td style="text-align: center">-</td><td style="text-align: center">10</td><td style="text-align: center">-</td><td style="text-align: center">-</td></tr>
 <tr><td style="text-align: center"><strong>2</strong></td><td style="text-align: center">-</td><td style="text-align: center">-</td><td style="text-align: center">30</td><td style="text-align: center">50</td></tr>
 <tr><td style="text-align: center"><strong>3</strong></td><td style="text-align: center">40</td><td style="text-align: center">-</td><td style="text-align: center">-</td><td style="text-align: center">70</td></tr>
 <tr><td style="text-align: center"><strong>4</strong></td><td style="text-align: center">10</td><td style="text-align: center">-</td><td style="text-align: center">-</td><td style="text-align: center">-</td></tr>
 </tbody></table>
+</div>
 <ul>
 <li>隣接リスト: 空間計算量が\(O(|V|+|E|)\)．</li>
 </ul>
-<table><thead><tr><th style="text-align: center">ノード</th><th style="text-align: left">接続された辺のリスト</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: center">ノード</th><th style="text-align: left">接続された辺のリスト</th></tr></thead><tbody>
 <tr><td style="text-align: center"><strong>1</strong></td><td style="text-align: left">[{to: 2, cost: 10}]</td></tr>
 <tr><td style="text-align: center"><strong>2</strong></td><td style="text-align: left">[{to: 3, cost: 30}, {to: 4, cost: 50}]</td></tr>
 <tr><td style="text-align: center"><strong>3</strong></td><td style="text-align: left">[{to: 1, cost: 40}, {to: 4, cost: 70}]</td></tr>
 <tr><td style="text-align: center"><strong>4</strong></td><td style="text-align: left">[{to: 1, cost: 10}]</td></tr>
 </tbody></table>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="単一始点最短路dijkstra法"><a class="header" href="#単一始点最短路dijkstra法">単一始点最短路(Dijkstra法)</a></h1>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="単一始点最短路dijkstra法"><a class="header" href="#単一始点最短路dijkstra法">単一始点最短路（Dijkstra法）</a></h1>
 <p>重みが全て\(0\)以上である任意の重み付きグラフ\(G\)における<strong>単一始点最短路</strong>は，<strong>Dijkstra法</strong>によって\(O(|E| \log |V|)\)で求めることができる．</p>
 <p>単一始点最短路とは，あるノード\(s \in G\)から，\(G\)に含まれる任意のノードまでの最短路である．以降始点を\(s\)と呼ぶ．</p>
 <h2 id="説明"><a class="header" href="#説明">説明</a></h2>
-<p>Dijkstra法の説明と正当性の証明を同時にするような形で説明を書く．</p>
-<p>以下の説明では，あるノード\(i\)について，\(s\)から\(i\)までの最短路長を\(d_{s→i}\)と表記する．また，あるノード\(i\)から出てあるノード\(j\)に入る(有向)辺の重みを\(e_{i→j}\)と表記する．</p>
-<p>Dijkstra法では，\(s\)からの最短路を，最短路長が小さいノードから順に求めていく．つまり，<strong>任意の時点で，最短路が求まっているノードの集合を\(X\)，最短路が求まっていないノードの集合を\(Y\)とすると，\(s\)から，\(Y\)に含まれる任意のノードへの最短路長は，\(s\)から，\(X\)に含まれる任意のノードへの最短路長以上であることが成り立つ</strong>．明らかに\(d_{s→s} = 0\)であるため，初期状態では，\(X = \lbrace s \rbrace\)である．</p>
-<p>全ての辺の重みが\(0\)以上であるため，\(Y\)に含まれるノードの中で最も\(s\)からの最短路長が小さいノードへの最短路は，(そのノード自身と)\(X\)に含まれるノードのみから構成される．つまり，</p>
-<p>$$min_{x \in X}(d_{s→x} + min_{y \in Y}(e_{x→y}))$$</p>
-<p>が最小値を取るような\(x \in X, y \in Y\)のペアについて，以下の式が成り立つ．</p>
-<p>$$d_{s→y} = d_{s→x} + e_{x→y}$$</p>
-<p>また，明らかに</p>
-<p>$$d_{s→y} \leq min_{p \in Y \backslash \lbrace y \rbrace}(d_{s→p})$$</p>
-<p>が成り立つため，この\(y\)を\(X\)に含めることができる．</p>
-<p>これを\(Y\)が空になるまで繰り返すことで，\(s\)を始点とする単一始点最短路を求めることができる．</p>
+<p>以下では，あるノード\(i\)について，\(s\)から\(i\)までの最短路長を\(d_{s→i}\)とする．また，あるノード\(i\)から出てあるノード\(j\)に入る(有向)辺の重みを\(e_{i→j}\)とする．</p>
+<p>前提条件から全ての辺の重みが\(0\)以上であるため，\(s\)から到達可能な任意の\(y\)について以下の式が成り立つ．</p>
+<p>$$d_{s→y} = min(d_{s→x} + e_{x→y}) \quad ただし \quad d_{s→x} \geq d_{s→y} \quad とする．$$</p>
+<p>よって，\(d_{s→y}\)を小さい方から求めていくことで\(s\)を始点とする単一始点最短路を求めることができる．</p>
+<h1 id="単一終点最短路"><a class="header" href="#単一終点最短路">単一終点最短路</a></h1>
+<p>\(G\)に含まれる辺の向きを全て逆向きにしたグラフを\(\hat{G}\)とし，\(i \in G\)に対応する\(\hat{G}\)のノードを\(\hat{i}\)と表す．</p>
+<p>任意のノードについて\(s\)を終点とする最短路を求めるには，\(\hat{G}\)について\(\hat{s}\)を始点とした最短路を求めればよい．</p>
+<h2 id="説明-1"><a class="header" href="#説明-1">説明</a></h2>
+<p>以下では，あるノード\(i\)について，\(i\)から\(s\)までの全経路の集合を\(P_{i→s}\)と表す．</p>
+<p>任意のノード\(x \in G\)について，\(P_{x→s}\)の辺の向きを全て逆向きにした経路の集合は\(P_{\hat{s}→\hat{x}}\)と明らかに等しいため，\(s\)を終点とする最短路を求めることは\(\hat{s}\)を始点とする最短路を求めることと同義である．</p>
 <h2 id="実装"><a class="header" href="#実装">実装</a></h2>
-<p><strong>プライオリティキュー</strong>を用いて，路長優先探索(造語です)をすることで求められる．計算量は，取り出しに\(O(\log |V|)\)かかるキューを用いていることから，\(O(|E| \log |V|)\)となる．</p>
+<p><strong>プライオリティキュー</strong>を用いて，路長優先探索（造語）をすることで求められる．計算量は，取り出しに\(O(\log |V|)\)かかるキューを用いていることから，\(O(|E| \log |V|)\)となる．</p>
 <h2 id="コード"><a class="header" href="#コード">コード</a></h2>
 <p><a href="https://judge.yosupo.jp/submission/77112"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
 <pre><code class="language-cpp">pair&lt;vector&lt;i64&gt;, vector&lt;int&gt;&gt; dijkstra(int s, i64 n, Graph &amp;g) {
@@ -315,7 +336,7 @@ vector&lt;pair&lt;int, int&gt;&gt; get_path(int t, vector&lt;int&gt; &amp;prev) 
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="単一始点最短パスbfs"><a class="header" href="#単一始点最短パスbfs">単一始点最短パス(BFS)</a></h1>
 <p>全ての辺の重みが\(1\)の場合の単一始点最短路(<strong>単一始点最短パス</strong>)は，BFSで\(O(|V|)\)で求められる．</p>
-<h2 id="説明-1"><a class="header" href="#説明-1">説明</a></h2>
+<h2 id="説明-2"><a class="header" href="#説明-2">説明</a></h2>
 <p>単一始点最短パスを<strong>Dijkstra法</strong>で求めることを考える．Dijkstra法では，始点からの最短路長が小さいノードから順に最短路が求まっていった．<strong>全ての辺の重みが\(1\)の場合，最短路長が小さい順というのはすなわち，始点からBFSをした時に訪れる順番である</strong>ため，単に始点からBFSをすることで単一始点最短パスを求めることができる．BFSで全てのノードを1回ずつ訪れるので，計算量は\(O(|V|)\)．</p>
 <h2 id="コード-1"><a class="header" href="#コード-1">コード</a></h2>
 <p><a href="https://onlinejudge.u-aizu.ac.jp/solutions/problem/ALDS1_11_C/review/6237791/Coordinator/C++17"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
@@ -411,7 +432,7 @@ graph TD
 </ol>
 <p>以下の式から，\(x\)を端点とする直径を構成することができるため，\(x\)が直径の端点にならないことに⽭盾する．</p>
 <p>\(dist(r, x) \geq dist(r, h) + max_{u \in \mathbb{E}}(dist(h, u))\)</p>
-<p>よって\(dist(h, x) \geq + max_{u \in \mathbb{E}}(dist(h, u))\) </p>
+<p>よって\(dist(h, x) \geq + max_{u \in \mathbb{E}}(dist(h, u))\)</p>
 <p>以上から，背理法より，任意に選択したノード\(r\)から最も遠いノード\(x\)は直径の端点になる．したがって，任意のノードについて，最も遠いノードを求め，そのノードのから最も遠いノードまでの距離が直径となる．</p>
 <h2 id="コード-2"><a class="header" href="#コード-2">コード</a></h2>
 <p><a href="https://atcoder.jp/contests/typical90/submissions/28658034"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
@@ -435,7 +456,7 @@ int diameter(vector&lt;vector&lt;int&gt;&gt; &amp;g) {
 <div style="break-before: page; page-break-before: always;"></div><h1 id="euler-tour"><a class="header" href="#euler-tour">Euler Tour</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="euler-tour-tree"><a class="header" href="#euler-tour-tree">Euler Tour Tree</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="hl分解"><a class="header" href="#hl分解">HL分解</a></h1>
-<p>2項演算(以降便宜上仮に&quot;和&quot;と呼ぶ)を与える．
+<p>2項演算(以降便宜上仮に"和"と呼ぶ)を与える．
 HL分解の各操作と時間計算量は以下．</p>
 <ul>
 <li>構築: \(O(|V|)\)</li>
@@ -443,8 +464,8 @@ HL分解の各操作と時間計算量は以下．</p>
 <li>木の任意のノードの値(モノイド)の更新: \(O(\log |V|)\)</li>
 <li>木の任意2ノード間のパスクエリ: \(O(\log ^2|V|)\)</li>
 </ul>
-<p>※パスクエリというのは，あるパスについて，通った順番にノード上の値を累積&quot;和&quot;した値を求めるクエリのこと．</p>
-<h2 id="説明-2"><a class="header" href="#説明-2">説明</a></h2>
+<p>※パスクエリというのは，あるパスについて，通った順番にノード上の値を累積"和"した値を求めるクエリのこと．</p>
+<h2 id="説明-3"><a class="header" href="#説明-3">説明</a></h2>
 <p>はじめに，以下のように<strong>枝分かれのない極端な木</strong>を考える．</p>
 <pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
 graph LR
@@ -471,7 +492,7 @@ linkStyle 8 stroke-width:4px,fill:none,stroke:slateblue;
 
 classDef heavy stroke-width:4px,stroke:slateblue;
 </pre>
-<p>では任意の木においてこれらのクエリに答えるためには，<strong>木をいくつかのパスに分解</strong>し，分割した各パスにおいては累積&quot;和&quot;を求めるためにセグメント木を利用し，それらを合わせればいいのではないか．これがHL分解の基本的なアイディアである．</p>
+<p>では任意の木においてこれらのクエリに答えるためには，<strong>木をいくつかのパスに分解</strong>し，分割した各パスにおいては累積"和"を求めるためにセグメント木を利用し，それらを合わせればいいのではないか．これがHL分解の基本的なアイディアである．</p>
 <p>例えば上のように木をいくつかのパスに分解すると，1-&gt;7パスや6-&gt;1パスのように，パス上の全てのノードが同じセグ木上で連続した並びになっているパスは1回のセグ木に対する操作でパスクエリが求まり，6-&gt;10パスのようなパスでは6-&gt;1と9-&gt;10で合わせて2回セグ木で操作を行い，それらを合わせればよいということである．</p>
 <p>しかし，異なるセグ木を操作した回数を\(N\)とすると，パスクエリに対する計算量は当然\(O(N \log |V|)\)となるため，各セグ木の操作が高速でも，<strong>この\(N\)が大きくなるとパスクエリに高速に答えることができない</strong>．</p>
 <p>ここからは，この\(O(N)\)を小さくするためのアイディアについて説明する．</p>
@@ -534,7 +555,7 @@ linkStyle 17 stroke-width:4px,fill:none,stroke:slateblue;
 classDef heavy stroke-width:4px,stroke:slateblue;
 </pre>
 <p>この木を例にしながら，<strong>任意の点から根までのパスにいくつのheavyパスが含まれるか</strong>を考える．ノード1個単体で，どこにもheavy辺が伸びていないものも1つのheavyパスとみなすと，任意のパスにおいて，heavyパスと1本のlight辺を交互に通ることになる．そのため，パス上のheavyパスの個数とパス上のlight辺の個数の差は必ず\(1\)以下になる．つまり，<strong>パス上のheavyパスの個数を抑えることは，パス上のlight辺の個数を抑えることと言い換えることができる</strong>．</p>
-<p>仮に，始点をノード19，終点を根としよう．まず，19-&gt;18の累積&quot;和&quot;を対応するセグ木を使って求める．次の18-&gt;13を見ると，これはlight辺である．<strong>ここにlight辺があるということはつまり，ノード18を根とする部分木のサイズ(ノード数)は，最大でも，ノード13を根とする部分木のサイズの半分以下</strong>ということである．もし半分以上のサイズならここはheavy辺になっているはずだからだ．実際に，ノード13を根とする部分木のサイズは7，ノード18を根とする部分木のサイズは2であり，半分以下である．これはつまり，<strong>light辺を通るたびに，全体の推定ノード数が，その下の部分木のサイズの2倍(以上)になる</strong>ということである．したがって，全体のノード数を\(|V|\)とすると，任意のノードから根までのパスに，<strong>light辺は最大でも\(O(\log |V|)\)個しか含まれない</strong>ことがわかる．従って，heavyパスの個数のオーダも\(O(\log |V|)\)であり，また，それぞれのheavyパスにおいて，セグ木の操作により\(O(\log |V|)\)がかかるため，任意のノードから根までのパスクエリの計算量は\(O(\log ^2 |V|)\)である．</p>
+<p>仮に，始点をノード19，終点を根としよう．まず，19-&gt;18の累積"和"を対応するセグ木を使って求める．次の18-&gt;13を見ると，これはlight辺である．<strong>ここにlight辺があるということはつまり，ノード18を根とする部分木のサイズ(ノード数)は，最大でも，ノード13を根とする部分木のサイズの半分以下</strong>ということである．もし半分以上のサイズならここはheavy辺になっているはずだからだ．実際に，ノード13を根とする部分木のサイズは7，ノード18を根とする部分木のサイズは2であり，半分以下である．これはつまり，<strong>light辺を通るたびに，全体の推定ノード数が，その下の部分木のサイズの2倍(以上)になる</strong>ということである．したがって，全体のノード数を\(|V|\)とすると，任意のノードから根までのパスに，<strong>light辺は最大でも\(O(\log |V|)\)個しか含まれない</strong>ことがわかる．従って，heavyパスの個数のオーダも\(O(\log |V|)\)であり，また，それぞれのheavyパスにおいて，セグ木の操作により\(O(\log |V|)\)がかかるため，任意のノードから根までのパスクエリの計算量は\(O(\log ^2 |V|)\)である．</p>
 <p>最後に，任意の2ノード間\(u\)-&gt;\(v\)のパスクエリを求める計算量は，\(u\)-&gt;\(root\) \(+\) \(root\)-&gt;\(v\)のパスクエリの計算量より小さいことに注目すると，後者の計算量は\(O(2 \log ^2 |V|) = O(\log ^2 |V|)\)であるため，<strong>前者の計算量も\(O(\log ^2 |V|)\)で抑えられる</strong>ことがわかる．</p>
 <p>LCAを求めるクエリについても，上と同様にlight辺の個数は\(O(\log |V|)\)であるため，<strong>高々\(O(\log |V|)\)回上るとLCAにたどりつける</strong>ことがわかる．</p>
 <h2 id="実装-1"><a class="header" href="#実装-1">実装</a></h2>
@@ -581,7 +602,7 @@ classDef heavy stroke-width:4px,stroke:slateblue;
 <li>ノード17が含まれるheavyパスで最も根に近いノード(以降topノードと呼ぶ)と，ノード19のtopノードの深さを比較する．ノード17とノード18では，ノード17の方が深いため，ノード17の値を左側から累積した後，左ノードをノード15に移動する．</li>
 <li>ノード15のtopノードと，ノード19のtopノードの深さを比較すると，今度はノード1よりもノード18の方が深いため，19-&gt;18を右側から累積した後，右ノードをノード13に移動する．</li>
 <li>ノード15のtopノードとノード13のtopノードが等しいことから，これらは同じheavyパス上にあることがわかる．よって，単に左ノード-&gt;右ノードで値を累積し，左側の累積値に累積する．</li>
-<li>最後に左側の累積値と右側の累積値の&quot;和&quot;を取った値が求める値である．</li>
+<li>最後に左側の累積値と右側の累積値の"和"を取った値が求める値である．</li>
 </ol>
 <p>このようにしてパスクエリを求めることができる．ここで，パスクエリを求める疑似コードを示す．</p>
 <pre><code class="language-rs">fn query(lnode, rnode) -&gt; S {
@@ -593,7 +614,7 @@ classDef heavy stroke-width:4px,stroke:slateblue;
         prodl = op(prodl, prod(lnode, rnode)) // 左ノード-&gt;右ノードパスの累積値を左側に累積
       else
         prodr = op(prod(rnode, lnode), prodr) // 右ノード-&gt;左ノードパスの累積値を右側に累積
-      return op(prodl, prodr) // 左側の累積値と右側の累積値の&quot;和&quot;を返す
+      return op(prodl, prodr) // 左側の累積値と右側の累積値の"和"を返す
     }
     // topノードの深さの深い方を上にあげる
     if lnode.top.depth &gt; rnode.top.depth { // 左ノードのtopノードの方が深さが深い場合
@@ -651,7 +672,7 @@ classDef heavy stroke-width:4px,stroke:slateblue;
 <p>この構築フェーズは，木上でDFSを2回行うだけなので，計算量は\(O(|V|)\)である．</p>
 <h3 id="実装におけるその他の注意事項"><a class="header" href="#実装におけるその他の注意事項">実装におけるその他の注意事項</a></h3>
 <p>実装上注意すべきことをいくつか最後に述べる．</p>
-<p>まず1つ目は，パスクエリでは，<strong>向きを間違えてはいけない</strong>ということ．このページでは&quot;和&quot;と呼んでいるが，実際にはこの2項演算には可換性を要求しないので，可換ではない可能性があることを忘れてはいけない．\(u\)-&gt;\(v\)の累積値を求めるなら，最左を\(u\)，最右を\(v\)として，累積値を取るときに右側からとるのか左側から取るのかを間違えてはいけない．</p>
+<p>まず1つ目は，パスクエリでは，<strong>向きを間違えてはいけない</strong>ということ．このページでは"和"と呼んでいるが，実際にはこの2項演算には可換性を要求しないので，可換ではない可能性があることを忘れてはいけない．\(u\)-&gt;\(v\)の累積値を求めるなら，最左を\(u\)，最右を\(v\)として，累積値を取るときに右側からとるのか左側から取るのかを間違えてはいけない．</p>
 <p>2つ目は，先ほどセグ木は1本と言ったが<strong>実際には2本必要</strong>であるということ．任意のheavyパスは，パスによっては右からも左からも累積値を取る可能性がある．よって，<strong>2方向分で2本セグ木が必要</strong>である．パスクエリの実装の際に，どっちのセグ木を使うかを間違えないように注意する．</p>
 <p>以上！</p>
 <h2 id="コード-3"><a class="header" href="#コード-3">コード</a></h2>
@@ -801,24 +822,26 @@ $$</p>
 <li>配列の各要素の値の取得\(O(N)\)</li>
 </ul>
 <p>配列の各要素は<strong>群</strong>を成す集合の要素である必要がある．</p>
-<h2 id="説明-3"><a class="header" href="#説明-3">説明</a></h2>
+<h2 id="説明-4"><a class="header" href="#説明-4">説明</a></h2>
 <p>群における2項演算を仮に和として考える．</p>
 <p>imos法でいう区間更新とは，配列のある区間の全要素に同じ値を足す操作のことである．これは，愚直に行うと\(O(N)\)かかってしまう．</p>
 <p>imos法は，どの区間に何の値を足す必要があるかという情報を覚えておき，配列の要素を最後に取得する時に，それまでの区間更新をまとめて処理するという方法である．より具体的に説明すると，区間更新操作では，左から<strong>累積和</strong>(\(O(N)\))を取った時に，配列の各要素の値を得られるように値の更新を行う．</p>
 <p>最後に左から累積和を取ることを前提として考えると，配列のある要素にある値を足すことは，その要素以降の全要素にその値を足すことを意味する．</p>
-<table><thead><tr><th style="text-align: center">Index</th><th style="text-align: center">0</th><th style="text-align: center">1</th><th style="text-align: center">2</th><th style="text-align: center">3</th><th style="text-align: center">4</th><th style="text-align: center">5</th><th style="text-align: center">6</th><th style="text-align: center">7</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: center">Index</th><th style="text-align: center">0</th><th style="text-align: center">1</th><th style="text-align: center">2</th><th style="text-align: center">3</th><th style="text-align: center">4</th><th style="text-align: center">5</th><th style="text-align: center">6</th><th style="text-align: center">7</th></tr></thead><tbody>
 <tr><td style="text-align: center">クエリ1</td><td style="text-align: center">-</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(+1\)</td></tr>
 <tr><td style="text-align: center">更新1</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(+1\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td></tr>
 <tr><td style="text-align: center"><strong>累積和</strong></td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(1\)</td><td style="text-align: center">\(1\)</td><td style="text-align: center">\(1\)</td><td style="text-align: center">\(1\)</td><td style="text-align: center">\(1\)</td><td style="text-align: center">\(1\)</td><td style="text-align: center">\(1\)</td></tr>
 </tbody></table>
+</div>
 <p>よって，例えばある区間に値\(x\)を足す場合，区間クエリの先頭に\(x\)を足し，終わりに\(-x\)を足すことで，最後に累積和を取った時にその区間の要素のみに\(x\)を足すことができる．</p>
-<table><thead><tr><th style="text-align: center">Index</th><th style="text-align: center">0</th><th style="text-align: center">1</th><th style="text-align: center">2</th><th style="text-align: center">3</th><th style="text-align: center">4</th><th style="text-align: center">5</th><th style="text-align: center">6</th><th style="text-align: center">7</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: center">Index</th><th style="text-align: center">0</th><th style="text-align: center">1</th><th style="text-align: center">2</th><th style="text-align: center">3</th><th style="text-align: center">4</th><th style="text-align: center">5</th><th style="text-align: center">6</th><th style="text-align: center">7</th></tr></thead><tbody>
 <tr><td style="text-align: center">クエリ1</td><td style="text-align: center">-</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">-</td><td style="text-align: center">-</td><td style="text-align: center">-</td></tr>
 <tr><td style="text-align: center">更新1</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(-x\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td></tr>
 <tr><td style="text-align: center"><strong>累積和</strong></td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(x\)</td><td style="text-align: center">\(x\)</td><td style="text-align: center">\(x\)</td><td style="text-align: center">\(x\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td></tr>
 </tbody></table>
+</div>
 <p>区間更新が複数あっても操作は変わらない．</p>
-<table><thead><tr><th style="text-align: center">Index</th><th style="text-align: center">0</th><th style="text-align: center">1</th><th style="text-align: center">2</th><th style="text-align: center">3</th><th style="text-align: center">4</th><th style="text-align: center">5</th><th style="text-align: center">6</th><th style="text-align: center">7</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: center">Index</th><th style="text-align: center">0</th><th style="text-align: center">1</th><th style="text-align: center">2</th><th style="text-align: center">3</th><th style="text-align: center">4</th><th style="text-align: center">5</th><th style="text-align: center">6</th><th style="text-align: center">7</th></tr></thead><tbody>
 <tr><td style="text-align: center">クエリ1</td><td style="text-align: center">-</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">-</td><td style="text-align: center">-</td><td style="text-align: center">-</td></tr>
 <tr><td style="text-align: center">更新1</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(-x\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td></tr>
 <tr><td style="text-align: center">クエリ2</td><td style="text-align: center">-</td><td style="text-align: center">-</td><td style="text-align: center">\(+y\)</td><td style="text-align: center">\(+y\)</td><td style="text-align: center">\(+y\)</td><td style="text-align: center">\(+y\)</td><td style="text-align: center">-</td><td style="text-align: center">-</td></tr>
@@ -827,6 +850,7 @@ $$</p>
 <tr><td style="text-align: center">更新3</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(+x\)</td><td style="text-align: center">\(+y\)</td><td style="text-align: center">\(+z\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(-x-z\)</td><td style="text-align: center">\(-y\)</td><td style="text-align: center">\(0\)</td></tr>
 <tr><td style="text-align: center"><strong>累積和</strong></td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(x\)</td><td style="text-align: center">\(x+y\)</td><td style="text-align: center">\(x+y+z\)</td><td style="text-align: center">\(x+y+z\)</td><td style="text-align: center">\(y\)</td><td style="text-align: center">\(0\)</td><td style="text-align: center">\(0\)</td></tr>
 </tbody></table>
+</div>
 <p>扱う代数系を群一般としてまとめると，区間\([l, r))に値\(x\)を作用させる場合，配列の\(l\)番目に\(x\)を作用させ，\(r\)番目に\(x\)の逆元を作用させる．実際の値を得るには，左から累積値を取れば良い．</p>
 <h2 id="コード-5"><a class="header" href="#コード-5">コード</a></h2>
 <p><a href="https://atcoder.jp/contests/abc183/submissions/29194550"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
@@ -850,10 +874,10 @@ public:
 <ul>
 <li>構築: \(O(N)\)</li>
 <li>値(モノイドを成す集合の要素)の更新: \(O(\log N)\)</li>
-<li>配列の任意の区間の&quot;和&quot;(モノイドにおける2項演算): \(O(\log N)\)</li>
+<li>配列の任意の区間の"和"(モノイドにおける2項演算): \(O(\log N)\)</li>
 </ul>
-<h2 id="説明-4"><a class="header" href="#説明-4">説明</a></h2>
-<p>配列の区間の累積&quot;和&quot;を木で管理することで，区間クエリ，更新クエリを高速に計算する．</p>
+<h2 id="説明-5"><a class="header" href="#説明-5">説明</a></h2>
+<p>配列の区間の累積"和"を木で管理することで，区間クエリ，更新クエリを高速に計算する．</p>
 <p>配列の初期値を</p>
 <p>|50|10|70|30|10|90|40|</p>
 <p>として，配列の要素を葉とする2分木を構築すると，このようになる．</p>
@@ -872,7 +896,7 @@ graph TD
 6 --- 12((10))
 6 --- 13((90))
 </pre>
-<p>ノードを集約する上のノードに，子の&quot;和&quot;を持たせるとこのようになる．</p>
+<p>ノードを集約する上のノードに，子の"和"を持たせるとこのようになる．</p>
 <pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
 graph TD
 1((300)) --- 2((160))
@@ -911,8 +935,8 @@ linkStyle 8 stroke-width:4px,fill:none,stroke:slateblue;
 classDef heavy stroke-width:4px,stroke:slateblue;
 </pre>
 <p>更新する場所を青く示している．どの場所を更新しても，木の高さ個のノードしか変化せず，かつ，この木は<strong>偏りのない2分木</strong>であるため，更新クエリは\(O(\log N)\)である．</p>
-<p>次に区間クエリを考える．これは，左側の累積&quot;和&quot;と右側の累積&quot;和&quot;に分けて考えるとわかりやすい．</p>
-<p>例として配列の2番目から6番目までの累積&quot;和&quot;を求める．</p>
+<p>次に区間クエリを考える．これは，左側の累積"和"と右側の累積"和"に分けて考えるとわかりやすい．</p>
+<p>例として配列の2番目から6番目までの累積"和"を求める．</p>
 <pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
 graph TD
 1((250)) --- 2((110))
@@ -931,7 +955,7 @@ graph TD
 classDef heavy1 stroke-width:4px,stroke:green;
 classDef heavy2 stroke-width:4px,stroke:orangered;
 </pre>
-<p>緑が左側の累積&quot;和&quot;で使う値，赤が右側の累積&quot;和&quot;で使う値を示している．<strong>どのような区間クエリであってっも，左側と右側それぞれには，同じ深さのノードは1度しか現れない</strong>．なぜなら，同じ深さのノード2つは上のノード1つで集約できるはずだからである．</p>
+<p>緑が左側の累積"和"で使う値，赤が右側の累積"和"で使う値を示している．<strong>どのような区間クエリであってっも，左側と右側それぞれには，同じ深さのノードは1度しか現れない</strong>．なぜなら，同じ深さのノード2つは上のノード1つで集約できるはずだからである．</p>
 <p>よって，区間クエリの計算量も\(O(\log N)\)である．</p>
 <h2 id="実装-2"><a class="header" href="#実装-2">実装</a></h2>
 <p>区間クエリを求めたい配列の要素数が変化しないと仮定すると，<strong>セグメント木の構造は静的であり変化しない</strong>ことがわかる．これを利用して，セグ木の実装ではノードを単に\(2*N-1\)この配列で管理することができる．</p>
@@ -970,7 +994,7 @@ graph TD
 </pre>
 <p>先ほどと比較して何が嬉しいかというと，この木では，<strong>親のインデックスを\(i\)とすると子のインデックスは必ず\(\lbrace 2 \times i, 2 \times i+1 \rbrace\)になっており，さらに，子のインデックスを\(i\)とすると，その親のインデックスは必ず\(i/2\)になっている</strong>．</p>
 <p>そのため，このように構築することで親&lt;-&gt;子間の移動が非常に楽になり，実装が短くなる．</p>
-<p>しかし，気づいている方もいるかもしれないが，この実装だと，<strong>親の累積&quot;和&quot;において子の順序が保たれていないため，任意のモノイドをのせることはできない</strong>．</p>
+<p>しかし，気づいている方もいるかもしれないが，この実装だと，<strong>親の累積"和"において子の順序が保たれていないため，任意のモノイドをのせることはできない</strong>．</p>
 <p>しかし，モノイドではなく，和や積，min，maxというような可換性を有する2項演算はのせることができるため，その場合は問題ない．例えば，後の章で扱うが，<strong>2次元区間クエリを扱うような場合，可換性を有さないモノイドをのせることはあまりないと考えられるため，ノード数を少なく抑えられるこの実装は有用である</strong>．</p>
 <p>では，任意のモノイドをのせるためにはどうすればいいかというと，下のように構築すると良い．</p>
 <pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
@@ -990,39 +1014,40 @@ graph TD
 7 --- 14((14))
 7 --- 15((15))
 </pre>
-<p>先ほどよりノード数が多くなっている．これは，<strong>要素数を超える最小の2の冪乗の値を要素数にする</strong>という実装である．余分に枠を取ることで，<strong>子の順序を保ったまま</strong>親に累積&quot;和&quot;を持たせることができる．また，先ほどと同様に親&lt;-&gt;子間の移動も楽である．</p>
+<p>先ほどよりノード数が多くなっている．これは，<strong>要素数を超える最小の2の冪乗の値を要素数にする</strong>という実装である．余分に枠を取ることで，<strong>子の順序を保ったまま</strong>親に累積"和"を持たせることができる．また，先ほどと同様に親&lt;-&gt;子間の移動も楽である．</p>
 <p><strong>ノード数は最大でも\(2\)倍程度しか増えない</strong>ため，空間計算量も時間計算量も変化しない．</p>
 <h2 id="コード-6"><a class="header" href="#コード-6">コード</a></h2>
 <p><a href="https://github.com/atcoder/ac-library/blob/master/atcoder/segtree.hpp">atcoder/segtree.hpp</a></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="binary-indexed-treeフェニック木"><a class="header" href="#binary-indexed-treeフェニック木">Binary Indexed Tree(フェニック木)</a></h1>
-<p>2項演算(以降便宜上仮に&quot;和&quot;と呼ぶ)を与える．
+<p>2項演算(以降便宜上仮に"和"と呼ぶ)を与える．
 区間クエリを求めたい配列の長さを\(n\)とすると，**Binary Indexed Tree(BIT)**の各操作と時間計算量は以下．</p>
 <ul>
 <li>値(モノイド)の更新: \(O(\log N)\)</li>
-<li>配列の始めから任意のインデックスまでの累積&quot;和&quot;: \(O(\log N)\)</li>
+<li>配列の始めから任意のインデックスまでの累積"和": \(O(\log N)\)</li>
 </ul>
-<h2 id="説明-5"><a class="header" href="#説明-5">説明</a></h2>
-<p>配列に単に値を持った場合，値の更新が\(O(1)\)でできる代わりに任意のインデックスまでの累積&quot;和&quot;を求めるのには\(O(N)\)かかる．逆に配列にそのインデックスまでの累積&quot;和&quot;を持つと，累積&quot;和&quot;の取得が\(O(1)\)でできる代わりに値の更新が\(O(N)\)かかってしまう．工夫すると，実はどちらのクエリにも高速(\(O(\log N)\))に答えることができる．</p>
-<p>\(O(\log N)\)でこれらの操作をするために，偏りのない<strong>2分木</strong>を作り，親のノードにその部分木が持つ葉の&quot;和&quot;を持たせるというのが，<strong>セグメント木</strong>のアイディアであった．</p>
-<p>BITでは，数のビット表現に注目する．BITの基本的なアイディアは，任意の自然数がいくつかの2の累乗の和であるのと同様に，累積&quot;和&quot;はいくつかの「サブ累積&quot;和&quot;」の&quot;和&quot;として表すことができるということである．例えばある数をビットで表した時に2つの位置のビットが立っているということは2つの累積&quot;和&quot;を含んでいるということ．</p>
+<h2 id="説明-6"><a class="header" href="#説明-6">説明</a></h2>
+<p>配列に単に値を持った場合，値の更新が\(O(1)\)でできる代わりに任意のインデックスまでの累積"和"を求めるのには\(O(N)\)かかる．逆に配列にそのインデックスまでの累積"和"を持つと，累積"和"の取得が\(O(1)\)でできる代わりに値の更新が\(O(N)\)かかってしまう．工夫すると，実はどちらのクエリにも高速(\(O(\log N)\))に答えることができる．</p>
+<p>\(O(\log N)\)でこれらの操作をするために，偏りのない<strong>2分木</strong>を作り，親のノードにその部分木が持つ葉の"和"を持たせるというのが，<strong>セグメント木</strong>のアイディアであった．</p>
+<p>BITでは，数のビット表現に注目する．BITの基本的なアイディアは，任意の自然数がいくつかの2の累乗の和であるのと同様に，累積"和"はいくつかの「サブ累積"和"」の"和"として表すことができるということである．例えばある数をビットで表した時に2つの位置のビットが立っているということは2つの累積"和"を含んでいるということ．</p>
 <p>長さ\(16\)の配列にいくつか値を設置した例を見てみる．</p>
-<table><thead><tr><th style="text-align: center"><strong>Index</strong></th><th style="text-align: center">1</th><th style="text-align: center">2</th><th style="text-align: center">3</th><th style="text-align: center">4</th><th style="text-align: center">5</th><th style="text-align: center">6</th><th style="text-align: center">7</th><th style="text-align: center">8</th><th style="text-align: center">9</th><th style="text-align: center">10</th><th style="text-align: center">11</th><th style="text-align: center">12</th><th style="text-align: center">13</th><th style="text-align: center">14</th><th style="text-align: center">15</th><th style="text-align: center">16</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: center"><strong>Index</strong></th><th style="text-align: center">1</th><th style="text-align: center">2</th><th style="text-align: center">3</th><th style="text-align: center">4</th><th style="text-align: center">5</th><th style="text-align: center">6</th><th style="text-align: center">7</th><th style="text-align: center">8</th><th style="text-align: center">9</th><th style="text-align: center">10</th><th style="text-align: center">11</th><th style="text-align: center">12</th><th style="text-align: center">13</th><th style="text-align: center">14</th><th style="text-align: center">15</th><th style="text-align: center">16</th></tr></thead><tbody>
 <tr><td style="text-align: center"><strong>保持する区間</strong></td><td style="text-align: center">1</td><td style="text-align: center">1...2</td><td style="text-align: center">3</td><td style="text-align: center">1...4</td><td style="text-align: center">5</td><td style="text-align: center">5...6</td><td style="text-align: center">7</td><td style="text-align: center">1...8</td><td style="text-align: center">9</td><td style="text-align: center">9...10</td><td style="text-align: center">11</td><td style="text-align: center">9...12</td><td style="text-align: center">13</td><td style="text-align: center">13...14</td><td style="text-align: center">15</td><td style="text-align: center">1...16</td></tr>
 <tr><td style="text-align: center"><strong>設置した値</strong></td><td style="text-align: center">2</td><td style="text-align: center">0</td><td style="text-align: center">1</td><td style="text-align: center">1</td><td style="text-align: center">1</td><td style="text-align: center">0</td><td style="text-align: center">4</td><td style="text-align: center">4</td><td style="text-align: center">0</td><td style="text-align: center">1</td><td style="text-align: center">0</td><td style="text-align: center">1</td><td style="text-align: center">2</td><td style="text-align: center">3</td><td style="text-align: center">0</td><td style="text-align: center">0</td></tr>
-<tr><td style="text-align: center"><strong>実際の累積&quot;和&quot;</strong></td><td style="text-align: center">2</td><td style="text-align: center">2</td><td style="text-align: center">3</td><td style="text-align: center">4</td><td style="text-align: center">5</td><td style="text-align: center">5</td><td style="text-align: center">9</td><td style="text-align: center">13</td><td style="text-align: center">13</td><td style="text-align: center">14</td><td style="text-align: center">14</td><td style="text-align: center">15</td><td style="text-align: center">17</td><td style="text-align: center">20</td><td style="text-align: center">20</td><td style="text-align: center">20</td></tr>
+<tr><td style="text-align: center"><strong>実際の累積"和"</strong></td><td style="text-align: center">2</td><td style="text-align: center">2</td><td style="text-align: center">3</td><td style="text-align: center">4</td><td style="text-align: center">5</td><td style="text-align: center">5</td><td style="text-align: center">9</td><td style="text-align: center">13</td><td style="text-align: center">13</td><td style="text-align: center">14</td><td style="text-align: center">14</td><td style="text-align: center">15</td><td style="text-align: center">17</td><td style="text-align: center">20</td><td style="text-align: center">20</td><td style="text-align: center">20</td></tr>
 <tr><td style="text-align: center"><strong>格納する値</strong></td><td style="text-align: center">2</td><td style="text-align: center">2</td><td style="text-align: center">1</td><td style="text-align: center">4</td><td style="text-align: center">1</td><td style="text-align: center">1</td><td style="text-align: center">4</td><td style="text-align: center">13</td><td style="text-align: center">0</td><td style="text-align: center">1</td><td style="text-align: center">0</td><td style="text-align: center">2</td><td style="text-align: center">2</td><td style="text-align: center">5</td><td style="text-align: center">0</td><td style="text-align: center">20</td></tr>
 </tbody></table>
-<p>実際に，BITで累積&quot;和&quot;を求めるにはどうするかというのを説明する．例えば閉区間\([0, 13]\)の累積&quot;和&quot;を求めてみる．まず\(13\)を2進数で表す．</p>
+</div>
+<p>実際に，BITで累積"和"を求めるにはどうするかというのを説明する．例えば閉区間\([0, 13]\)の累積"和"を求めてみる．まず\(13\)を2進数で表す．</p>
 <p>$$13_{(10)} = 1101_{(2)}$$</p>
 <p>このインデックスに格納された値を足しては最も右にある\(1\)を削除してそれを新しいインデックスとするという操作を，インデックス値が\(0\)になるまで繰り返す．</p>
 <p>$$1101_{(2)} → 1100_{(2)} → 1000_{(2)} → 0000_{(2)}$$</p>
-<p>この例ではインデックス\(1101_{(2)} = 13_{(10)}\)の値，インデックス\(1100_{(2)} = 12_{(10)}\)の値，インデックス\(1000_{(2)} = 8_{(10)}\)の値を足せばいいことになる．上の表で実際に足してみると，\(2 + 2 + 13 = 17\)となる．これは，閉区間\([0, 13]\)の実際の累積&quot;和&quot;の値と一致している．また，\(13, 12, 8\)が保持する区間を見てみると，\(1...8, 9...12, 13\)となっていることからも正しい「サブ累積&quot;和&quot;」を足せていることがわかる．</p>
+<p>この例ではインデックス\(1101_{(2)} = 13_{(10)}\)の値，インデックス\(1100_{(2)} = 12_{(10)}\)の値，インデックス\(1000_{(2)} = 8_{(10)}\)の値を足せばいいことになる．上の表で実際に足してみると，\(2 + 2 + 13 = 17\)となる．これは，閉区間\([0, 13]\)の実際の累積"和"の値と一致している．また，\(13, 12, 8\)が保持する区間を見てみると，\(1...8, 9...12, 13\)となっていることからも正しい「サブ累積"和"」を足せていることがわかる．</p>
 <p>表だとわかりにくいが，これを木構造として見てみるとわかりやすい．</p>
 <div align="center"><img src="range/bit/bit.png" width="50%"></div>
-<p>このようにして，ビットが\(1\)になっているところの個数回の演算で，指定されたインデックスまでの累積&quot;和&quot;を求めることが可能であるため，累積&quot;和&quot;を求めるクエリの計算量は，ビット長から，明らかに\(O(\log N)\)である．</p>
+<p>このようにして，ビットが\(1\)になっているところの個数回の演算で，指定されたインデックスまでの累積"和"を求めることが可能であるため，累積"和"を求めるクエリの計算量は，ビット長から，明らかに\(O(\log N)\)である．</p>
 <p>最後に値の更新だが，あるインデックスを，自身が保持する区間に含めるインデックスの個数も，ビット長から，明らかに\(O(\log N)\)しかないため，これらのインデックスのみを更新する計算量も，\(O(\log N)\)である．</p>
-<h2 id="任意区間の累積和を求めたい場合"><a class="header" href="#任意区間の累積和を求めたい場合">任意区間の累積&quot;和&quot;を求めたい場合</a></h2>
-<p>BITで任意区間の累積&quot;和&quot;が求められるケースは限られている．例えば，整数での和を扱っている場合，閉区間\([a, b]\)の累積和(これは文字通り和)は\([0, b]\)の値から\([0, a-1]\)の値を引くことで求められる．このように，扱っている<strong>代数系</strong>に，<strong>逆元</strong>が定義できる場合，つまり，扱っている代数系が<strong>群</strong>である場合は，BITで任意区間の累積&quot;和&quot;が求めることができる．</p>
+<h2 id="任意区間の累積和を求めたい場合"><a class="header" href="#任意区間の累積和を求めたい場合">任意区間の累積"和"を求めたい場合</a></h2>
+<p>BITで任意区間の累積"和"が求められるケースは限られている．例えば，整数での和を扱っている場合，閉区間\([a, b]\)の累積和(これは文字通り和)は\([0, b]\)の値から\([0, a-1]\)の値を引くことで求められる．このように，扱っている<strong>代数系</strong>に，<strong>逆元</strong>が定義できる場合，つまり，扱っている代数系が<strong>群</strong>である場合は，BITで任意区間の累積"和"が求めることができる．</p>
 <h2 id="実装-3"><a class="header" href="#実装-3">実装</a></h2>
 <p>説明はややこしく見えるが，コード上では，ビット演算によりアクセスすべきインデックスを簡単に計算できるため，実装は軽い．例えば，ある数\(x\)を2進数表した時に最も右にある\(1\)だけを取り出すには，\(x＆(-x)\)とするだけである．</p>
 <h2 id="fenwickさんの論文"><a class="header" href="#fenwickさんの論文">Fenwickさんの論文</a></h2>
@@ -1068,7 +1093,7 @@ struct BinaryIndexedTree {
 <li>赤黒木 : C++の<code>set</code>クラスの内部で使われており，OSの実装におけるタスクスケジューラにも使われていたりする．おそらく最も有名な平衡2分探索木．</li>
 <li>AVL木 : こちらも非常に有名な平衡2分探索木．後日加筆．</li>
 <li>Splay木 : Splayという特殊な操作により各種操作の償却計算量を\(O(\log N)\)に抑える(詳しくは該当の章を参照して欲しい)．実装が上と比較すると簡単であるため，自実装する必要がある場合はこれがおすすめ．</li>
-<li>2-3木 : &quot;2分&quot;ではないが，目的は同じ．後日加筆．</li>
+<li>2-3木 : "2分"ではないが，目的は同じ．後日加筆．</li>
 <li>Treap : 後日加筆．</li>
 <li>RBST : 後日加筆．</li>
 </ul>
@@ -1520,11 +1545,11 @@ public:
 <li>構築: 処理なし</li>
 <li>指定された1次元座標に値(モノイドを成す集合の要素)の設置: \(O(\log N)\)</li>
 <li>指定された1次元座標の値の更新: \(O(\log N)\)</li>
-<li>任意の座標区間の&quot;和&quot;(モノイドにおける2項演算) : \(O(\log N)\)</li>
+<li>任意の座標区間の"和"(モノイドにおける2項演算) : \(O(\log N)\)</li>
 </ul>
 <p>※このRangeBSTという名前は，筆者が勝手につけたもので，このデータ構造には特別名前はなく，中身はBST，つまり<strong>平衡2分探索木</strong>である．平衡2分探索木に機能を追加することで能力を拡張する例は多々あり，これはその1つの例である．</p>
 <p><strong>セグメント木と同じ?と思った方もいるかもしれないが，実は少し違う</strong>．セグメント木は，配列に対する区間クエリに対応したもの，つまり，言い換えると<strong>座標に制限(0~配列のサイズ)がある</strong>．RangeBSTは，データを，<strong>座標の集合</strong>としてもつため，座標の値自体に制限がなく，座圧+セグ木で解く必要がある問題も，RangeBSTなら座圧せずに解くことができる(<strong>データ構造内部でも座圧操作をしない！！</strong>)ため，実装が楽になり，実行速度も速くなることがある．</p>
-<h2 id="説明-6"><a class="header" href="#説明-6">説明</a></h2>
+<h2 id="説明-7"><a class="header" href="#説明-7">説明</a></h2>
 <p>配列に対する区間クエリではないため，最初にサイズを与えたりはしない．使用するメモリ量は，追加した座標の数に比例して動的に増える(座標に重複がある場合は増えない)．</p>
 <p>例えば，座標10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150にそれぞれ何かしらの値を設置したとする．このとき，平衡2分探索木でこの集合を持つ形は複数あるが，仮に1番綺麗な形として下のようになったとしよう．</p>
 <pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
@@ -1544,7 +1569,7 @@ graph TD
 140 --- 130((130))
 140 --- 150((150))
 </pre>
-<p>ではここで，座標\(25 \sim 115\)の累積&quot;和&quot;を求めよと言われたら，どこのノードの値の&quot;和&quot;を求めればいいかというと，下の赤い部分である．</p>
+<p>ではここで，座標\(25 \sim 115\)の累積"和"を求めよと言われたら，どこのノードの値の"和"を求めればいいかというと，下の赤い部分である．</p>
 <pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
 graph TD
 80((80)):::p --- 40((40)):::p
@@ -1565,7 +1590,7 @@ graph TD
 classDef p stroke-width:4px,stroke:orangered;
 </pre>
 <p>もちろんそのままやっていてはノード数分の計算量がかかるが，上の赤く塗られたノードを見ると，平衡2分探索木のおかげである程度まとまった位置に求めたいノードが集まっていることがわかる．</p>
-<p>じゃあ<strong>それぞれのノードが自分を根とする部分木の&quot;和&quot;を持っていたら</strong>どうなるかと考えると，見るノードは下の色がついたノードだけでよくなることがわかる．赤いノードはそのノードの値が必要であることを示しており，青いノードはそのノードを根とする部分木の累積&quot;和&quot;が必要であることを示している．</p>
+<p>じゃあ<strong>それぞれのノードが自分を根とする部分木の"和"を持っていたら</strong>どうなるかと考えると，見るノードは下の色がついたノードだけでよくなることがわかる．赤いノードはそのノードの値が必要であることを示しており，青いノードはそのノードを根とする部分木の累積"和"が必要であることを示している．</p>
 <pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
 graph TD
 80((80)):::v --- 40((40)):::v
@@ -1586,9 +1611,9 @@ graph TD
 classDef v stroke-width:4px,stroke:orangered;
 classDef p stroke-width:4px,stroke:slateblue;
 </pre>
-<p>とても少なくなった．実は，この工夫だけで，任意区間の累積&quot;和&quot;を求めるのに必要なノード数が\(O(\log N)\)個に抑えられるのである．その理由を説明する．</p>
+<p>とても少なくなった．実は，この工夫だけで，任意区間の累積"和"を求めるのに必要なノード数が\(O(\log N)\)個に抑えられるのである．その理由を説明する．</p>
 <p>これは言葉で説明するより図と疑似コードを見た方がわかりやすい．</p>
-<p>よりちゃんとした書き方として，累積&quot;和&quot;を取得したい区間を \([25, 115)\)と書く．\([\)は閉区間を意味し，\()\)は開区間を意味する．まず，\(25\)と\(115\)を木上で2分探索(<code>lower_bound</code>)すると，下の緑のノードにたどり着く．また，この2つのノードのLCAをピンク色で示す．</p>
+<p>よりちゃんとした書き方として，累積"和"を取得したい区間を \([25, 115)\)と書く．\([\)は閉区間を意味し，\()\)は開区間を意味する．まず，\(25\)と\(115\)を木上で2分探索(<code>lower_bound</code>)すると，下の緑のノードにたどり着く．また，この2つのノードのLCAをピンク色で示す．</p>
 <pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
 graph TD
 80((80)):::lca --- 40((40))
@@ -1611,7 +1636,7 @@ classDef p stroke-width:4px,stroke:slateblue;
 classDef lb stroke-width:4px,stroke:green;
 classDef lca stroke-width:4px,stroke:deeppink;
 </pre>
-<p>左のノードは，LCAまで上りながら，<strong>右の部分木</strong>がある場合だけその累積&quot;和&quot;を累積すればよく，右のノードも同様に，LCAにまで上りながら，<strong>左の部分木</strong>がある場合だけその累積&quot;和&quot;を累積すればよい．わかりづらいと思うので，先ほどの図と重ねてみるとわかりやすい．
+<p>左のノードは，LCAまで上りながら，<strong>右の部分木</strong>がある場合だけその累積"和"を累積すればよく，右のノードも同様に，LCAにまで上りながら，<strong>左の部分木</strong>がある場合だけその累積"和"を累積すればよい．わかりづらいと思うので，先ほどの図と重ねてみるとわかりやすい．
 　</p>
 <pre class="mermaid">%%{init: {&quot;flowchart&quot; : { &quot;curve&quot; : &quot;basis&quot; } } }%%
 graph TD
@@ -1662,7 +1687,7 @@ classDef lca stroke-width:4px,stroke:deeppink;
 }
 </code></pre>
 <p>よって，区間クエリの処理は，まず木上で<code>lower_bound</code>し，その次に2つのノードからLCAまで上りながら\(O(1)\)の演算を各ステップで行うだけである．したがって，平衡2分探索木の高さが\(\log N\)であることから，計算量は\(O(\log N)\)となる．</p>
-<p>最後に，更新クエリや挿入クエリについて説明する．挿入/更新を\(O(\log N)\)で行えることは平衡2分探索木の章を確認して欲しい．挿入/更新後，ノードの累積&quot;和&quot;の値に影響が出るのは該当ノードの祖先ノード高々\(O(\log N)\)個であるため，それらの値を更新していけばよい．計算量は\(O(\log N) + O(\log N) = O(\log N)\)となる．</p>
+<p>最後に，更新クエリや挿入クエリについて説明する．挿入/更新を\(O(\log N)\)で行えることは平衡2分探索木の章を確認して欲しい．挿入/更新後，ノードの累積"和"の値に影響が出るのは該当ノードの祖先ノード高々\(O(\log N)\)個であるため，それらの値を更新していけばよい．計算量は\(O(\log N) + O(\log N) = O(\log N)\)となる．</p>
 <h2 id="実装におけるその他の注意事項-2"><a class="header" href="#実装におけるその他の注意事項-2">実装におけるその他の注意事項</a></h2>
 <p>モノイドを扱っているため，例のごとく演算の向きを間違えないようにする．</p>
 <p>以上！</p>
@@ -1810,7 +1835,7 @@ public:
 <li>2次元配列上の各要素の値の取得\(O(HW)\)</li>
 </ul>
 <p>2次元配列の各要素は<strong>可換群</strong>を成す集合の要素である必要がある．</p>
-<h2 id="説明-7"><a class="header" href="#説明-7">説明</a></h2>
+<h2 id="説明-8"><a class="header" href="#説明-8">説明</a></h2>
 <p>考え方は1次元のimos法と同じである．2次元imos法では，\((l_x, l_y)\)を左上の座標，\((r_x, r_y)\)を右下とするような矩形(\((l_x, l_y)\)は矩形内，\((r_x, r_y)\)は矩形外の座標)に値\(x\)を作用させる場合，\(l_x, l_y\)に\(x\)を，\(r_x, l_y\)に\(x^{-1}\)を，\(l_x, r_y\)に\(x^{-1}\)を，\(r_x, r_y\)に\(x\)を作用させる．実際の値を得るには，各行ごとに左から累積値を取った後に，各列ごとに上から累積値を取れば良い．</p>
 <h2 id="コード-10"><a class="header" href="#コード-10">コード</a></h2>
 <p><a href="https://atcoder.jp/contests/typical90/submissions/29194902"><img src="https://img.shields.io/badge/verify-passing-brightgreen" alt="" /></a></p>
@@ -1843,7 +1868,7 @@ public:
 <li>区間\([l, m)\)と区間\([m, r)\)をマージして\([l, r)\)を高速に計算することができない．(これができるなら<strong>セグメント木</strong>などを使えば良い．)</li>
 </ul>
 <p>要するに，少し複雑な区間クエリに高速に対応するためのアルゴリズムである．</p>
-<h2 id="説明-8"><a class="header" href="#説明-8">説明</a></h2>
+<h2 id="説明-9"><a class="header" href="#説明-9">説明</a></h2>
 <p><strong>オフラインクエリ</strong>というのは，クエリを，実際に，与えられた順番で処理する必要がないことを意味する．また，上で述べた条件で，\([l, r)\)に対する区間クエリを求めた後に，\([l+1, r)\)，\([l−1, r)\)，\([l, r−1)\)，\([l, r+1)\)のクエリを高速に求められるというのがあった．これは，区間を左/右に1つ伸び縮みした区間のクエリを高速に求められることを意味する．</p>
 <p>Mo's algorithmの基本的なアイディアは，クエリを適切に並び替え，全体での<strong>区間の伸び縮みの回数を最小限に抑え</strong>られば，全体での計算量を抑えられるということである．</p>
 <p>ある区間\([l_1, r_1)\)を求めてからある区間\([l_2, r_2)\)までに行われる伸び縮みの回数は，\(|l_1 - l_2| + |r_1 - r_2|\)である．このことから，\((l_i, r_i)\)を座標としてみることで，<strong>任意の2つの区間の間の伸び縮み回数は，2次元座標上でのマンハッタン距離</strong>を意味することがわかる．</p>
@@ -1913,7 +1938,7 @@ public:
 <p><strong>区間スケジューリング問題</strong>とは以下のような問題である．</p>
 <p>\(N\)個のタスクの集合が与えられる．各タスク\(i\)について開始時刻\(s[i]\)と終了時刻\(f[i]\)が定められている．任意の時刻において重複がないようにタスクを選ぶ場合，最大でいくつのタスクを選ぶことができるか．</p>
 <p>この問題は，<strong>貪欲法</strong>により，\(O(N \log N)\)で解くことができる．</p>
-<h2 id="説明-9"><a class="header" href="#説明-9">説明</a></h2>
+<h2 id="説明-10"><a class="header" href="#説明-10">説明</a></h2>
 <p><strong>終了時刻の早いものから順に重複しない限り選ぶことを繰り返す</strong>という貪欲法によってこの問題を解くことができる．</p>
 <h2 id="証明-1"><a class="header" href="#証明-1">証明</a></h2>
 <p>この問題に対する解に含まれる集合を\(OPT\)とし，以降，\(OPT\)に含まれるタスクを終了時刻でソートして\(OPT = \lbrace i_1, i_2, ..., i_o \rbrace\)と表現する．</p>
@@ -1957,7 +1982,7 @@ public:
 <p>\(N\)個のタスクの集合が与えられる．各タスク\(i\)について開始時刻\(s[i]\)と終了時刻\(f[i]\)が定められている．任意の時刻において<strong>重複が\(K\)以下になるように</strong>タスクを選ぶ場合，最大でいくつのタスクを選ぶことができるか．</p>
 <p>区間スケジューリング問題は，これの\(K=1\)のケースだが，\(K=1\)ではない場合でも解くことができるように，一般化して考える．</p>
 <p>この問題は，<strong>貪欲法</strong>により，\(O(N \log N)\)で解くことができる．</p>
-<h2 id="説明-10"><a class="header" href="#説明-10">説明</a></h2>
+<h2 id="説明-11"><a class="header" href="#説明-11">説明</a></h2>
 <p>この問題は，<strong>全タスクの集合を\(K\)個の集合に分割し，それぞれの集合ごとに独立に\(K=1\)の区間スケジューリング問題を解く</strong>というように言い換えることができる．しかし，分割方法は\(O(K^N)\)通りあり，全探索することはできないので，<strong>次のタスクをどの集合に割り当てるかを考えながら\(K\)個の区間スケジューリング問題を同時に解く</strong>ことを考える．</p>
 <p>つまり，<strong>\(K\)個の終了時刻を管理しながら，次のタスクをどの集合に割り当てるかを選び，選んだものの貪欲法を進めればよい</strong>．しかしここで，そのタスクを選ぶことができる状態にあるものが複数ある場合は，どれに割り当てるのが最適かを考える必要があるが，明らかに，<strong>終了時刻が最も遅いものを選ぶのが最適</strong>である(証明省略)．したがって，\(K\)個の重複を許す区間スケジューリングもまた，貪欲法で解くことが可能である．</p>
 <p>計算量は，まず最初に，タスクを終了時刻でソートするのに\(O(N \log N)\)かかる．次に，貪欲法では，<strong>\(K\)個の終了時刻の内，次のタスクの開始時刻より小さいものの中で最大のものを選ぶ</strong>ことを\(N\)回繰り返すので，<strong>multiset(平衡2分探索木)</strong> 等を使って\(O(N \log K)\)かかる．よって，最終的な計算量は\(O(N (\log N + \log K))\)だが，問題文から\(K \leq N\)としてよいので\(O(N \log N)\)となる．</p>
@@ -2014,35 +2039,47 @@ public:
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+
+
                         <div style="clear: both"></div>
                     </nav>
                 </div>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
             </nav>
 
         </div>
 
-        <script type="text/javascript">
+
+
+
+        <script>
             window.playground_copyable = true;
         </script>
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
 
         <!-- Custom JS scripts -->
-        <script type="text/javascript" src="mermaid.min.js"></script>
-        <script type="text/javascript" src="mermaid-init.js"></script>
-        <script type="text/javascript">
+        <script src="mermaid.min.js"></script>
+        <script src="mermaid-init.js"></script>
+
+        <script>
         window.addEventListener('load', function() {
             MathJax.Hub.Register.StartupHook('End', function() {
                 window.setTimeout(window.print, 100);
             });
         });
         </script>
+
+    </div>
     </body>
 </html>
